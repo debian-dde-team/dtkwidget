@@ -1,5 +1,5 @@
-dtkwidget (0.3.3-1) unstable; urgency=low
+dtkwidget (0.3.3-1) unstable; urgency=medium
 
-  * Initial release. Merge from deepin-tool-kit.
+  * Initial release. (Closes: #12345)
 
- -- TagBuilder <tagbuilder@deepin.com>  Wed, 26 Jul 2017 17:10:12 +0800
+ -- Yanhao Mo <moyanhao@outlook.com>  Thu, 27 Jul 2017 21:26:39 +0800
