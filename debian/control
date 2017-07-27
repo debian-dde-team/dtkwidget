@@ -13,7 +13,7 @@ Build-Depends: debhelper (>= 10~), qtbase5-dev, pkg-config,
  libdtkcore-dev, libgsettings-qt-dev
 Standards-Version: 4.0.0
 
-Package: libdtkwidget
+Package: libdtkwidget1
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}, libdtkcore
 Multi-Arch: same
