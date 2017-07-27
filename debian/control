@@ -1,5 +1,5 @@
 Source: dtkwidget
-Section: devel
+Section: libdevel
 Priority: optional
 Maintainer: Debian Deepin Packaging Team <pkg-deepin@lists.alioth.debian.org>
 Uploaders:
@@ -26,7 +26,7 @@ Description: Deepin graphical user interface library
 
 Package: libdtkwidget-dev
 Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}, libdtkwidget( =${binary:Version}),
+Depends: ${shlibs:Depends}, ${misc:Depends},
  qtmultimedia5-dev, libqt5x11extras5-dev, libdtkcore-dev
 Description: Deepin graphical user interface library
  DtkWidget is Deepin graphical user interface for deepin desktop development.
