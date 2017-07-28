@@ -5,7 +5,7 @@ Maintainer: Debian Deepin Packaging Team <pkg-deepin@lists.alioth.debian.org>
 Uploaders:
  Boyuan Yang <073plan@gmail.com>,
  Yanhao Mo <yanhaocs@gmail.com>,
-Build-Depends: debhelper (>= 10~), qtbase5-dev, pkg-config,
+Build-Depends: debhelper (>= 10), qtbase5-dev, pkg-config,
  qtmultimedia5-dev, libqt5x11extras5-dev, libxext-dev, qttools5-dev-tools,
  x11proto-xext-dev, libxcb-util0-dev, libstartup-notification0-dev,
  libmtdev-dev, qtbase5-private-dev, libegl1-mesa-dev, libudev-dev,

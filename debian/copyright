@@ -1,6 +1,6 @@
 Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
-Upstream-Name: deepin-tool-kit
-Source: https://github.com/linuxdeepin/deepin-tool-kit
+Upstream-Name: dtkwidget
+Source: https://github.com/linuxdeepin/dtkwidget
 
 Files: *
 Copyright: 2010-2017, Deepin Technology Co., Ltd.
@@ -8,7 +8,7 @@ License: GPL-3+
 
 Files: debian/*
 Copyright: 2010-2017, Deepin Technology Co., Ltd.
-           2017, Yanhao Mo <moyanhao@outlook.com>
+           2017, Yanhao Mo <yanhaocs@gmail.com>
 License: GPL-3+
 
 License: GPL-3+
