@@ -11,3 +11,7 @@ override_dh_auto_configure:
 
 override_dh_makeshlibs:
 	dh_makeshlibs -V
+
+override_dh_clean:
+	dh_clean
+	rm -vf translations/*qm
