@@ -11,7 +11,7 @@ export QT_SELECT := 5
 DEB_HOST_MULTIARCH ?= $(shell dpkg-architecture -qDEB_HOST_MULTIARCH)
 
 %:
-	dh $@ --with pkgkde_symbolhelper
+	dh $@ --with pkgkde_symbolshelper
 
 override_dh_auto_configure:
 	dh_auto_configure -- LIB_INSTALL_DIR=/usr/lib/$(DEB_HOST_MULTIARCH)
