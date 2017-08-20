@@ -10,15 +10,18 @@
 #include <QDebug>
 #include <QDir>
 #include <QLocalSocket>
-#include <QStandardPaths>
 #include <QLibraryInfo>
 #include <QTranslator>
 #include <QLocalServer>
 #include <QProcess>
 #include <QMenu>
 #include <QStyleFactory>
+#include <QSystemSemaphore>
+#include <QtConcurrent/QtConcurrent>
 
 #include <qpa/qplatformintegrationfactory_p.h>
+
+#include <DStandardPaths>
 
 #include "dapplication.h"
 #include "dthememanager.h"
@@ -100,6 +103,68 @@ bool DApplicationPrivate::setSingleInstance(const QString &key)
     return m_localServer->listen(key);
 }
 
+static bool tryAcquireSystemSemaphore(QSystemSemaphore *ss, qint64 timeout = 10)
+{
+    if (ss->error() != QSystemSemaphore::NoError) {
+        return false;
+    }
+
+    QSystemSemaphore _tmp_ss(QString("%1-%2").arg("DTK::tryAcquireSystemSemaphore").arg(ss->key()), 1, QSystemSemaphore::Open);
+
+    _tmp_ss.acquire();
+
+    QElapsedTimer t;
+    QFuture<bool> request = QtConcurrent::run(ss, &QSystemSemaphore::acquire);
+
+    t.start();
+
+    while (Q_LIKELY(t.elapsed() < timeout && !request.isFinished()));
+
+    if (request.isFinished()) {
+        return true;
+    }
+
+    if (Q_LIKELY(request.isRunning())) {
+        if (Q_LIKELY(ss->release(1))) {
+            request.waitForFinished();
+        }
+    }
+
+    return false;
+}
+
+bool DApplicationPrivate::setSingleInstanceBySemaphore(const QString &key)
+{
+    static QSystemSemaphore ss(key, 1, QSystemSemaphore::Open);
+    static bool singleInstance = false;
+
+    if (singleInstance)
+        return true;
+
+    Q_ASSERT_X(ss.error() == QSystemSemaphore::NoError, "DApplicationPrivate::setSingleInstanceBySemaphore:", ss.errorString().toLocal8Bit().constData());
+
+    singleInstance = tryAcquireSystemSemaphore(&ss);
+
+    if (singleInstance) {
+        QtConcurrent::run([] {
+            while (ss.acquire()) {
+                if (qApp->startingUp())
+                    break;
+
+                ss.release(1);
+
+                Q_EMIT qApp->newInstanceStarted();
+            }
+        });
+
+        qAddPostRoutine([] {
+            ss.release(1);
+        });
+    }
+
+    return singleInstance;
+}
+
 bool DApplicationPrivate::loadDtkTranslator(QList<QLocale> localeFallback)
 {
     D_Q(DApplication);
@@ -113,13 +178,14 @@ bool DApplicationPrivate::loadDtkTranslator(QList<QLocale> localeFallback)
     q->installTranslator(qtbaseTranslator);
 
     QList<DPathBuf> translateDirs;
-    auto dtkwidgetName = "dtkwidget";
+    auto dtkwidgetDir = "dtkwidget";
+    auto dtkwidgetName = "dtkwidget2";
 
     //("/home/user/.local/share", "/usr/local/share", "/usr/share")
-    auto dataDirs = QStandardPaths::standardLocations(QStandardPaths::GenericDataLocation);
+    auto dataDirs = DStandardPaths::standardLocations(QStandardPaths::GenericDataLocation);
     for (const auto &path : dataDirs) {
         DPathBuf DPathBuf(path);
-        translateDirs << DPathBuf / dtkwidgetName / "translations";
+        translateDirs << DPathBuf / dtkwidgetDir / "translations";
     }
 
     DPathBuf runDir(q->applicationDirPath());
@@ -145,7 +211,6 @@ bool DApplicationPrivate::loadTranslator(QList<DPathBuf> translateDirs, const QS
                 translator->load(translatePath);
                 q->installTranslator(translator);
                 return true;
-
             }
         }
 
@@ -195,7 +260,7 @@ bool DApplication::setSingleInstance(const QString &key)
 {
     D_D(DApplication);
 
-    return d->setSingleInstance(key);
+    return d->setSingleInstanceBySemaphore(key);
 }
 
 //! load translate file form system or application data path;
@@ -212,7 +277,7 @@ bool DApplication::loadTranslator(QList<QLocale> localeFallback)
     QList<DPathBuf> translateDirs;
     auto appName = applicationName();
     //("/home/user/.local/share", "/usr/local/share", "/usr/share")
-    auto dataDirs = QStandardPaths::standardLocations(QStandardPaths::GenericDataLocation);
+    auto dataDirs = DStandardPaths::standardLocations(QStandardPaths::GenericDataLocation);
     for (const auto &path : dataDirs) {
         DPathBuf DPathBuf(path);
         translateDirs << DPathBuf / appName / "translations";

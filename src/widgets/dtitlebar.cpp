@@ -26,8 +26,8 @@
 DWIDGET_BEGIN_NAMESPACE
 
 const int DefaultTitlebarHeight = 40;
-const int DefaultIconHeight = 20;
-const int DefaultIconWidth = 20;
+const int DefaultIconHeight = 24;
+const int DefaultIconWidth = 24;
 
 class DTitlebarPrivate : public DTK_CORE_NAMESPACE::DObjectPrivate
 {
@@ -393,7 +393,7 @@ void DTitlebar::resizeEvent(QResizeEvent *event)
     d->minButton->setFixedHeight(event->size().height());
     d->maxButton->setFixedHeight(event->size().height());
     d->closeButton->setFixedHeight(event->size().height());
-
+    d->separator->setFixedWidth(event->size().width());
     return QWidget::resizeEvent(event);
 }
 

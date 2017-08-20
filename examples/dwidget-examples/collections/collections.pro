@@ -54,18 +54,14 @@ RESOURCES += \
 FORMS += \
     cameraform.ui
 
-linux{
-    INCLUDEPATH += $$PWD/../../../dwidget/platforms/linux
-}
-win32* {
-    INCLUDEPATH += $$PWD/../../../dwidget/platforms/windows
-}
+include($$PWD/../../../src/config.pri)
 
 win32* {
     CONFIG += no_lflags_merge
     DEFINES += STATIC_LIB
+
     #DEPENDS dtkcore
-    INCLUDEPATH += $$INCLUDE_INSTALL_DIR\libdtk-1.2\DCore
+    INCLUDEPATH += $$INCLUDE_INSTALL_DIR\libdtk-$$VERSION\DCore
     LIBS += -L$$LIB_INSTALL_DIR -ldtkcore
 }
 
@@ -76,3 +72,7 @@ else:unix: LIBS += -L$$OUT_PWD/../../../src/ -ldtkwidget
 INCLUDEPATH += $$PWD/../../../src
 INCLUDEPATH += $$PWD/../../../src/widgets
 DEPENDPATH += $$PWD/../../../src
+
+CONFIG(debug, debug|release) {
+    unix:QMAKE_RPATHDIR += $$OUT_PWD/../../../src
+}

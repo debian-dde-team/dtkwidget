@@ -1,11 +1,6 @@
-VERSION = 1.2
+include($$PWD/config.pri)
+
 CONFIG += c++11 create_pc create_prl no_install_prl
-
-DEFINES += QT_MESSAGELOGCONTEXT
-
-isEmpty(PREFIX){
-    PREFIX = /usr
-}
 
 isEmpty(LIB_INSTALL_DIR) {
     target.path = $$PREFIX/lib
@@ -26,6 +21,5 @@ isEmpty(INCLUDE_INSTALL_DIR) {
 INSTALLS += includes target
 
 win32* {
-    DEFINES += STATIC_LIB
     CONFIG += staticlib
 }

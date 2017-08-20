@@ -187,5 +187,9 @@ includes.files += \
     $$PWD/DPlatformWindowHandle \
     $$PWD/DGraphicsClipEffect \
     $$PWD/DVideoWidget \
-    $$PWD/DForeignWindow
+    $$PWD/DForeignWindow \
+    $$PWD/DExpandGroup \
+    $$PWD/DArrowButton \
+    $$PWD/DArrowLineExpand \
+    $$PWD/DThemeManager
 
