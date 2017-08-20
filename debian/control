@@ -20,6 +20,7 @@ Build-Depends:
  libxcb-util0-dev,
  libxext-dev,
  libxrender-dev,
+ libpulse-dev,
  pkg-config,
  pkg-kde-tools,
  qtbase5-dev,
