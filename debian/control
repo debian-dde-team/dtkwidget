@@ -42,7 +42,7 @@ Depends: libdtkcore-dev,
          libqt5x11extras5-dev,
          qtmultimedia5-dev,
          ${misc:Depends}
-Description: Deepin graphical user interface library
+Description: Deepin graphical user interface library (development files)
  DtkWidget is Deepin graphical user interface for deepin desktop development.
  .
  This package is part of DDE (Deepin Desktop Environment).
