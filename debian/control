@@ -24,6 +24,9 @@ Build-Depends: debhelper (>= 10),
                qttools5-dev-tools,
                x11proto-xext-dev
 Standards-Version: 4.0.0
+Homepage: https://github.com/linuxdeepin/dtkwidget.git
+Vcs-Git: https://anonscm.debian.org/git/pkg-deepin/dtkwidget.git
+Vcs-Browser: https://anonscm.debian.org/git/pkg-deepin/dtkwidget.git
 
 Package: libdtkwidget2
 Architecture: any
