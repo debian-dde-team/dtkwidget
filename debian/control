@@ -1,50 +1,45 @@
 Source: dtkwidget
-Section: libdevel
+Section: libs
 Priority: optional
 Maintainer: Debian Deepin Packaging Team <pkg-deepin@lists.alioth.debian.org>
-Uploaders: Boyuan Yang <073plan@gmail.com>, Yanhao Mo <yanhaocs@gmail.com>
-Build-Depends: debhelper (>= 10),
-               libdtkcore-dev,
-               libegl1-mesa-dev,
-               libfontconfig1-dev,
-               libfreetype6-dev,
-               libglib2.0-dev,
-               libgsettings-qt-dev,
-               libmtdev-dev,
-               libqt5x11extras5-dev,
-               libstartup-notification0-dev,
-               libudev-dev,
-               libxcb-util0-dev,
-               libxext-dev,
-               libxrender-dev,
-               pkg-config,
-               qtbase5-dev,
-               qtbase5-private-dev,
-               qtmultimedia5-dev,
-               qttools5-dev-tools,
-               x11proto-xext-dev
-Standards-Version: 4.0.0
-Homepage: https://github.com/linuxdeepin/dtkwidget.git
+Uploaders:
+ Boyuan Yang <073plan@gmail.com>,
+ Yanhao Mo <yanhaocs@gmail.com>,
+Build-Depends:
+ debhelper (>= 10),
+ libdtkcore-dev,
+ libegl1-mesa-dev,
+ libfontconfig1-dev,
+ libfreetype6-dev,
+ libglib2.0-dev,
+ libgsettings-qt-dev,
+ libmtdev-dev,
+ libqt5x11extras5-dev,
+ libstartup-notification0-dev,
+ libudev-dev,
+ libxcb-util0-dev,
+ libxext-dev,
+ libxrender-dev,
+ pkg-config,
+ pkg-kde-tools,
+ qtbase5-dev,
+ qtbase5-private-dev,
+ qtmultimedia5-dev,
+ qttools5-dev-tools,
+ x11proto-xext-dev,
+Standards-Version: 4.0.1
+Homepage: https://github.com/linuxdeepin/dtkwidget
 Vcs-Git: https://anonscm.debian.org/git/pkg-deepin/dtkwidget.git
 Vcs-Browser: https://anonscm.debian.org/git/pkg-deepin/dtkwidget.git
 
-Package: libdtkwidget2
-Architecture: any
-Depends: ${misc:Depends}, ${shlibs:Depends}
-Multi-Arch: same
-Description: Deepin graphical user interface library
- DtkWidget is Deepin graphical user interface for deepin desktop development.
- .
- This package is part of DDE (Deepin Desktop Environment).
- .
- This package contains the shared libraries.
-
 Package: libdtkwidget-dev
 Architecture: any
-Depends: libdtkcore-dev,
-         libqt5x11extras5-dev,
-         qtmultimedia5-dev,
-         ${misc:Depends}
+Section: libdevel
+Depends:
+ libdtkcore-dev,
+ libqt5x11extras5-dev,
+ qtmultimedia5-dev,
+ ${misc:Depends},
 Description: Deepin graphical user interface library (development files)
  DtkWidget is Deepin graphical user interface for deepin desktop development.
  .
@@ -52,3 +47,16 @@ Description: Deepin graphical user interface library (development files)
  .
  This package contains the header files and static libraries which are
  needed for developing Deepin applications.
+
+Package: libdtkwidget2
+Architecture: any
+Depends:
+ ${misc:Depends},
+ ${shlibs:Depends},
+Multi-Arch: same
+Description: Deepin graphical user interface library
+ DtkWidget is Deepin graphical user interface for deepin desktop development.
+ .
+ This package is part of DDE (Deepin Desktop Environment).
+ .
+ This package contains the shared libraries.
