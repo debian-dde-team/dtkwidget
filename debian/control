@@ -39,7 +39,6 @@ Description: Deepin graphical user interface library
 Package: libdtkwidget-dev
 Architecture: any
 Depends: libdtkcore-dev,
-         libdtkwidget2,
          libqt5x11extras5-dev,
          qtmultimedia5-dev,
          ${misc:Depends}
