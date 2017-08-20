@@ -1,3 +1,4 @@
+# SymbolsHelper-Confirmed: 2.0.0 amd64
 libdtkwidget.so.2 libdtkwidget2 #MINVER#
  _Z19qDBusMarshallHelperI10CaYearInfoEvR13QDBusArgumentPKT_@Base 2.0.0
  _Z19qDBusMarshallHelperI14CaLunarDayInfoEvR13QDBusArgumentPKT_@Base 2.0.0
@@ -3465,8 +3466,9 @@ libdtkwidget.so.2 libdtkwidget2 #MINVER#
  _ZNK4QMapIiPN3Dtk6Widget11DBaseExpandEE4keysEv@Base 2.0.0
  _ZNK4QMapIiPN3Dtk6Widget11DBaseExpandEE6valuesEv@Base 2.0.0
  _ZNK5QHashI5QPairI7QStringN3Dtk6Widget18DThumbnailProvider4SizeEE15QHashDummyValueE8findNodeERKS6_Pj@Base 2.0.0
- _ZNK5QHashI7QString15QHashDummyValueE8findNodeERKS0_Pj@Base 2.0.0
- _ZNK5QHashI9QMimeTypexE8findNodeERKS0_Pj@Base 2.0.0
+ (optional=templinst)_ZNK5QHashI5QPairI7QStringN3Dtk6Widget18DThumbnailProvider4SizeEE15QHashDummyValueE8findNodeERKS6_j@Base 2.0.0
+ (optional=templinst)_ZNK5QHashI7QString15QHashDummyValueE8findNodeERKS0_j@Base 2.0.0
+ (optional=templinst)_ZNK5QHashI9QMimeTypexE8findNodeERKS0_j@Base 2.0.0
  _ZNK5QHashIP7QWidgetPKN3Dtk6Widget17DBlurEffectWidgetEE6valuesERKS1_@Base 2.0.0
  _ZNK5QHashIP7QWidgetPKN3Dtk6Widget17DBlurEffectWidgetEE8findNodeERKS1_Pj@Base 2.0.0
  _ZNK5QHashIPKN3Dtk6Widget17DBlurEffectWidgetEP7QWidgetE8findNodeERKS4_Pj@Base 2.0.0
@@ -4039,316 +4041,6 @@ libdtkwidget.so.2 libdtkwidget2 #MINVER#
  _ZTVN3Dtk6Widget9DListViewE@Base 2.0.0
  _ZTVN3Dtk6Widget9DTextEditE@Base 2.0.0
  _ZTVN3Dtk6Widget9DTitlebarE@Base 2.0.0
- _ZThn16_N10IconButtonD0Ev@Base 2.0.0
- _ZThn16_N10IconButtonD1Ev@Base 2.0.0
- _ZThn16_N11ButtonGroupD0Ev@Base 2.0.0
- _ZThn16_N11ButtonGroupD1Ev@Base 2.0.0
- _ZThn16_N12CalendarViewD0Ev@Base 2.0.0
- _ZThn16_N12CalendarViewD1Ev@Base 2.0.0
- _ZThn16_N12ContentTitleD0Ev@Base 2.0.0
- _ZThn16_N12ContentTitleD1Ev@Base 2.0.0
- _ZThn16_N12QtConcurrent15RunFunctionTaskIbE3runEv@Base 2.0.0
- _ZThn16_N12QtConcurrent15RunFunctionTaskIvE3runEv@Base 2.0.0
- _ZThn16_N12QtConcurrent19RunFunctionTaskBaseIbE3runEv@Base 2.0.0
- _ZThn16_N12QtConcurrent19RunFunctionTaskBaseIvE3runEv@Base 2.0.0
- _ZThn16_N12QtConcurrent32StoredMemberFunctionPointerCall0Ib16QSystemSemaphoreED0Ev@Base 2.0.0
- _ZThn16_N12QtConcurrent32StoredMemberFunctionPointerCall0Ib16QSystemSemaphoreED1Ev@Base 2.0.0
- _ZThn16_N12ShortcutEditD0Ev@Base 2.0.0
- _ZThn16_N12ShortcutEditD1Ev@Base 2.0.0
- _ZThn16_N26StartupNotificationMonitor17nativeEventFilterERK10QByteArrayPvPl@Base 2.0.0
- _ZThn16_N26StartupNotificationMonitorD0Ev@Base 2.0.0
- _ZThn16_N26StartupNotificationMonitorD1Ev@Base 2.0.0
- _ZThn16_N29StartupNotificationMonitorSubD0Ev@Base 2.0.0
- _ZThn16_N29StartupNotificationMonitorSubD1Ev@Base 2.0.0
- _ZThn16_N3Dtk6Widget10DBoxWidgetD0Ev@Base 2.0.0
- _ZThn16_N3Dtk6Widget10DBoxWidgetD1Ev@Base 2.0.0
- _ZThn16_N3Dtk6Widget10DScrollBarD0Ev@Base 2.0.0
- _ZThn16_N3Dtk6Widget10DScrollBarD1Ev@Base 2.0.0
- _ZThn16_N3Dtk6Widget10DX11WidgetD0Ev@Base 2.0.0
- _ZThn16_N3Dtk6Widget10DX11WidgetD1Ev@Base 2.0.0
- _ZThn16_N3Dtk6Widget10ItemButtonD0Ev@Base 2.0.0
- _ZThn16_N3Dtk6Widget10ItemButtonD1Ev@Base 2.0.0
- _ZThn16_N3Dtk6Widget10NavigationD0Ev@Base 2.0.0
- _ZThn16_N3Dtk6Widget10NavigationD1Ev@Base 2.0.0
- _ZThn16_N3Dtk6Widget11DBaseButtonD0Ev@Base 2.0.0
- _ZThn16_N3Dtk6Widget11DBaseButtonD1Ev@Base 2.0.0
- _ZThn16_N3Dtk6Widget11DBaseExpandD0Ev@Base 2.0.0
- _ZThn16_N3Dtk6Widget11DBaseExpandD1Ev@Base 2.0.0
- _ZThn16_N3Dtk6Widget11DButtonGridD0Ev@Base 2.0.0
- _ZThn16_N3Dtk6Widget11DButtonGridD1Ev@Base 2.0.0
- _ZThn16_N3Dtk6Widget11DButtonListD0Ev@Base 2.0.0
- _ZThn16_N3Dtk6Widget11DButtonListD1Ev@Base 2.0.0
- _ZThn16_N3Dtk6Widget11DFlowLayout11setGeometryERK5QRect@Base 2.0.0
- _ZThn16_N3Dtk6Widget11DFlowLayoutD0Ev@Base 2.0.0
- _ZThn16_N3Dtk6Widget11DFlowLayoutD1Ev@Base 2.0.0
- _ZThn16_N3Dtk6Widget11DHBoxWidgetD0Ev@Base 2.0.0
- _ZThn16_N3Dtk6Widget11DHBoxWidgetD1Ev@Base 2.0.0
- _ZThn16_N3Dtk6Widget11DHeaderLineD0Ev@Base 2.0.0
- _ZThn16_N3Dtk6Widget11DHeaderLineD1Ev@Base 2.0.0
- _ZThn16_N3Dtk6Widget11DLinkButtonD0Ev@Base 2.0.0
- _ZThn16_N3Dtk6Widget11DLinkButtonD1Ev@Base 2.0.0
- _ZThn16_N3Dtk6Widget11DListWidgetD0Ev@Base 2.0.0
- _ZThn16_N3Dtk6Widget11DListWidgetD1Ev@Base 2.0.0
- _ZThn16_N3Dtk6Widget11DMainWindowD0Ev@Base 2.0.0
- _ZThn16_N3Dtk6Widget11DMainWindowD1Ev@Base 2.0.0
- _ZThn16_N3Dtk6Widget11DOptionListD0Ev@Base 2.0.0
- _ZThn16_N3Dtk6Widget11DOptionListD1Ev@Base 2.0.0
- _ZThn16_N3Dtk6Widget11DPushButtonD0Ev@Base 2.0.0
- _ZThn16_N3Dtk6Widget11DPushButtonD1Ev@Base 2.0.0
- _ZThn16_N3Dtk6Widget11DScrollAreaD0Ev@Base 2.0.0
- _ZThn16_N3Dtk6Widget11DScrollAreaD1Ev@Base 2.0.0
- _ZThn16_N3Dtk6Widget11DSearchEditD0Ev@Base 2.0.0
- _ZThn16_N3Dtk6Widget11DSearchEditD1Ev@Base 2.0.0
- _ZThn16_N3Dtk6Widget11DTextButtonD0Ev@Base 2.0.0
- _ZThn16_N3Dtk6Widget11DTextButtonD1Ev@Base 2.0.0
- _ZThn16_N3Dtk6Widget11DTickEffectD0Ev@Base 2.0.0
- _ZThn16_N3Dtk6Widget11DTickEffectD1Ev@Base 2.0.0
- _ZThn16_N3Dtk6Widget11DVBoxWidgetD0Ev@Base 2.0.0
- _ZThn16_N3Dtk6Widget11DVBoxWidgetD1Ev@Base 2.0.0
- _ZThn16_N3Dtk6Widget11ImageButtonD0Ev@Base 2.0.0
- _ZThn16_N3Dtk6Widget11ImageButtonD1Ev@Base 2.0.0
- _ZThn16_N3Dtk6Widget12DAboutDialogD0Ev@Base 2.0.0
- _ZThn16_N3Dtk6Widget12DAboutDialogD1Ev@Base 2.0.0
- _ZThn16_N3Dtk6Widget12DApplicationD0Ev@Base 2.0.0
- _ZThn16_N3Dtk6Widget12DApplicationD1Ev@Base 2.0.0
- _ZThn16_N3Dtk6Widget12DArrowButtonD0Ev@Base 2.0.0
- _ZThn16_N3Dtk6Widget12DArrowButtonD1Ev@Base 2.0.0
- _ZThn16_N3Dtk6Widget12DColorPickerD0Ev@Base 2.0.0
- _ZThn16_N3Dtk6Widget12DColorPickerD1Ev@Base 2.0.0
- _ZThn16_N3Dtk6Widget12DImageButtonD0Ev@Base 2.0.0
- _ZThn16_N3Dtk6Widget12DImageButtonD1Ev@Base 2.0.0
- _ZThn16_N3Dtk6Widget12DInputDialogD0Ev@Base 2.0.0
- _ZThn16_N3Dtk6Widget12DInputDialogD1Ev@Base 2.0.0
- _ZThn16_N3Dtk6Widget12DStackWidgetD0Ev@Base 2.0.0
- _ZThn16_N3Dtk6Widget12DStackWidgetD1Ev@Base 2.0.0
- _ZThn16_N3Dtk6Widget12DVideoWidgetD0Ev@Base 2.0.0
- _ZThn16_N3Dtk6Widget12DVideoWidgetD1Ev@Base 2.0.0
- _ZThn16_N3Dtk6Widget12DialogButtonD0Ev@Base 2.0.0
- _ZThn16_N3Dtk6Widget12DialogButtonD1Ev@Base 2.0.0
- _ZThn16_N3Dtk6Widget13ContentLoaderD0Ev@Base 2.0.0
- _ZThn16_N3Dtk6Widget13ContentLoaderD1Ev@Base 2.0.0
- _ZThn16_N3Dtk6Widget13DComboBoxItemD0Ev@Base 2.0.0
- _ZThn16_N3Dtk6Widget13DComboBoxItemD1Ev@Base 2.0.0
- _ZThn16_N3Dtk6Widget13DFontComboBoxD0Ev@Base 2.0.0
- _ZThn16_N3Dtk6Widget13DFontComboBoxD1Ev@Base 2.0.0
- _ZThn16_N3Dtk6Widget13DIpv4LineEditD0Ev@Base 2.0.0
- _ZThn16_N3Dtk6Widget13DIpv4LineEditD1Ev@Base 2.0.0
- _ZThn16_N3Dtk6Widget13DMPRISControlD0Ev@Base 2.0.0
- _ZThn16_N3Dtk6Widget13DMPRISControlD1Ev@Base 2.0.0
- _ZThn16_N3Dtk6Widget13DPasswordEditD0Ev@Base 2.0.0
- _ZThn16_N3Dtk6Widget13DPasswordEditD1Ev@Base 2.0.0
- _ZThn16_N3Dtk6Widget13DShortcutEditD0Ev@Base 2.0.0
- _ZThn16_N3Dtk6Widget13DShortcutEditD1Ev@Base 2.0.0
- _ZThn16_N3Dtk6Widget13DSwitchButtonD0Ev@Base 2.0.0
- _ZThn16_N3Dtk6Widget13DSwitchButtonD1Ev@Base 2.0.0
- _ZThn16_N3Dtk6Widget13DTrashManagerD0Ev@Base 2.0.0
- _ZThn16_N3Dtk6Widget13DTrashManagerD1Ev@Base 2.0.0
- _ZThn16_N3Dtk6Widget14DColorComboBoxD0Ev@Base 2.0.0
- _ZThn16_N3Dtk6Widget14DColorComboBoxD1Ev@Base 2.0.0
- _ZThn16_N3Dtk6Widget14DDoubleSpinBoxD0Ev@Base 2.0.0
- _ZThn16_N3Dtk6Widget14DDoubleSpinBoxD1Ev@Base 2.0.0
- _ZThn16_N3Dtk6Widget14DForeignWindowD0Ev@Base 2.0.0
- _ZThn16_N3Dtk6Widget14DForeignWindowD1Ev@Base 2.0.0
- _ZThn16_N3Dtk6Widget14DPageIndicatorD0Ev@Base 2.0.0
- _ZThn16_N3Dtk6Widget14DPageIndicatorD1Ev@Base 2.0.0
- _ZThn16_N3Dtk6Widget14DTrashManager_D0Ev@Base 2.0.0
- _ZThn16_N3Dtk6Widget14DTrashManager_D1Ev@Base 2.0.0
- _ZThn16_N3Dtk6Widget15ArrowButtonIconD0Ev@Base 2.0.0
- _ZThn16_N3Dtk6Widget15ArrowButtonIconD1Ev@Base 2.0.0
- _ZThn16_N3Dtk6Widget15ArrowHeaderLineD0Ev@Base 2.0.0
- _ZThn16_N3Dtk6Widget15ArrowHeaderLineD1Ev@Base 2.0.0
- _ZThn16_N3Dtk6Widget15DAbstractDialogD0Ev@Base 2.0.0
- _ZThn16_N3Dtk6Widget15DAbstractDialogD1Ev@Base 2.0.0
- _ZThn16_N3Dtk6Widget15DArrowRectangleD0Ev@Base 2.0.0
- _ZThn16_N3Dtk6Widget15DArrowRectangleD1Ev@Base 2.0.0
- _ZThn16_N3Dtk6Widget15DCircleProgressD0Ev@Base 2.0.0
- _ZThn16_N3Dtk6Widget15DCircleProgressD1Ev@Base 2.0.0
- _ZThn16_N3Dtk6Widget15DSettingsDialogD0Ev@Base 2.0.0
- _ZThn16_N3Dtk6Widget15DSettingsDialogD1Ev@Base 2.0.0
- _ZThn16_N3Dtk6Widget15DSimpleComboBoxD0Ev@Base 2.0.0
- _ZThn16_N3Dtk6Widget15DSimpleComboBoxD1Ev@Base 2.0.0
- _ZThn16_N3Dtk6Widget16DArrowLineExpandD0Ev@Base 2.0.0
- _ZThn16_N3Dtk6Widget16DArrowLineExpandD1Ev@Base 2.0.0
- _ZThn16_N3Dtk6Widget16DFileChooserEditD0Ev@Base 2.0.0
- _ZThn16_N3Dtk6Widget16DFileChooserEditD1Ev@Base 2.0.0
- _ZThn16_N3Dtk6Widget16DWindowMaxButtonD0Ev@Base 2.0.0
- _ZThn16_N3Dtk6Widget16DWindowMaxButtonD1Ev@Base 2.0.0
- _ZThn16_N3Dtk6Widget16DWindowMinButtonD0Ev@Base 2.0.0
- _ZThn16_N3Dtk6Widget16DWindowMinButtonD1Ev@Base 2.0.0
- _ZThn16_N3Dtk6Widget16FontDelegateItemD0Ev@Base 2.0.0
- _ZThn16_N3Dtk6Widget16FontDelegateItemD1Ev@Base 2.0.0
- _ZThn16_N3Dtk6Widget16SwitchHeaderLineD0Ev@Base 2.0.0
- _ZThn16_N3Dtk6Widget16SwitchHeaderLineD1Ev@Base 2.0.0
- _ZThn16_N3Dtk6Widget17ColorDelegateItemD0Ev@Base 2.0.0
- _ZThn16_N3Dtk6Widget17ColorDelegateItemD1Ev@Base 2.0.0
- _ZThn16_N3Dtk6Widget17DBlurEffectWidgetD0Ev@Base 2.0.0
- _ZThn16_N3Dtk6Widget17DBlurEffectWidgetD1Ev@Base 2.0.0
- _ZThn16_N3Dtk6Widget17DClipEffectWidgetD0Ev@Base 2.0.0
- _ZThn16_N3Dtk6Widget17DClipEffectWidgetD1Ev@Base 2.0.0
- _ZThn16_N3Dtk6Widget17DFileIconProviderD0Ev@Base 2.0.0
- _ZThn16_N3Dtk6Widget17DFileIconProviderD1Ev@Base 2.0.0
- _ZThn16_N3Dtk6Widget17DLoadingIndicatorD0Ev@Base 2.0.0
- _ZThn16_N3Dtk6Widget17DLoadingIndicatorD1Ev@Base 2.0.0
- _ZThn16_N3Dtk6Widget17DSegmentedControlD0Ev@Base 2.0.0
- _ZThn16_N3Dtk6Widget17DSegmentedControlD1Ev@Base 2.0.0
- _ZThn16_N3Dtk6Widget17DSwitchLineExpandD0Ev@Base 2.0.0
- _ZThn16_N3Dtk6Widget17DSwitchLineExpandD1Ev@Base 2.0.0
- _ZThn16_N3Dtk6Widget18DSeparatorVerticalD0Ev@Base 2.0.0
- _ZThn16_N3Dtk6Widget18DSeparatorVerticalD1Ev@Base 2.0.0
- _ZThn16_N3Dtk6Widget18DShortcutEditLabelD0Ev@Base 2.0.0
- _ZThn16_N3Dtk6Widget18DShortcutEditLabelD1Ev@Base 2.0.0
- _ZThn16_N3Dtk6Widget18DThumbnailProviderD0Ev@Base 2.0.0
- _ZThn16_N3Dtk6Widget18DThumbnailProviderD1Ev@Base 2.0.0
- _ZThn16_N3Dtk6Widget18DWindowCloseButtonD0Ev@Base 2.0.0
- _ZThn16_N3Dtk6Widget18DWindowCloseButtonD1Ev@Base 2.0.0
- _ZThn16_N3Dtk6Widget18SimpleDelegateItemD0Ev@Base 2.0.0
- _ZThn16_N3Dtk6Widget18SimpleDelegateItemD1Ev@Base 2.0.0
- _ZThn16_N3Dtk6Widget19DGraphicsClipEffectD0Ev@Base 2.0.0
- _ZThn16_N3Dtk6Widget19DGraphicsClipEffectD1Ev@Base 2.0.0
- _ZThn16_N3Dtk6Widget19DSegmentedHighlightD0Ev@Base 2.0.0
- _ZThn16_N3Dtk6Widget19DSegmentedHighlightD1Ev@Base 2.0.0
- _ZThn16_N3Dtk6Widget19DWindowOptionButtonD0Ev@Base 2.0.0
- _ZThn16_N3Dtk6Widget19DWindowOptionButtonD1Ev@Base 2.0.0
- _ZThn16_N3Dtk6Widget20DPictureSequenceViewD0Ev@Base 2.0.0
- _ZThn16_N3Dtk6Widget20DPictureSequenceViewD1Ev@Base 2.0.0
- _ZThn16_N3Dtk6Widget20DSeparatorHorizontalD0Ev@Base 2.0.0
- _ZThn16_N3Dtk6Widget20DSeparatorHorizontalD1Ev@Base 2.0.0
- _ZThn16_N3Dtk6Widget20DWindowManagerHelperD0Ev@Base 2.0.0
- _ZThn16_N3Dtk6Widget20DWindowManagerHelperD1Ev@Base 2.0.0
- _ZThn16_N3Dtk6Widget20DWindowRestoreButtonD0Ev@Base 2.0.0
- _ZThn16_N3Dtk6Widget20DWindowRestoreButtonD1Ev@Base 2.0.0
- _ZThn16_N3Dtk6Widget21DWindowManagerHelper_D0Ev@Base 2.0.0
- _ZThn16_N3Dtk6Widget21DWindowManagerHelper_D1Ev@Base 2.0.0
- _ZThn16_N3Dtk6Widget27DSlideStackWidgetTransitionD0Ev@Base 2.0.0
- _ZThn16_N3Dtk6Widget27DSlideStackWidgetTransitionD1Ev@Base 2.0.0
- _ZThn16_N3Dtk6Widget29DFileThumbnailProviderPrivateD0Ev@Base 2.0.0
- _ZThn16_N3Dtk6Widget29DFileThumbnailProviderPrivateD1Ev@Base 2.0.0
- _ZThn16_N3Dtk6Widget6DLabelD0Ev@Base 2.0.0
- _ZThn16_N3Dtk6Widget6DLabelD1Ev@Base 2.0.0
- _ZThn16_N3Dtk6Widget7ContentD0Ev@Base 2.0.0
- _ZThn16_N3Dtk6Widget7ContentD1Ev@Base 2.0.0
- _ZThn16_N3Dtk6Widget7DDialogD0Ev@Base 2.0.0
- _ZThn16_N3Dtk6Widget7DDialogD1Ev@Base 2.0.0
- _ZThn16_N3Dtk6Widget7DOptionD0Ev@Base 2.0.0
- _ZThn16_N3Dtk6Widget7DOptionD1Ev@Base 2.0.0
- _ZThn16_N3Dtk6Widget7DSliderD0Ev@Base 2.0.0
- _ZThn16_N3Dtk6Widget7DSliderD1Ev@Base 2.0.0
- _ZThn16_N3Dtk6Widget7DWidgetD0Ev@Base 2.0.0
- _ZThn16_N3Dtk6Widget7DWidgetD1Ev@Base 2.0.0
- _ZThn16_N3Dtk6Widget7DWindowD0Ev@Base 2.0.0
- _ZThn16_N3Dtk6Widget7DWindowD1Ev@Base 2.0.0
- _ZThn16_N3Dtk6Widget8DSpinBoxD0Ev@Base 2.0.0
- _ZThn16_N3Dtk6Widget8DSpinBoxD1Ev@Base 2.0.0
- _ZThn16_N3Dtk6Widget9DBaseLineD0Ev@Base 2.0.0
- _ZThn16_N3Dtk6Widget9DBaseLineD1Ev@Base 2.0.0
- _ZThn16_N3Dtk6Widget9DCalendarD0Ev@Base 2.0.0
- _ZThn16_N3Dtk6Widget9DCalendarD1Ev@Base 2.0.0
- _ZThn16_N3Dtk6Widget9DComboBoxD0Ev@Base 2.0.0
- _ZThn16_N3Dtk6Widget9DComboBoxD1Ev@Base 2.0.0
- _ZThn16_N3Dtk6Widget9DLineEditD0Ev@Base 2.0.0
- _ZThn16_N3Dtk6Widget9DLineEditD1Ev@Base 2.0.0
- _ZThn16_N3Dtk6Widget9DListViewD0Ev@Base 2.0.0
- _ZThn16_N3Dtk6Widget9DListViewD1Ev@Base 2.0.0
- _ZThn16_N3Dtk6Widget9DTextEditD0Ev@Base 2.0.0
- _ZThn16_N3Dtk6Widget9DTextEditD1Ev@Base 2.0.0
- _ZThn16_N3Dtk6Widget9DTitlebarD0Ev@Base 2.0.0
- _ZThn16_N3Dtk6Widget9DTitlebarD1Ev@Base 2.0.0
- _ZThn16_N8ComboBoxD0Ev@Base 2.0.0
- _ZThn16_N8ComboBoxD1Ev@Base 2.0.0
- _ZThn16_NK3Dtk6Widget11DFlowLayout11minimumSizeEv@Base 2.0.0
- _ZThn16_NK3Dtk6Widget11DFlowLayout14heightForWidthEi@Base 2.0.0
- _ZThn16_NK3Dtk6Widget11DFlowLayout17hasHeightForWidthEv@Base 2.0.0
- _ZThn16_NK3Dtk6Widget11DFlowLayout19expandingDirectionsEv@Base 2.0.0
- _ZThn16_NK3Dtk6Widget11DFlowLayout8sizeHintEv@Base 2.0.0
- _ZThn16_NK7QWindow4sizeEv@Base 2.0.0
- _ZThn32_N3Dtk6Widget11DFlowLayoutD0Ev@Base 2.0.0
- _ZThn32_N3Dtk6Widget11DFlowLayoutD1Ev@Base 2.0.0
- _ZThn40_N3Dtk6Widget14DForeignWindowD0Ev@Base 2.0.0
- _ZThn40_N3Dtk6Widget14DForeignWindowD1Ev@Base 2.0.0
- _ZThn48_N3Dtk6Widget10DBoxWidgetD0Ev@Base 2.0.0
- _ZThn48_N3Dtk6Widget10DBoxWidgetD1Ev@Base 2.0.0
- _ZThn48_N3Dtk6Widget10DScrollBarD0Ev@Base 2.0.0
- _ZThn48_N3Dtk6Widget10DScrollBarD1Ev@Base 2.0.0
- _ZThn48_N3Dtk6Widget10DX11WidgetD0Ev@Base 2.0.0
- _ZThn48_N3Dtk6Widget10DX11WidgetD1Ev@Base 2.0.0
- _ZThn48_N3Dtk6Widget11DHBoxWidgetD0Ev@Base 2.0.0
- _ZThn48_N3Dtk6Widget11DHBoxWidgetD1Ev@Base 2.0.0
- _ZThn48_N3Dtk6Widget11DListWidgetD0Ev@Base 2.0.0
- _ZThn48_N3Dtk6Widget11DListWidgetD1Ev@Base 2.0.0
- _ZThn48_N3Dtk6Widget11DMainWindowD0Ev@Base 2.0.0
- _ZThn48_N3Dtk6Widget11DMainWindowD1Ev@Base 2.0.0
- _ZThn48_N3Dtk6Widget11DOptionListD0Ev@Base 2.0.0
- _ZThn48_N3Dtk6Widget11DOptionListD1Ev@Base 2.0.0
- _ZThn48_N3Dtk6Widget11DPushButtonD0Ev@Base 2.0.0
- _ZThn48_N3Dtk6Widget11DPushButtonD1Ev@Base 2.0.0
- _ZThn48_N3Dtk6Widget11DScrollAreaD0Ev@Base 2.0.0
- _ZThn48_N3Dtk6Widget11DScrollAreaD1Ev@Base 2.0.0
- _ZThn48_N3Dtk6Widget11DVBoxWidgetD0Ev@Base 2.0.0
- _ZThn48_N3Dtk6Widget11DVBoxWidgetD1Ev@Base 2.0.0
- _ZThn48_N3Dtk6Widget12DAboutDialogD0Ev@Base 2.0.0
- _ZThn48_N3Dtk6Widget12DAboutDialogD1Ev@Base 2.0.0
- _ZThn48_N3Dtk6Widget12DInputDialogD0Ev@Base 2.0.0
- _ZThn48_N3Dtk6Widget12DInputDialogD1Ev@Base 2.0.0
- _ZThn48_N3Dtk6Widget12DStackWidgetD0Ev@Base 2.0.0
- _ZThn48_N3Dtk6Widget12DStackWidgetD1Ev@Base 2.0.0
- _ZThn48_N3Dtk6Widget12DVideoWidgetD0Ev@Base 2.0.0
- _ZThn48_N3Dtk6Widget12DVideoWidgetD1Ev@Base 2.0.0
- _ZThn48_N3Dtk6Widget13DFontComboBoxD0Ev@Base 2.0.0
- _ZThn48_N3Dtk6Widget13DFontComboBoxD1Ev@Base 2.0.0
- _ZThn48_N3Dtk6Widget13DIpv4LineEditD0Ev@Base 2.0.0
- _ZThn48_N3Dtk6Widget13DIpv4LineEditD1Ev@Base 2.0.0
- _ZThn48_N3Dtk6Widget13DMPRISControlD0Ev@Base 2.0.0
- _ZThn48_N3Dtk6Widget13DMPRISControlD1Ev@Base 2.0.0
- _ZThn48_N3Dtk6Widget13DPasswordEditD0Ev@Base 2.0.0
- _ZThn48_N3Dtk6Widget13DPasswordEditD1Ev@Base 2.0.0
- _ZThn48_N3Dtk6Widget14DColorComboBoxD0Ev@Base 2.0.0
- _ZThn48_N3Dtk6Widget14DColorComboBoxD1Ev@Base 2.0.0
- _ZThn48_N3Dtk6Widget14DDoubleSpinBoxD0Ev@Base 2.0.0
- _ZThn48_N3Dtk6Widget14DDoubleSpinBoxD1Ev@Base 2.0.0
- _ZThn48_N3Dtk6Widget14DPageIndicatorD0Ev@Base 2.0.0
- _ZThn48_N3Dtk6Widget14DPageIndicatorD1Ev@Base 2.0.0
- _ZThn48_N3Dtk6Widget15DAbstractDialogD0Ev@Base 2.0.0
- _ZThn48_N3Dtk6Widget15DAbstractDialogD1Ev@Base 2.0.0
- _ZThn48_N3Dtk6Widget15DArrowRectangleD0Ev@Base 2.0.0
- _ZThn48_N3Dtk6Widget15DArrowRectangleD1Ev@Base 2.0.0
- _ZThn48_N3Dtk6Widget15DCircleProgressD0Ev@Base 2.0.0
- _ZThn48_N3Dtk6Widget15DCircleProgressD1Ev@Base 2.0.0
- _ZThn48_N3Dtk6Widget15DSettingsDialogD0Ev@Base 2.0.0
- _ZThn48_N3Dtk6Widget15DSettingsDialogD1Ev@Base 2.0.0
- _ZThn48_N3Dtk6Widget15DSimpleComboBoxD0Ev@Base 2.0.0
- _ZThn48_N3Dtk6Widget15DSimpleComboBoxD1Ev@Base 2.0.0
- _ZThn48_N3Dtk6Widget16DFileChooserEditD0Ev@Base 2.0.0
- _ZThn48_N3Dtk6Widget16DFileChooserEditD1Ev@Base 2.0.0
- _ZThn48_N3Dtk6Widget17DBlurEffectWidgetD0Ev@Base 2.0.0
- _ZThn48_N3Dtk6Widget17DBlurEffectWidgetD1Ev@Base 2.0.0
- _ZThn48_N3Dtk6Widget17DClipEffectWidgetD0Ev@Base 2.0.0
- _ZThn48_N3Dtk6Widget17DClipEffectWidgetD1Ev@Base 2.0.0
- _ZThn48_N3Dtk6Widget17DLoadingIndicatorD0Ev@Base 2.0.0
- _ZThn48_N3Dtk6Widget17DLoadingIndicatorD1Ev@Base 2.0.0
- _ZThn48_N3Dtk6Widget20DPictureSequenceViewD0Ev@Base 2.0.0
- _ZThn48_N3Dtk6Widget20DPictureSequenceViewD1Ev@Base 2.0.0
- _ZThn48_N3Dtk6Widget7DDialogD0Ev@Base 2.0.0
- _ZThn48_N3Dtk6Widget7DDialogD1Ev@Base 2.0.0
- _ZThn48_N3Dtk6Widget7DOptionD0Ev@Base 2.0.0
- _ZThn48_N3Dtk6Widget7DOptionD1Ev@Base 2.0.0
- _ZThn48_N3Dtk6Widget7DWidgetD0Ev@Base 2.0.0
- _ZThn48_N3Dtk6Widget7DWidgetD1Ev@Base 2.0.0
- _ZThn48_N3Dtk6Widget7DWindowD0Ev@Base 2.0.0
- _ZThn48_N3Dtk6Widget7DWindowD1Ev@Base 2.0.0
- _ZThn48_N3Dtk6Widget8DSpinBoxD0Ev@Base 2.0.0
- _ZThn48_N3Dtk6Widget8DSpinBoxD1Ev@Base 2.0.0
- _ZThn48_N3Dtk6Widget9DComboBoxD0Ev@Base 2.0.0
- _ZThn48_N3Dtk6Widget9DComboBoxD1Ev@Base 2.0.0
- _ZThn48_N3Dtk6Widget9DLineEditD0Ev@Base 2.0.0
- _ZThn48_N3Dtk6Widget9DLineEditD1Ev@Base 2.0.0
- _ZThn48_N3Dtk6Widget9DListViewD0Ev@Base 2.0.0
- _ZThn48_N3Dtk6Widget9DListViewD1Ev@Base 2.0.0
- _ZThn48_N3Dtk6Widget9DTextEditD0Ev@Base 2.0.0
- _ZThn48_N3Dtk6Widget9DTextEditD1Ev@Base 2.0.0
- _ZThn48_N3Dtk6Widget9DTitlebarD0Ev@Base 2.0.0
- _ZThn48_N3Dtk6Widget9DTitlebarD1Ev@Base 2.0.0
- _ZThn88_N3Dtk6Widget16DWindowMaxButtonD0Ev@Base 2.0.0
- _ZThn88_N3Dtk6Widget16DWindowMaxButtonD1Ev@Base 2.0.0
  _ZZN11QMetaTypeIdI10CaYearInfoE14qt_metatype_idEvE11metatype_id@Base 2.0.0
  _ZZN11QMetaTypeIdI12QDBusMessageE14qt_metatype_idEvE11metatype_id@Base 2.0.0
  _ZZN11QMetaTypeIdI12QPainterPathE14qt_metatype_idEvE11metatype_id@Base 2.0.0
@@ -4425,3 +4117,120 @@ libdtkwidget.so.2 libdtkwidget2 #MINVER#
  _ZrsRK13QDBusArgumentR14CaLunarDayInfo@Base 2.0.0
  _ZrsRK13QDBusArgumentR16CaLunarMonthInfo@Base 2.0.0
  _ZrsRK13QDBusArgumentR16CaSolarMonthInfo@Base 2.0.0
+ (c++)"non-virtual thunk to ButtonGroup::~ButtonGroup()@Base" 2.0.0
+ (c++)"non-virtual thunk to CalendarView::~CalendarView()@Base" 2.0.0
+ (c++)"non-virtual thunk to ComboBox::~ComboBox()@Base" 2.0.0
+ (c++)"non-virtual thunk to ContentTitle::~ContentTitle()@Base" 2.0.0
+ (c++)"non-virtual thunk to Dtk::Widget::ArrowButtonIcon::~ArrowButtonIcon()@Base" 2.0.0
+ (c++)"non-virtual thunk to Dtk::Widget::ArrowHeaderLine::~ArrowHeaderLine()@Base" 2.0.0
+ (c++)"non-virtual thunk to Dtk::Widget::ColorDelegateItem::~ColorDelegateItem()@Base" 2.0.0
+ (c++)"non-virtual thunk to Dtk::Widget::Content::~Content()@Base" 2.0.0
+ (c++)"non-virtual thunk to Dtk::Widget::ContentLoader::~ContentLoader()@Base" 2.0.0
+ (c++)"non-virtual thunk to Dtk::Widget::DAboutDialog::~DAboutDialog()@Base" 2.0.0
+ (c++)"non-virtual thunk to Dtk::Widget::DAbstractDialog::~DAbstractDialog()@Base" 2.0.0
+ (c++)"non-virtual thunk to Dtk::Widget::DApplication::~DApplication()@Base" 2.0.0
+ (c++)"non-virtual thunk to Dtk::Widget::DArrowButton::~DArrowButton()@Base" 2.0.0
+ (c++)"non-virtual thunk to Dtk::Widget::DArrowLineExpand::~DArrowLineExpand()@Base" 2.0.0
+ (c++)"non-virtual thunk to Dtk::Widget::DArrowRectangle::~DArrowRectangle()@Base" 2.0.0
+ (c++)"non-virtual thunk to Dtk::Widget::DBaseButton::~DBaseButton()@Base" 2.0.0
+ (c++)"non-virtual thunk to Dtk::Widget::DBaseExpand::~DBaseExpand()@Base" 2.0.0
+ (c++)"non-virtual thunk to Dtk::Widget::DBaseLine::~DBaseLine()@Base" 2.0.0
+ (c++)"non-virtual thunk to Dtk::Widget::DBlurEffectWidget::~DBlurEffectWidget()@Base" 2.0.0
+ (c++)"non-virtual thunk to Dtk::Widget::DBoxWidget::~DBoxWidget()@Base" 2.0.0
+ (c++)"non-virtual thunk to Dtk::Widget::DButtonGrid::~DButtonGrid()@Base" 2.0.0
+ (c++)"non-virtual thunk to Dtk::Widget::DButtonList::~DButtonList()@Base" 2.0.0
+ (c++)"non-virtual thunk to Dtk::Widget::DCalendar::~DCalendar()@Base" 2.0.0
+ (c++)"non-virtual thunk to Dtk::Widget::DCircleProgress::~DCircleProgress()@Base" 2.0.0
+ (c++)"non-virtual thunk to Dtk::Widget::DClipEffectWidget::~DClipEffectWidget()@Base" 2.0.0
+ (c++)"non-virtual thunk to Dtk::Widget::DColorComboBox::~DColorComboBox()@Base" 2.0.0
+ (c++)"non-virtual thunk to Dtk::Widget::DColorPicker::~DColorPicker()@Base" 2.0.0
+ (c++)"non-virtual thunk to Dtk::Widget::DComboBox::~DComboBox()@Base" 2.0.0
+ (c++)"non-virtual thunk to Dtk::Widget::DComboBoxItem::~DComboBoxItem()@Base" 2.0.0
+ (c++)"non-virtual thunk to Dtk::Widget::DDialog::~DDialog()@Base" 2.0.0
+ (c++)"non-virtual thunk to Dtk::Widget::DDoubleSpinBox::~DDoubleSpinBox()@Base" 2.0.0
+ (c++)"non-virtual thunk to Dtk::Widget::DFileChooserEdit::~DFileChooserEdit()@Base" 2.0.0
+ (c++)"non-virtual thunk to Dtk::Widget::DFileIconProvider::~DFileIconProvider()@Base" 2.0.0
+ (c++)"non-virtual thunk to Dtk::Widget::DFileThumbnailProviderPrivate::~DFileThumbnailProviderPrivate()@Base" 2.0.0
+ (c++)"non-virtual thunk to Dtk::Widget::DFlowLayout::expandingDirections() const@Base" 2.0.0
+ (c++)"non-virtual thunk to Dtk::Widget::DFlowLayout::hasHeightForWidth() const@Base" 2.0.0
+ (c++)"non-virtual thunk to Dtk::Widget::DFlowLayout::heightForWidth(int) const@Base" 2.0.0
+ (c++)"non-virtual thunk to Dtk::Widget::DFlowLayout::minimumSize() const@Base" 2.0.0
+ (c++)"non-virtual thunk to Dtk::Widget::DFlowLayout::setGeometry(QRect const&)@Base" 2.0.0
+ (c++)"non-virtual thunk to Dtk::Widget::DFlowLayout::sizeHint() const@Base" 2.0.0
+ (c++)"non-virtual thunk to Dtk::Widget::DFlowLayout::~DFlowLayout()@Base" 2.0.0
+ (c++)"non-virtual thunk to Dtk::Widget::DFontComboBox::~DFontComboBox()@Base" 2.0.0
+ (c++)"non-virtual thunk to Dtk::Widget::DForeignWindow::~DForeignWindow()@Base" 2.0.0
+ (c++)"non-virtual thunk to Dtk::Widget::DGraphicsClipEffect::~DGraphicsClipEffect()@Base" 2.0.0
+ (c++)"non-virtual thunk to Dtk::Widget::DHBoxWidget::~DHBoxWidget()@Base" 2.0.0
+ (c++)"non-virtual thunk to Dtk::Widget::DHeaderLine::~DHeaderLine()@Base" 2.0.0
+ (c++)"non-virtual thunk to Dtk::Widget::DImageButton::~DImageButton()@Base" 2.0.0
+ (c++)"non-virtual thunk to Dtk::Widget::DInputDialog::~DInputDialog()@Base" 2.0.0
+ (c++)"non-virtual thunk to Dtk::Widget::DIpv4LineEdit::~DIpv4LineEdit()@Base" 2.0.0
+ (c++)"non-virtual thunk to Dtk::Widget::DLabel::~DLabel()@Base" 2.0.0
+ (c++)"non-virtual thunk to Dtk::Widget::DLineEdit::~DLineEdit()@Base" 2.0.0
+ (c++)"non-virtual thunk to Dtk::Widget::DLinkButton::~DLinkButton()@Base" 2.0.0
+ (c++)"non-virtual thunk to Dtk::Widget::DListView::~DListView()@Base" 2.0.0
+ (c++)"non-virtual thunk to Dtk::Widget::DListWidget::~DListWidget()@Base" 2.0.0
+ (c++)"non-virtual thunk to Dtk::Widget::DLoadingIndicator::~DLoadingIndicator()@Base" 2.0.0
+ (c++)"non-virtual thunk to Dtk::Widget::DMPRISControl::~DMPRISControl()@Base" 2.0.0
+ (c++)"non-virtual thunk to Dtk::Widget::DMainWindow::~DMainWindow()@Base" 2.0.0
+ (c++)"non-virtual thunk to Dtk::Widget::DOption::~DOption()@Base" 2.0.0
+ (c++)"non-virtual thunk to Dtk::Widget::DOptionList::~DOptionList()@Base" 2.0.0
+ (c++)"non-virtual thunk to Dtk::Widget::DPageIndicator::~DPageIndicator()@Base" 2.0.0
+ (c++)"non-virtual thunk to Dtk::Widget::DPasswordEdit::~DPasswordEdit()@Base" 2.0.0
+ (c++)"non-virtual thunk to Dtk::Widget::DPictureSequenceView::~DPictureSequenceView()@Base" 2.0.0
+ (c++)"non-virtual thunk to Dtk::Widget::DPushButton::~DPushButton()@Base" 2.0.0
+ (c++)"non-virtual thunk to Dtk::Widget::DScrollArea::~DScrollArea()@Base" 2.0.0
+ (c++)"non-virtual thunk to Dtk::Widget::DScrollBar::~DScrollBar()@Base" 2.0.0
+ (c++)"non-virtual thunk to Dtk::Widget::DSearchEdit::~DSearchEdit()@Base" 2.0.0
+ (c++)"non-virtual thunk to Dtk::Widget::DSegmentedControl::~DSegmentedControl()@Base" 2.0.0
+ (c++)"non-virtual thunk to Dtk::Widget::DSegmentedHighlight::~DSegmentedHighlight()@Base" 2.0.0
+ (c++)"non-virtual thunk to Dtk::Widget::DSeparatorHorizontal::~DSeparatorHorizontal()@Base" 2.0.0
+ (c++)"non-virtual thunk to Dtk::Widget::DSeparatorVertical::~DSeparatorVertical()@Base" 2.0.0
+ (c++)"non-virtual thunk to Dtk::Widget::DSettingsDialog::~DSettingsDialog()@Base" 2.0.0
+ (c++)"non-virtual thunk to Dtk::Widget::DShortcutEdit::~DShortcutEdit()@Base" 2.0.0
+ (c++)"non-virtual thunk to Dtk::Widget::DShortcutEditLabel::~DShortcutEditLabel()@Base" 2.0.0
+ (c++)"non-virtual thunk to Dtk::Widget::DSimpleComboBox::~DSimpleComboBox()@Base" 2.0.0
+ (c++)"non-virtual thunk to Dtk::Widget::DSlideStackWidgetTransition::~DSlideStackWidgetTransition()@Base" 2.0.0
+ (c++)"non-virtual thunk to Dtk::Widget::DSlider::~DSlider()@Base" 2.0.0
+ (c++)"non-virtual thunk to Dtk::Widget::DSpinBox::~DSpinBox()@Base" 2.0.0
+ (c++)"non-virtual thunk to Dtk::Widget::DStackWidget::~DStackWidget()@Base" 2.0.0
+ (c++)"non-virtual thunk to Dtk::Widget::DSwitchButton::~DSwitchButton()@Base" 2.0.0
+ (c++)"non-virtual thunk to Dtk::Widget::DSwitchLineExpand::~DSwitchLineExpand()@Base" 2.0.0
+ (c++)"non-virtual thunk to Dtk::Widget::DTextButton::~DTextButton()@Base" 2.0.0
+ (c++)"non-virtual thunk to Dtk::Widget::DTextEdit::~DTextEdit()@Base" 2.0.0
+ (c++)"non-virtual thunk to Dtk::Widget::DThumbnailProvider::~DThumbnailProvider()@Base" 2.0.0
+ (c++)"non-virtual thunk to Dtk::Widget::DTickEffect::~DTickEffect()@Base" 2.0.0
+ (c++)"non-virtual thunk to Dtk::Widget::DTitlebar::~DTitlebar()@Base" 2.0.0
+ (c++)"non-virtual thunk to Dtk::Widget::DTrashManager::~DTrashManager()@Base" 2.0.0
+ (c++)"non-virtual thunk to Dtk::Widget::DTrashManager_::~DTrashManager_()@Base" 2.0.0
+ (c++)"non-virtual thunk to Dtk::Widget::DVBoxWidget::~DVBoxWidget()@Base" 2.0.0
+ (c++)"non-virtual thunk to Dtk::Widget::DVideoWidget::~DVideoWidget()@Base" 2.0.0
+ (c++)"non-virtual thunk to Dtk::Widget::DWidget::~DWidget()@Base" 2.0.0
+ (c++)"non-virtual thunk to Dtk::Widget::DWindow::~DWindow()@Base" 2.0.0
+ (c++)"non-virtual thunk to Dtk::Widget::DWindowCloseButton::~DWindowCloseButton()@Base" 2.0.0
+ (c++)"non-virtual thunk to Dtk::Widget::DWindowManagerHelper::~DWindowManagerHelper()@Base" 2.0.0
+ (c++)"non-virtual thunk to Dtk::Widget::DWindowManagerHelper_::~DWindowManagerHelper_()@Base" 2.0.0
+ (c++)"non-virtual thunk to Dtk::Widget::DWindowMaxButton::~DWindowMaxButton()@Base" 2.0.0
+ (c++)"non-virtual thunk to Dtk::Widget::DWindowMinButton::~DWindowMinButton()@Base" 2.0.0
+ (c++)"non-virtual thunk to Dtk::Widget::DWindowOptionButton::~DWindowOptionButton()@Base" 2.0.0
+ (c++)"non-virtual thunk to Dtk::Widget::DWindowRestoreButton::~DWindowRestoreButton()@Base" 2.0.0
+ (c++)"non-virtual thunk to Dtk::Widget::DX11Widget::~DX11Widget()@Base" 2.0.0
+ (c++)"non-virtual thunk to Dtk::Widget::DialogButton::~DialogButton()@Base" 2.0.0
+ (c++)"non-virtual thunk to Dtk::Widget::FontDelegateItem::~FontDelegateItem()@Base" 2.0.0
+ (c++)"non-virtual thunk to Dtk::Widget::ImageButton::~ImageButton()@Base" 2.0.0
+ (c++)"non-virtual thunk to Dtk::Widget::ItemButton::~ItemButton()@Base" 2.0.0
+ (c++)"non-virtual thunk to Dtk::Widget::Navigation::~Navigation()@Base" 2.0.0
+ (c++)"non-virtual thunk to Dtk::Widget::SimpleDelegateItem::~SimpleDelegateItem()@Base" 2.0.0
+ (c++)"non-virtual thunk to Dtk::Widget::SwitchHeaderLine::~SwitchHeaderLine()@Base" 2.0.0
+ (c++)"non-virtual thunk to IconButton::~IconButton()@Base" 2.0.0
+ (c++)"non-virtual thunk to QWindow::size() const@Base" 2.0.0
+ (c++)"non-virtual thunk to QtConcurrent::RunFunctionTask<bool>::run()@Base" 2.0.0
+ (c++)"non-virtual thunk to QtConcurrent::RunFunctionTask<void>::run()@Base" 2.0.0
+ (c++)"non-virtual thunk to QtConcurrent::RunFunctionTaskBase<bool>::run()@Base" 2.0.0
+ (c++)"non-virtual thunk to QtConcurrent::RunFunctionTaskBase<void>::run()@Base" 2.0.0
+ (c++)"non-virtual thunk to QtConcurrent::StoredMemberFunctionPointerCall0<bool, QSystemSemaphore>::~StoredMemberFunctionPointerCall0()@Base" 2.0.0
+ (c++)"non-virtual thunk to ShortcutEdit::~ShortcutEdit()@Base" 2.0.0
+ (c++)"non-virtual thunk to StartupNotificationMonitor::nativeEventFilter(QByteArray const&, void*, long*)@Base" 2.0.0
+ (c++)"non-virtual thunk to StartupNotificationMonitor::~StartupNotificationMonitor()@Base" 2.0.0
+ (c++)"non-virtual thunk to StartupNotificationMonitorSub::~StartupNotificationMonitorSub()@Base" 2.0.0
