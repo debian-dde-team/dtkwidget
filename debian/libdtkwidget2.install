@@ -1,2 +1,4 @@
-usr/lib/*/lib*.so.*
-usr/share/*/translations/*
+usr/share/dtkwidget/translations
+usr/lib/x86_64-linux-gnu/libdtkwidget.so.2.0.0
+usr/lib/x86_64-linux-gnu/libdtkwidget.so.2
+usr/lib/x86_64-linux-gnu/libdtkwidget.so.2.0
