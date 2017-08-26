@@ -55,7 +55,8 @@ Architecture: any
 Depends:
  ${misc:Depends},
  ${shlibs:Depends},
-Multi-Arch: same
+#Multi-Arch: same
+# drop M-A mark due to bug #872846
 Description: Deepin graphical user interface library
  DtkWidget is Deepin graphical user interface for deepin desktop development.
  .
