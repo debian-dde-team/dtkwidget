@@ -1,3 +1,13 @@
+dtkwidget (2.0.0-2) unstable; urgency=medium
+
+  [ Yanhao Mo ]
+  * Fix typo about maintainter's email
+
+  [ SZ Lin (林上智) ]
+  * Bump Standards-Version to 4.1.1
+
+ -- SZ Lin (林上智) <szlin@debian.org>  Fri, 29 Sep 2017 11:23:45 +0800
+
 dtkwidget (2.0.0-1) unstable; urgency=medium
 
   * Initial release. (Closes: #869905)
