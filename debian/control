@@ -5,6 +5,7 @@ Maintainer: Debian Deepin Packaging Team <pkg-deepin-devel@lists.alioth.debian.o
 Uploaders:
  Boyuan Yang <073plan@gmail.com>,
  Yanhao Mo <yanhaocs@gmail.com>,
+ SZ Lin (林上智) <szlin@debian.org>
 Build-Depends:
  debhelper (>= 10),
  libdtkcore-dev,
