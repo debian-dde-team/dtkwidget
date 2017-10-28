@@ -1,6 +1,7 @@
 dtkwidget (2.0.0-3) unstable; urgency=medium
 
   * Fix FTBFS on non-amd64 platforms. 
+  * Limit architecture to linux-any since non-linux is not supported.
 
  -- Boyuan Yang <073plan@gmail.com>  Fri, 27 Oct 2017 21:05:58 +0800
 

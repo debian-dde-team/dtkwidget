@@ -35,7 +35,7 @@ Vcs-Git: https://anonscm.debian.org/git/pkg-deepin/dtkwidget.git
 Vcs-Browser: https://anonscm.debian.org/git/pkg-deepin/dtkwidget.git
 
 Package: libdtkwidget-dev
-Architecture: any
+Architecture: linux-any
 Section: libdevel
 Depends:
  libdtkcore-dev,
@@ -52,7 +52,7 @@ Description: Deepin graphical user interface library (development files)
  needed for developing Deepin applications.
 
 Package: libdtkwidget2
-Architecture: any
+Architecture: linux-any
 Depends:
  ${misc:Depends},
  ${shlibs:Depends},
