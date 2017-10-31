@@ -1,4 +1,4 @@
-# SymbolsHelper-Confirmed: 2.0.0 amd64 armhf i386 mips powerpc
+# SymbolsHelper-Confirmed: 2.0.0 amd64 armhf i386 mips powerpc s390x
 libdtkwidget.so.2 libdtkwidget2 #MINVER#
  (c++)"ButtonGroup::ButtonGroup(QWidget*)@Base" 2.0.0
  (c++)"ButtonGroup::buttonChecked(int)@Base" 2.0.0
@@ -2887,12 +2887,14 @@ libdtkwidget.so.2 libdtkwidget2 #MINVER#
  (c++)"XUtils::ToggleMaximizedWindow(QWidget const*)@Base" 2.0.0
  (c++)"XUtils::UpdateCursorShape(QWidget const*, int, int, QMargins const&, int)@Base" 2.0.0
  (arch=armhf i386 mips powerpc)_ZN3Dtk6Widget14DForeignWindow9fromWinIdEj@Base 2.0.0
- (optional=templinst|arch=armhf i386 mips powerpc)_ZN4QMapI7QStringS0_E6insertERKS0_S3_@Base 2.0.0
+ (arch=s390x)_ZN3Dtk6Widget14DForeignWindow9fromWinIdEy@Base 2.0.0
+ (optional=templinst|arch=armhf i386 mips powerpc s390x)_ZN4QMapI7QStringS0_E6insertERKS0_S3_@Base 2.0.0
  (optional=templinst|arch=mips)_ZN5QListIPKN3Dtk6Widget17DBlurEffectWidgetEE6appendERKS4_@Base 2.0.0
  (optional=templinst|arch=mips)_ZN5QListIPN3Dtk6Widget11DBaseExpandEE6appendERKS3_@Base 2.0.0
  (optional=templinst|arch=mips)_ZN5QListIPN3Dtk6Widget7DOptionEE6appendERKS3_@Base 2.0.0
  (optional=templinst|arch=armhf i386 mips powerpc)_ZNK8QMapDataI5QDate14CaLunarDayInfoE8findNodeERKS0_@Base 2.0.0
  (optional=templinst|arch=armhf i386 mips powerpc)_ZSt13__adjust_heapIN5QListIiE8iteratorEiiN9__gnu_cxx5__ops15_Iter_less_iterEEvT_T0_S7_T1_T2_@Base 2.0.0
+ (optional=templinst|arch=s390x)_ZSt13__adjust_heapIN5QListIiE8iteratorExiN9__gnu_cxx5__ops15_Iter_less_iterEEvT_T0_S7_T1_T2_@Base 2.0.0
  (c++)"guard variable for QtPrivate::ConnectionTypes<QtPrivate::List<QDate const&, CaLunarDayInfo const&>, true>::types()::t@Base" 2.0.0
  (c++)"guard variable for QtPrivate::ValueTypeIsMetaType<QList<QIcon>, true>::registerConverter(int)::f@Base" 2.0.0
  (c++)"guard variable for QtPrivate::ValueTypeIsMetaType<QList<QPainterPath>, true>::registerConverter(int)::f@Base" 2.0.0
