@@ -1,4 +1,4 @@
-# SymbolsHelper-Confirmed: 2.0.0 amd64 armhf i386 powerpc
+# SymbolsHelper-Confirmed: 2.0.0 amd64 armhf i386 mips powerpc
 libdtkwidget.so.2 libdtkwidget2 #MINVER#
  (c++)"ButtonGroup::ButtonGroup(QWidget*)@Base" 2.0.0
  (c++)"ButtonGroup::buttonChecked(int)@Base" 2.0.0
@@ -2499,7 +2499,7 @@ libdtkwidget.so.2 libdtkwidget2 #MINVER#
  (c++)"QHash<QWidget*, Dtk::Widget::DBlurEffectWidget const*>::duplicateNode(QHashData::Node*, void*)@Base" 2.0.0
  (c++)"QHash<QWidget*, Dtk::Widget::DBlurEffectWidget const*>::erase(QHash<QWidget*, Dtk::Widget::DBlurEffectWidget const*>::const_iterator)@Base" 2.0.0
  (c++)"QHash<QWidget*, Dtk::Widget::DBlurEffectWidget const*>::findNode(QWidget* const&, unsigned int*) const@Base" 2.0.0
- (c++)"QHash<QWidget*, Dtk::Widget::DBlurEffectWidget const*>::values(QWidget* const&) const@Base" 2.0.0
+ (c++|arch=!mips)"QHash<QWidget*, Dtk::Widget::DBlurEffectWidget const*>::values(QWidget* const&) const@Base" 2.0.0
  (c++)"QList<CaLunarDayInfo>::QList(QList<CaLunarDayInfo> const&)@Base" 2.0.0
  (c++)"QList<CaLunarDayInfo>::append(CaLunarDayInfo const&)@Base" 2.0.0
  (c++)"QList<CaLunarDayInfo>::detach_helper_grow(int, int)@Base" 2.0.0
@@ -2623,7 +2623,7 @@ libdtkwidget.so.2 libdtkwidget2 #MINVER#
  (c++)"QList<int>::detach_helper_grow(int, int)@Base" 2.0.0
  (c++)"QList<int>::removeOne(int const&)@Base" 2.0.0
  (c++)"QList<int>::~QList()@Base" 2.0.0
- (c++)"QMap<QListWidgetItem*, Dtk::Widget::DOption*>::values() const@Base" 2.0.0
+ (c++|arch=!mips)"QMap<QListWidgetItem*, Dtk::Widget::DOption*>::values() const@Base" 2.0.0
  (c++)"QMap<QString, QString>::QMap(QMap<QString, QString> const&)@Base" 2.0.0
  (c++)"QMap<QString, QString>::detach_helper()@Base" 2.0.0
  (c++)"QMap<QString, QString>::~QMap()@Base" 2.0.0
@@ -2641,7 +2641,7 @@ libdtkwidget.so.2 libdtkwidget2 #MINVER#
  (c++)"QMap<int, Dtk::Widget::DBaseExpand*>::remove(int const&)@Base" 2.0.0
  (c++)"QMap<int, Dtk::Widget::DBaseExpand*>::values() const@Base" 2.0.0
  (c++)"QMap<int, QString>::detach_helper()@Base" 2.0.0
- (c++)"QMap<int, QString>::keys() const@Base" 2.0.0
+ (c++|arch=!mips)"QMap<int, QString>::keys() const@Base" 2.0.0
  (c++)"QMap<int, QString>::~QMap()@Base" 2.0.0
  (c++)"QMapData<QDate, CaLunarDayInfo>::destroy()@Base" 2.0.0
  (c++)"QMapData<QString, QString>::findNode(QString const&) const@Base" 2.0.0
@@ -2886,10 +2886,13 @@ libdtkwidget.so.2 libdtkwidget2 #MINVER#
  (c++)"XUtils::StartResizing(QWidget const*, QPoint const&, XUtils::CornerEdge const&)@Base" 2.0.0
  (c++)"XUtils::ToggleMaximizedWindow(QWidget const*)@Base" 2.0.0
  (c++)"XUtils::UpdateCursorShape(QWidget const*, int, int, QMargins const&, int)@Base" 2.0.0
- (arch=armhf i386 powerpc)_ZN3Dtk6Widget14DForeignWindow9fromWinIdEj@Base 2.0.0
- (optional=templinst|arch=armhf i386 powerpc)_ZN4QMapI7QStringS0_E6insertERKS0_S3_@Base 2.0.0
- (optional=templinst|arch=armhf i386 powerpc)_ZNK8QMapDataI5QDate14CaLunarDayInfoE8findNodeERKS0_@Base 2.0.0
- (optional=templinst|arch=armhf i386 powerpc)_ZSt13__adjust_heapIN5QListIiE8iteratorEiiN9__gnu_cxx5__ops15_Iter_less_iterEEvT_T0_S7_T1_T2_@Base 2.0.0
+ (arch=armhf i386 mips powerpc)_ZN3Dtk6Widget14DForeignWindow9fromWinIdEj@Base 2.0.0
+ (optional=templinst|arch=armhf i386 mips powerpc)_ZN4QMapI7QStringS0_E6insertERKS0_S3_@Base 2.0.0
+ (optional=templinst|arch=mips)_ZN5QListIPKN3Dtk6Widget17DBlurEffectWidgetEE6appendERKS4_@Base 2.0.0
+ (optional=templinst|arch=mips)_ZN5QListIPN3Dtk6Widget11DBaseExpandEE6appendERKS3_@Base 2.0.0
+ (optional=templinst|arch=mips)_ZN5QListIPN3Dtk6Widget7DOptionEE6appendERKS3_@Base 2.0.0
+ (optional=templinst|arch=armhf i386 mips powerpc)_ZNK8QMapDataI5QDate14CaLunarDayInfoE8findNodeERKS0_@Base 2.0.0
+ (optional=templinst|arch=armhf i386 mips powerpc)_ZSt13__adjust_heapIN5QListIiE8iteratorEiiN9__gnu_cxx5__ops15_Iter_less_iterEEvT_T0_S7_T1_T2_@Base 2.0.0
  (c++)"guard variable for QtPrivate::ConnectionTypes<QtPrivate::List<QDate const&, CaLunarDayInfo const&>, true>::types()::t@Base" 2.0.0
  (c++)"guard variable for QtPrivate::ValueTypeIsMetaType<QList<QIcon>, true>::registerConverter(int)::f@Base" 2.0.0
  (c++)"guard variable for QtPrivate::ValueTypeIsMetaType<QList<QPainterPath>, true>::registerConverter(int)::f@Base" 2.0.0
