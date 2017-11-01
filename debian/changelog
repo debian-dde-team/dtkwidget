@@ -1,3 +1,10 @@
+dtkwidget (2.0.0-4) unstable; urgency=medium
+
+  * Use shlibs file to circumvent symbols problems.
+    We are going to rebuild the world after new release.
+
+ -- Boyuan Yang <073plan@gmail.com>  Wed, 01 Nov 2017 10:15:21 +0800
+
 dtkwidget (2.0.0-3) unstable; urgency=high
 
   * Fix FTBFS on non-amd64 platforms. Closes: #880357
