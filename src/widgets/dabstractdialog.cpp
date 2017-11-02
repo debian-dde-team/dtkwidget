@@ -1,11 +1,19 @@
-/**
- * Copyright (C) 2015 Deepin Technology Co., Ltd.
+/*
+ * Copyright (C) 2015 ~ 2017 Deepin Technology Co., Ltd.
  *
- * This program is free software; you can redistribute it and/or modify
+ * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 3 of the License, or
- * (at your option) any later version.
- **/
+ * the Free Software Foundation, either version 3 of the License, or
+ * any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 
 #include <QMouseEvent>
 #include <QApplication>
@@ -81,6 +89,10 @@ QRect DAbstractDialogPrivate::getParentGeometry() const
     return qApp->primaryScreen()->geometry();
 }
 
+/**
+ * @brief DAbstractDialog::DAbstractDialog constructs a DAbstractDialog instance.
+ * @param parent is the parent widget to be used.
+ */
 DAbstractDialog::DAbstractDialog(QWidget *parent) :
     QDialog(parent),
     DObject(*new DAbstractDialogPrivate(this))
@@ -90,6 +102,10 @@ DAbstractDialog::DAbstractDialog(QWidget *parent) :
     d_func()->init();
 }
 
+/**
+ * @brief DAbstractDialog::backgroundColor
+ * @return the background color of the dialog.
+ */
 QColor DAbstractDialog::backgroundColor() const
 {
     D_DC(DAbstractDialog);
@@ -97,6 +113,10 @@ QColor DAbstractDialog::backgroundColor() const
     return d->backgroundColor;
 }
 
+/**
+ * @brief DAbstractDialog::borderColor
+ * @return the border color of the dialog.
+ */
 QColor DAbstractDialog::borderColor() const
 {
     D_DC(DAbstractDialog);
@@ -104,6 +124,10 @@ QColor DAbstractDialog::borderColor() const
     return d->borderColor;
 }
 
+/**
+ * @brief DAbstractDialog::displayPostion
+ * @return the display position of this dialog.
+ */
 DAbstractDialog::DisplayPostion DAbstractDialog::displayPostion() const
 {
     D_DC(DAbstractDialog);
@@ -111,6 +135,9 @@ DAbstractDialog::DisplayPostion DAbstractDialog::displayPostion() const
     return d->displayPostion;
 }
 
+/**
+ * @brief DAbstractDialog::moveToCenter moves the dialog to the center of the screen or its parent widget.
+ */
 void DAbstractDialog::moveToCenter()
 {
     D_DC(DAbstractDialog);
@@ -118,6 +145,9 @@ void DAbstractDialog::moveToCenter()
     moveToCenterByRect(d->getParentGeometry());
 }
 
+/**
+ * @brief DAbstractDialog::moveToTopRight moves the dialog to the top right of the screen or its parent widget.
+ */
 void DAbstractDialog::moveToTopRight()
 {
     D_DC(DAbstractDialog);
@@ -125,12 +155,20 @@ void DAbstractDialog::moveToTopRight()
     moveToTopRightByRect(d->getParentGeometry());
 }
 
+/**
+ * @brief DAbstractDialog::moveToTopRightByRect moves the dialog to the top right corner of the rect.
+ * @param rect is the target rect.
+ */
 void DAbstractDialog::moveToTopRightByRect(const QRect &rect)
 {
     int x = rect.x() + rect.width() - width();
     move(QPoint(x, 0));
 }
 
+/**
+ * @brief DAbstractDialog::setBackgroundColor sets the background color of the dialog.
+ * @param backgroundColor is the target background color.
+ */
 void DAbstractDialog::setBackgroundColor(QColor backgroundColor)
 {
     D_D(DAbstractDialog);
@@ -143,6 +181,10 @@ void DAbstractDialog::setBackgroundColor(QColor backgroundColor)
     update();
 }
 
+/**
+ * @brief DAbstractDialog::setBorderColor sets the border color of the dialog.
+ * @param borderColor is the target border color.
+ */
 void DAbstractDialog::setBorderColor(QColor borderColor)
 {
     D_D(DAbstractDialog);
@@ -156,6 +198,10 @@ void DAbstractDialog::setBorderColor(QColor borderColor)
     }
 }
 
+/**
+ * @brief DAbstractDialog::setDisplayPostion sets the position of the dialog.
+ * @param displayPostion is the target position.
+ */
 void DAbstractDialog::setDisplayPostion(DAbstractDialog::DisplayPostion displayPostion)
 {
     D_D(DAbstractDialog);
@@ -174,6 +220,10 @@ void DAbstractDialog::setDisplayPostion(DAbstractDialog::DisplayPostion displayP
     }
 }
 
+/**
+ * @brief DAbstractDialog::moveToCenterByRect moves the dialog to the center of the rect.
+ * @param rect is the target rect.
+ */
 void DAbstractDialog::moveToCenterByRect(const QRect &rect)
 {
     QRect qr = geometry();

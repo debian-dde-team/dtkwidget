@@ -1,11 +1,19 @@
-/**
- * Copyright (C) 2015 Deepin Technology Co., Ltd.
+/*
+ * Copyright (C) 2015 ~ 2017 Deepin Technology Co., Ltd.
  *
- * This program is free software; you can redistribute it and/or modify
+ * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 3 of the License, or
- * (at your option) any later version.
- **/
+ * the Free Software Foundation, either version 3 of the License, or
+ * any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 
 #ifndef DSWITCHBUTTON_H
 #define DSWITCHBUTTON_H
@@ -14,11 +22,13 @@
 #include <QPixmap>
 #include <QVariantAnimation>
 #include <QUrl>
+
 #include "dtkwidget_global.h"
+#include "dobject.h"
 
 DWIDGET_BEGIN_NAMESPACE
-
-class DSwitchButton : public QFrame
+class DSwitchButtonPrivate;
+class LIBDTKWIDGETSHARED_EXPORT DSwitchButton : public QFrame, public DTK_CORE_NAMESPACE::DObject
 {
     Q_OBJECT
 
@@ -35,26 +45,25 @@ public:
 
     bool checked() const;
 
-    int animationDuration() const;
+    Q_DECL_DEPRECATED int animationDuration() const;
+    Q_DECL_DEPRECATED QEasingCurve::Type animationType() const;
+    Q_DECL_DEPRECATED QString backgroundImageSource() const;
+    Q_DECL_DEPRECATED double animationStartValue() const;
+    Q_DECL_DEPRECATED double animationEndValue() const;
+    Q_DECL_DEPRECATED QString disabledImageSource() const;
+    Q_DECL_DEPRECATED QString enabledImageSource() const;
 
-    QEasingCurve::Type animationType() const;
-    QString backgroundImageSource() const;
-
-    double animationStartValue() const;
-    double animationEndValue() const;
-    QString disabledImageSource() const;
-    QString enabledImageSource() const;
     QSize sizeHint() const Q_DECL_OVERRIDE;
 
 public Q_SLOTS:
     void setChecked(bool arg);
-    void setAnimationDuration(int arg);
-    void setAnimationType(QEasingCurve::Type arg);
 
-    void setAnimationStartValue(double animationStartValue);
-    void setAnimationEndValue(double animationEndValue);
-    bool setDisabledImageSource(const QString &arg);
-    bool setEnabledImageSource(const QString &arg);
+    Q_DECL_DEPRECATED void setAnimationDuration(int arg);
+    Q_DECL_DEPRECATED void setAnimationType(QEasingCurve::Type arg);
+    Q_DECL_DEPRECATED void setAnimationStartValue(double animationStartValue);
+    Q_DECL_DEPRECATED void setAnimationEndValue(double animationEndValue);
+    Q_DECL_DEPRECATED bool setDisabledImageSource(const QString &arg);
+    Q_DECL_DEPRECATED bool setEnabledImageSource(const QString &arg);
 
 Q_SIGNALS:
     void checkedChanged(bool arg);
@@ -62,17 +71,9 @@ Q_SIGNALS:
 protected:
     void paintEvent(QPaintEvent *e) Q_DECL_OVERRIDE;
     void mousePressEvent(QMouseEvent *) Q_DECL_OVERRIDE;
+
 private:
-    bool m_checked;
-
-    QPixmap m_enabledImage;
-    QPixmap m_disabledImage;
-    QVariantAnimation *m_innerAnimation;
-
-    double m_animationStartValue;
-    double m_animationEndValue;
-    QString m_disabledImageSource;
-    QString m_enabledImageSource;
+    D_DECLARE_PRIVATE(DSwitchButton)
 };
 
 DWIDGET_END_NAMESPACE

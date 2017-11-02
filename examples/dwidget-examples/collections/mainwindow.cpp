@@ -1,11 +1,19 @@
-/**
- * Copyright (C) 2015 Deepin Technology Co., Ltd.
+/*
+ * Copyright (C) 2015 ~ 2017 Deepin Technology Co., Ltd.
  *
- * This program is free software; you can redistribute it and/or modify
+ * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 3 of the License, or
- * (at your option) any later version.
- **/
+ * the Free Software Foundation, either version 3 of the License, or
+ * any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 
 #include <QHBoxLayout>
 #include <QPushButton>
@@ -25,7 +33,6 @@
 #include "dtkwidget_global.h"
 #include "dswitchbutton.h"
 #include "segmentedcontrol.h"
-#include "dcolorpicker.h"
 #include "dplatformwindowhandle.h"
 #include "dtitlebar.h"
 
@@ -33,8 +40,6 @@
 
 #include "mainwindow.h"
 #include "buttonlisttab.h"
-#include "buttongridtab.h"
-#include "imagebuttongridtab.h"
 #include "cameraform.h"
 #include "graphicseffecttab.h"
 
@@ -165,15 +170,9 @@ void MainWindow::initTabWidget()
 
     ButtonListTab *buttonListGroupTab = new ButtonListTab(this);
 
-    ButtonGridTab *buttonGridTab = new ButtonGridTab(this);
-
-    ImageButtonGridTab *imageButtonGridTab = new ImageButtonGridTab(this);
-
     Segmentedcontrol *segmentedControl = new Segmentedcontrol(this);
 
     WidgetsTab *widgetsTab = new WidgetsTab(this);
-
-    DColorPicker *picker = new DColorPicker(1, this);
 
     CameraForm *cameraform = new CameraForm(this);
 
@@ -190,10 +189,7 @@ void MainWindow::initTabWidget()
     m_mainTab->addTab(sliderTab, "Slider");
 
     m_mainTab->addTab(buttonListGroupTab, "ButtonList");
-    m_mainTab->addTab(imageButtonGridTab, "imageButtonGrid");
-    m_mainTab->addTab(buttonGridTab, "ButtonGrid");
     m_mainTab->addTab(segmentedControl, "Segmented Control");
-    m_mainTab->addTab(picker, "Color Picker");
     m_mainTab->addTab(cameraform, "Camera View");
 
     m_mainTab->setCurrentIndex(0);

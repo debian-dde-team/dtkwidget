@@ -1,11 +1,20 @@
-/**
- * Copyright (C) 2017 Deepin Technology Co., Ltd.
+/*
+ * Copyright (C) 2017 ~ 2017 Deepin Technology Co., Ltd.
  *
- * This program is free software; you can redistribute it and/or modify
+ * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 3 of the License, or
- * (at your option) any later version.
- **/
+ * the Free Software Foundation, either version 3 of the License, or
+ * any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 #include "dvideowidget.h"
 #include <DObjectPrivate>
 
@@ -94,6 +103,7 @@ public:
     int hue = 0;
     int saturation = 0;
     bool round = false;
+    qreal ratio = 1;
 
     D_DECLARE_PUBLIC(DVideoWidget)
 };
@@ -106,6 +116,22 @@ DVideoWidgetPrivate::DVideoWidgetPrivate(DVideoWidget *qq)
                 qq, static_cast<void (DVideoWidget::*)()>(&DVideoWidget::repaint));
 }
 
+/*!
+ * \class DVideoWidget
+ * \brief The DVideoWidget class provides a widget which presents video produced
+ * by a media object.
+ *
+ * Since the last frame that played is preserved, it always has better user
+ * experience looping some media. Also it supports video flip (both vertically
+ * or horizontally), video scale and rounded video clip.
+ *
+ * It's usually used just to play video animations like the one presented in
+ * dde-zone settings page. If you want to play video or other media objects,
+ * please refer to QVideoWidget for better preformance or support.
+ *
+ * \param parent is the parent widget to be attached on.
+ */
+
 DVideoWidget::DVideoWidget(QWidget *parent)
     : QWidget(parent)
     , DObject(*new DVideoWidgetPrivate(this))
@@ -113,6 +139,10 @@ DVideoWidget::DVideoWidget(QWidget *parent)
 
 }
 
+/*!
+ * \property DVideoWidget::mirroredHorizontal
+ * \brief indicates whether the video is horizontally flipped.
+ */
 bool DVideoWidget::mirroredHorizontal() const
 {
     D_DC(DVideoWidget);
@@ -120,6 +150,10 @@ bool DVideoWidget::mirroredHorizontal() const
     return d->mirroredHorizontal;
 }
 
+/*!
+ * \property DVideoWidget::mirroredVertical
+ * \brief indicates whether the video is vertically flipped.
+ */
 bool DVideoWidget::mirroredVertical() const
 {
     D_DC(DVideoWidget);
@@ -127,6 +161,10 @@ bool DVideoWidget::mirroredVertical() const
     return d->mirroredVertical;
 }
 
+/*!
+ * @brief DVideoWidget::paint paints a specific QVideoFrame onto the widget.
+ * @param frame is the target video frame.
+ */
 void DVideoWidget::paint(const QVideoFrame &frame)
 {
     D_DC(DVideoWidget);
@@ -143,6 +181,10 @@ void DVideoWidget::paint(const QVideoFrame &frame)
     painter.drawImage(0, 0, image.mirrored(d->mirroredHorizontal, d->mirroredVertical));
 }
 
+/*!
+ * \property DVideoWidget::scale
+ * \brief the scale ratio used to paint the video frames.
+ */
 qreal DVideoWidget::scale() const
 {
     D_DC(DVideoWidget);
@@ -150,6 +192,10 @@ qreal DVideoWidget::scale() const
     return d->scale;
 }
 
+/*!
+ * \property DVideoWidget::aspectRatioMode
+ * \brief holds the current aspect ratio.
+ */
 Qt::AspectRatioMode DVideoWidget::aspectRatioMode() const
 {
     D_DC(DVideoWidget);
@@ -157,6 +203,27 @@ Qt::AspectRatioMode DVideoWidget::aspectRatioMode() const
     return d->aspectRatioMode;
 }
 
+void DVideoWidget::setSourceVideoPixelRatio(const qreal ratio)
+{
+    D_D(DVideoWidget);
+
+    d->ratio = ratio;
+}
+
+const qreal DVideoWidget::sourceVideoPixelRatio() const
+{
+    D_DC(DVideoWidget);
+
+    return d->ratio;
+}
+
+/*!
+ * \property DVideoWidget::brightness
+ * \brief returns the brightness adjust setting.
+ *
+ * \note
+ * This property is not implemented.
+ */
 int DVideoWidget::brightness() const
 {
     D_DC(DVideoWidget);
@@ -164,6 +231,13 @@ int DVideoWidget::brightness() const
     return d->brightness;
 }
 
+/*!
+ * \property DVideoWidget::contrast
+ * \brief returns the contrast adjust setting.
+ *
+ * \note
+ * This property is not implemented.
+ */
 int DVideoWidget::contrast() const
 {
     D_DC(DVideoWidget);
@@ -171,6 +245,13 @@ int DVideoWidget::contrast() const
     return d->contrast;
 }
 
+/*!
+ * \property DVideoWidget::hue
+ * \brief returns the hue adjust setting.
+ *
+ * \note
+ * This property is not implemented.
+ */
 int DVideoWidget::hue() const
 {
     D_DC(DVideoWidget);
@@ -178,6 +259,13 @@ int DVideoWidget::hue() const
     return d->hue;
 }
 
+/*!
+ * \property DVideoWidget::saturation
+ * \brief This property holds an adjustment to the saturation of displayed video.
+ *
+ * \note
+ * This property is not implemented.
+ */
 int DVideoWidget::saturation() const
 {
     D_DC(DVideoWidget);
@@ -185,6 +273,10 @@ int DVideoWidget::saturation() const
     return d->saturation;
 }
 
+/**
+ * @brief DVideoWidget::currentFrame
+ * @return the current frame displaying.
+ */
 const QVideoFrame *DVideoWidget::currentFrame() const
 {
     D_DC(DVideoWidget);
@@ -196,15 +288,19 @@ const QVideoFrame *DVideoWidget::currentFrame() const
     return NULL;
 }
 
-//! 返回当前帧
-//!
+/**
+ * @brief DVideoWidget::capture grabs the current frame.
+ * @return a QPixmap representing the current frame.
+ */
 QPixmap DVideoWidget::capture()
 {
     return grab();
 }
 
-//! 获取视频截图
-//!
+/*!
+ * \property DVideoWidget::round
+ * \brief controls whether the painted video frame are rounded or not.
+ */
 bool DVideoWidget::round() const
 {
     D_DC(DVideoWidget);
@@ -212,6 +308,10 @@ bool DVideoWidget::round() const
     return d->round;
 }
 
+/**
+ * @brief DVideoWidget::setSource sets a QCamera source to be tracked.
+ * @param source is the target camera source.
+ */
 void DVideoWidget::setSource(QCamera *source)
 {
     Q_ASSERT(source);
@@ -221,6 +321,10 @@ void DVideoWidget::setSource(QCamera *source)
     source->setViewfinder(d->formatProxy);
 }
 
+/**
+ * @brief DVideoWidget::setSource sets a QMediaPlayer source to be played.
+ * @param source is the target media player source.
+ */
 void DVideoWidget::setSource(QMediaPlayer *source)
 {
     Q_ASSERT(source);
@@ -347,7 +451,8 @@ void DVideoWidget::paintEvent(QPaintEvent *)
         return;
     }
 
-    image = image.scaled(size()*d->scale, d->aspectRatioMode, Qt::SmoothTransformation);
+    image.setDevicePixelRatio(d->ratio);
+    image = image.scaled(size() * d->scale * d->ratio, d->aspectRatioMode, Qt::SmoothTransformation);
     image = image.mirrored(d->mirroredHorizontal, d->mirroredVertical);
 
     if (d->round) {
@@ -359,7 +464,7 @@ void DVideoWidget::paintEvent(QPaintEvent *)
         painter.setClipPath(path);
     }
 
-    painter.drawImage(rect().center() - image.rect().center(), image);
+    painter.drawImage(QRectF(rect()).center() - QRectF(image.rect()).center() / d->ratio, image);
 }
 
 DWIDGET_END_NAMESPACE

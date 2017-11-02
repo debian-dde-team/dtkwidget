@@ -6,21 +6,30 @@ HEADERS += \
     $$PWD/dwindowmanagerhelper.h \
     $$PWD/dwidgetutil.h \
     $$PWD/ddesktopservices.h \
-    $$PWD/dtrashmanager.h
+    $$PWD/dtrashmanager.h \
+    $$PWD/dsvgrenderer.h \
+    $$PWD/dhidpihelper.h
 
 SOURCES += \
     $$PWD/dfileiconprovider.cpp \
     $$PWD/dthumbnailprovider.cpp \
     $$PWD/dwindowmanagerhelper.cpp \
-    $$PWD/dwidgetutil.cpp
+    $$PWD/dwidgetutil.cpp \
+    $$PWD/dhidpihelper.cpp
 
 linux* {
 CONFIG += link_pkgconfig
-PKGCONFIG += gsettings-qt
+PKGCONFIG += gsettings-qt librsvg-2.0 dframeworkdbus
+
+HEADERS += \
+    $$PWD/dregionmonitor.h \
+    $$PWD/private/dregionmonitor_p.h
 
 SOURCES += \
     $$PWD/ddesktopservices_linux.cpp \
-    $$PWD/dtrashmanager_linux.cpp
+    $$PWD/dtrashmanager_linux.cpp \
+    $$PWD/dsvgrenderer.cpp\
+    $$PWD/dregionmonitor.cpp
 }
 
 win32* | macx* {
@@ -41,7 +50,10 @@ includes.files += $$PWD/*.h \
             $$PWD/DTrashManager \
             $$PWD/DThumbnailProvider \
             $$PWD/DFileIconProvider \
-            $$PWD/DWindowManagerHelper
+            $$PWD/DWindowManagerHelper \
+            $$PWD/DHiDPIHelper \
+            $$PWD/DSvgRenderer
 
 DISTFILES += \
-    $$PWD/desktop.pri
+    $$PWD/desktop.pri \
+    $$PWD/DHiDPIHelper

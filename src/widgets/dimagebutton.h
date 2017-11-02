@@ -1,11 +1,19 @@
-/**
- * Copyright (C) 2015 Deepin Technology Co., Ltd.
+/*
+ * Copyright (C) 2015 ~ 2017 Deepin Technology Co., Ltd.
  *
- * This program is free software; you can redistribute it and/or modify
+ * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 3 of the License, or
- * (at your option) any later version.
- **/
+ * the Free Software Foundation, either version 3 of the License, or
+ * any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 
 #ifndef DIMAGEBUTTON_H
 #define DIMAGEBUTTON_H
@@ -16,16 +24,19 @@
 #include <QPixmap>
 
 #include "dtkwidget_global.h"
+#include "dobject.h"
 
 DWIDGET_BEGIN_NAMESPACE
-
-class LIBDTKWIDGETSHARED_EXPORT DImageButton : public QLabel
+class DImageButtonPrivate;
+class LIBDTKWIDGETSHARED_EXPORT DImageButton : public QLabel, public DTK_CORE_NAMESPACE::DObject
 {
     Q_OBJECT
     Q_PROPERTY(QString normalPic READ getNormalPic WRITE setNormalPic DESIGNABLE true)
     Q_PROPERTY(QString hoverPic READ getHoverPic WRITE setHoverPic DESIGNABLE true)
     Q_PROPERTY(QString pressPic READ getPressPic WRITE setPressPic DESIGNABLE true)
     Q_PROPERTY(QString checkedPic READ getCheckedPic WRITE setCheckedPic DESIGNABLE true)
+    Q_PROPERTY(bool checked READ isChecked WRITE setChecked)
+    Q_PROPERTY(bool checkable READ isCheckable WRITE setCheckable)
 
 public:
     DImageButton(QWidget * parent=0);
@@ -40,20 +51,28 @@ public:
 
     void setChecked(bool flag);
     void setCheckable(bool flag);
-    bool isChecked();
-    bool isCheckable();
+    bool isChecked() const;
+    bool isCheckable() const;
 
     void setNormalPic(const QString & normalPic);
     void setHoverPic(const QString & hoverPic);
     void setPressPic(const QString & pressPic);
     void setCheckedPic(const QString & checkedPic);
 
-    inline const QString getNormalPic() const {return m_normalPic;}
-    inline const QString getHoverPic() const {return m_hoverPic;}
-    inline const QString getPressPic() const {return m_pressPic;}
-    inline const QString getCheckedPic() const {return m_checkedPic;}
+    const QString getNormalPic() const;
+    const QString getHoverPic() const;
+    const QString getPressPic() const;
+    const QString getCheckedPic() const;
 
-    enum State {Normal, Hover, Press, Checked};
+    /*!
+     * \brief The State enum contains the four possible states of DImageButton.
+     */
+    enum State {
+        Normal, /*!< normal state */
+        Hover, /*!< hover state */
+        Press, /*!< pressed state */
+        Checked /*!< checked state */
+    };
 
     State getState() const;
 
@@ -62,6 +81,7 @@ Q_SIGNALS:
     void stateChanged();
 
 protected:
+    DImageButton(DImageButtonPrivate &q, QWidget *parent);
     void enterEvent(QEvent * event) Q_DECL_OVERRIDE;
     void leaveEvent(QEvent * event) Q_DECL_OVERRIDE;
     void mousePressEvent(QMouseEvent * event) Q_DECL_OVERRIDE;
@@ -69,19 +89,8 @@ protected:
     void mouseMoveEvent(QMouseEvent *event) Q_DECL_OVERRIDE;
 
 private:
-    void updateIcon();
-    void setState(State state);
-
-private:
-
-    State m_state = Normal;
-
-    bool m_isChecked = false;
-    bool m_isCheckable = false;
-    QString m_normalPic;
-    QString m_hoverPic;
-    QString m_pressPic;
-    QString m_checkedPic;
+    Q_DISABLE_COPY(DImageButton)
+    D_DECLARE_PRIVATE(DImageButton)
 };
 
 DWIDGET_END_NAMESPACE

@@ -1,11 +1,20 @@
-/**
- * Copyright (C) 2017 Deepin Technology Co., Ltd.
+/*
+ * Copyright (C) 2017 ~ 2017 Deepin Technology Co., Ltd.
  *
- * This program is free software; you can redistribute it and/or modify
+ * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 3 of the License, or
- * (at your option) any later version.
- **/
+ * the Free Software Foundation, either version 3 of the License, or
+ * any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 #ifndef DVIDEOWIDGET_H
 #define DVIDEOWIDGET_H
 
@@ -13,7 +22,6 @@
 #include "dobject.h"
 
 #include <QWidget>
-#include <QVideoWidget>
 
 QT_BEGIN_NAMESPACE
 class QCamera;
@@ -29,23 +37,14 @@ class DVideoWidget : public QWidget, public DTK_CORE_NAMESPACE::DObject
     Q_OBJECT
 
     Q_PROPERTY(bool mirroredHorizontal READ mirroredHorizontal WRITE setMirroredHorizontal NOTIFY mirroredHorizontalChanged)
-    //是否开启水平翻转
     Q_PROPERTY(bool mirroredVertical READ mirroredVertical WRITE setMirroredVertical NOTIFY mirroredVerticalChanged)
-    //是否开启竖直翻转
     Q_PROPERTY(qreal scale READ scale WRITE setScale NOTIFY scaleChanged)
-    //视频帧大小=scale*窗口大小，但是超出窗口外的图像并不绘制，所以当scale>1的时候视频图像会被裁剪，以此来模拟变焦
     Q_PROPERTY(Qt::AspectRatioMode aspectRatioMode READ aspectRatioMode WRITE setAspectRatioMode)
-    //视频图像适应窗口大小时的模式，具体见Qt文档
     Q_PROPERTY(int brightness READ brightness WRITE setBrightness NOTIFY brightnessChanged)
-    //视频亮度调节（待实现）
     Q_PROPERTY(int contrast READ contrast WRITE setContrast NOTIFY contrastChanged)
-    //视频对比度调节（待实现）
     Q_PROPERTY(int hue READ hue WRITE setHue NOTIFY hueChanged)
-    //视频色调调节（待实现）
     Q_PROPERTY(int saturation READ saturation WRITE setSaturation NOTIFY saturationChanged)
-    //视频饱和度调节（待实现）
     Q_PROPERTY(bool round READ round WRITE setRound NOTIFY roundChanged)
-    //是否剪切成圆形
 
 public:
     explicit DVideoWidget(QWidget *parent = 0);
@@ -55,6 +54,9 @@ public:
     void paint(const QVideoFrame& frame);
     qreal scale() const;
     Qt::AspectRatioMode aspectRatioMode() const;
+
+    void setSourceVideoPixelRatio(const qreal ratio);
+    const qreal sourceVideoPixelRatio() const;
 
     int brightness() const;
     int contrast() const;
@@ -76,7 +78,6 @@ Q_SIGNALS:
     void hueChanged(int hue);
     void saturationChanged(int saturation);
     void roundChanged(bool round);
-    void loopChanged(bool loop);
 
 public Q_SLOTS:
     void setSource(QCamera *source);

@@ -1,3 +1,20 @@
+/*
+ * Copyright (C) 2017 ~ 2017 Deepin Technology Co., Ltd.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 #include "dclipeffectwidget.h"
 #include <DObjectPrivate>
 
@@ -34,6 +51,17 @@ DClipEffectWidgetPrivate::DClipEffectWidgetPrivate(DClipEffectWidget *qq)
 
 }
 
+/*!
+ * \class DClipEffectWidget
+ * \brief The DClipEffectWidget class clips itself and its content according to a given clip path.
+ *
+ * This class is useful when you want to make rounded widget or things like that.
+ */
+
+/*!
+ * \brief DClipEffectWidget::DClipEffectWidget constructs an instance of DClipEffectWidget.
+ * \param parent is passed to QWidget constructor.
+ */
 DClipEffectWidget::DClipEffectWidget(QWidget *parent)
     : QWidget(parent)
     , DObject(*new DClipEffectWidgetPrivate(this))
@@ -44,6 +72,10 @@ DClipEffectWidget::DClipEffectWidget(QWidget *parent)
     setFocusPolicy(Qt::NoFocus);
 }
 
+/*!
+ * \property DClipEffectWidget::margins
+ * \brief This property holds the margin need to be removed before the clip.
+ */
 QMargins DClipEffectWidget::margins() const
 {
     D_DC(DClipEffectWidget);
@@ -51,6 +83,10 @@ QMargins DClipEffectWidget::margins() const
     return d->margins;
 }
 
+/*!
+ * \property DClipEffectWidget::clipPath
+ * \brief This property holds the path used to clip the widget.
+ */
 QPainterPath DClipEffectWidget::clipPath() const
 {
     D_DC(DClipEffectWidget);

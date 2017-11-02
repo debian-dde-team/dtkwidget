@@ -13,11 +13,9 @@ win32* {
 
 linux{
     HEADERS += \
-        $$PWD/dcalendar.h \
         $$PWD/dmpriscontrol.h
 
     SOURCES += \
-        $$PWD/dcalendar.cpp \
         $$PWD/dmpriscontrol.cpp
 
 }
@@ -41,10 +39,8 @@ HEADERS += $$PWD/dslider.h\
     $$PWD/dsearchedit.h \
     $$PWD/dswitchbutton.h \
     $$PWD/dsegmentedcontrol.h \
-    $$PWD/dcolorpicker.h \
     $$PWD/dlineedit.h \
     $$PWD/dcombobox.h \
-    $$PWD/dbuttongrid.h\
     $$PWD/dcomboboxmodel.h \
     $$PWD/dcolorcombobox.h \
     $$PWD/dfontcombobox.h \
@@ -55,6 +51,8 @@ HEADERS += $$PWD/dslider.h\
     $$PWD/dwindowrestorebutton.h \
     $$PWD/dwindowoptionbutton.h \
     $$PWD/dshortcutedit.h \
+    $$PWD/dsimplelistview.h \
+    $$PWD/dsimplelistitem.h \
     $$PWD/dabstractcomboboxdelegate.h \
     $$PWD/dexpandgroup.h \
     $$PWD/dlabel.h \
@@ -93,7 +91,9 @@ HEADERS += $$PWD/dslider.h\
     $$PWD/dvideowidget.h \
     $$PWD/dforeignwindow.h \
     $$PWD/dpushbutton.h \
-    $$PWD/dtickeffect.h
+    $$PWD/dtickeffect.h \
+    $$PWD/dwaterprogress.h \
+    $$PWD/dsettingswidgetfactory.h
 
 SOURCES += $$PWD/dslider.cpp \
     $$PWD/dthememanager.cpp \
@@ -113,10 +113,8 @@ SOURCES += $$PWD/dslider.cpp \
     $$PWD/dsearchedit.cpp \
     $$PWD/dswitchbutton.cpp\
     $$PWD/dsegmentedcontrol.cpp \
-    $$PWD/dcolorpicker.cpp \
     $$PWD/dlineedit.cpp \
     $$PWD/dcombobox.cpp \
-    $$PWD/dbuttongrid.cpp\
     $$PWD/dcomboboxmodel.cpp \
     $$PWD/dcolorcombobox.cpp \
     $$PWD/dfontcombobox.cpp \
@@ -127,6 +125,8 @@ SOURCES += $$PWD/dslider.cpp \
     $$PWD/dwindowrestorebutton.cpp \
     $$PWD/dwindowoptionbutton.cpp \
     $$PWD/dshortcutedit.cpp \
+    $$PWD/dsimplelistview.cpp \
+    $$PWD/dsimplelistitem.cpp \
     $$PWD/dabstractcomboboxdelegate.cpp \
     $$PWD/dexpandgroup.cpp \
     $$PWD/dlabel.cpp \
@@ -165,7 +165,9 @@ SOURCES += $$PWD/dslider.cpp \
     $$PWD/dvideowidget.cpp \
     $$PWD/dforeignwindow.cpp \
     $$PWD/dpushbutton.cpp \
-    $$PWD/dtickeffect.cpp
+    $$PWD/dtickeffect.cpp \
+    $$PWD/dwaterprogress.cpp \
+    $$PWD/dsettingswidgetfactory.cpp
 
 RESOURCES += \
     $$PWD/themes/dui_theme_dark.qrc \
@@ -191,5 +193,13 @@ includes.files += \
     $$PWD/DExpandGroup \
     $$PWD/DArrowButton \
     $$PWD/DArrowLineExpand \
-    $$PWD/DThemeManager
+    $$PWD/DThemeManager \
+    $$PWD/DWaterProgress \
+    $$PWD/DSimpleListView \
+    $$PWD/DSimpleListItem \
+    $$PWD/DSearchEdit \
+    $$PWD/DPageIndicator \
+    $$PWD/DSettingsWidgetFactory \
+    $$PWD/DSettingsDialog
+
 

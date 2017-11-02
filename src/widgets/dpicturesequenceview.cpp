@@ -1,16 +1,26 @@
-/**
- * Copyright (C) 2015 Deepin Technology Co., Ltd.
+/*
+ * Copyright (C) 2015 ~ 2017 Deepin Technology Co., Ltd.
  *
- * This program is free software; you can redistribute it and/or modify
+ * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 3 of the License, or
- * (at your option) any later version.
- **/
+ * the Free Software Foundation, either version 3 of the License, or
+ * any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 
 #include "dpicturesequenceview.h"
 #include "private/dpicturesequenceview_p.h"
 
 #include <QGraphicsPixmapItem>
+#include <QImageReader>
+#include <QIcon>
 
 DWIDGET_BEGIN_NAMESPACE
 
@@ -41,6 +51,31 @@ void DPictureSequenceViewPrivate::play()
     D_Q(DPictureSequenceView);
 
     refreshTimer->start();
+}
+
+QPixmap DPictureSequenceViewPrivate::loadPixmap(const QString &path)
+{
+    D_Q(DPictureSequenceView);
+
+    qreal ratio = 1.0;
+
+    const qreal devicePixelRatio = q->devicePixelRatioF();
+
+    QPixmap pixmap;
+
+    if (!qFuzzyCompare(ratio, devicePixelRatio)) {
+        QImageReader reader;
+        reader.setFileName(qt_findAtNxFile(path, devicePixelRatio, &ratio));
+        if (reader.canRead()) {
+            reader.setScaledSize(reader.size() * (devicePixelRatio / ratio));
+            pixmap = QPixmap::fromImage(reader.read());
+            pixmap.setDevicePixelRatio(devicePixelRatio);
+        }
+    } else {
+        pixmap.load(path);
+    }
+
+    return pixmap;
 }
 
 void DPictureSequenceViewPrivate::_q_refreshPicture()
@@ -90,7 +125,7 @@ void DPictureSequenceView::setPictureSequence(const QStringList &sequence, Paint
     d->pictureItemList.clear();
 
     for (const QString &path : sequence) {
-        QPixmap pixmap(path);
+        QPixmap pixmap = d->loadPixmap(path);
 
         if (paintMode == DPictureSequenceView::AutoScaleMode)
             pixmap = pixmap.scaled(size(), Qt::KeepAspectRatio, Qt::SmoothTransformation);

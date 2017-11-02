@@ -1,11 +1,19 @@
-/**
- * Copyright (C) 2015 Deepin Technology Co., Ltd.
+/*
+ * Copyright (C) 2015 ~ 2017 Deepin Technology Co., Ltd.
  *
- * This program is free software; you can redistribute it and/or modify
+ * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 3 of the License, or
- * (at your option) any later version.
- **/
+ * the Free Software Foundation, either version 3 of the License, or
+ * any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 
 #ifndef DSLIDER_H
 #define DSLIDER_H
@@ -28,9 +36,12 @@ class LIBDTKWIDGETSHARED_EXPORT DSlider : public QSlider
     Q_PROPERTY(int hoverShowValueInterval READ hoverShowValueInterval WRITE setHoverShowValueInterval)
 
 public:
+    /*!
+     * \brief The HandleType enum contains the handle types can be used by DSlider.
+     */
     enum HandleType {
-        SharpHandler,
-        RoundHandle
+        SharpHandler, /*!< Rectangle with one side replaced by an arrow, like handle on verniers */
+        RoundHandle /*!< Round shape handle */
     };
 
     DSlider(QWidget *parent = 0);
@@ -55,7 +66,6 @@ public:
     void addScale(int value);
     void removeScale(int value);
 
-    QSize sizeHint() const;
     bool hoverShowValue() const;
     QColor hoverValueColor() const;
     int hoverShowValueInterval() const;
@@ -67,10 +77,11 @@ public Q_SLOTS:
 
 protected:
     DSlider(DSliderPrivate &d);
-    void paintEvent(QPaintEvent *event);
-    void mousePressEvent(QMouseEvent *event);
-    void mouseReleaseEvent(QMouseEvent *event);
-    void mouseMoveEvent(QMouseEvent *event);
+    void paintEvent(QPaintEvent *event) Q_DECL_OVERRIDE;
+    void mousePressEvent(QMouseEvent *event) Q_DECL_OVERRIDE;
+    void mouseReleaseEvent(QMouseEvent *event) Q_DECL_OVERRIDE;
+    void mouseMoveEvent(QMouseEvent *event) Q_DECL_OVERRIDE;
+    QSize sizeHint() const Q_DECL_OVERRIDE;
 
 private Q_SLOTS:
     void hoverTimout();

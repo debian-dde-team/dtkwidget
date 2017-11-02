@@ -1,4 +1,4 @@
-QT += core gui multimedia multimediawidgets
+QT += core gui multimedia multimediawidgets svg
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -26,8 +26,6 @@ SOURCES += main.cpp\
     indicatortab.cpp \
     widgetstab.cpp \
     comboboxtab.cpp \
-    buttongridtab.cpp \
-    imagebuttongridtab.cpp \
     cameraform.cpp \
     graphicseffecttab.cpp
 
@@ -42,8 +40,6 @@ HEADERS  += mainwindow.h \
     indicatortab.h \
     widgetstab.h \
     comboboxtab.h \
-    buttongridtab.h \
-    imagebuttongridtab.h \
     cameraform.h \
     graphicseffecttab.h
 
@@ -70,7 +66,7 @@ else:win32:CONFIG(debug, debug|release): LIBS += -L$$OUT_PWD/../../../src/debug 
 else:unix: LIBS += -L$$OUT_PWD/../../../src/ -ldtkwidget
 
 INCLUDEPATH += $$PWD/../../../src
-INCLUDEPATH += $$PWD/../../../src/widgets
+INCLUDEPATH += $$PWD/../../../src/widgets $$PWD/../../../src/util
 DEPENDPATH += $$PWD/../../../src
 
 CONFIG(debug, debug|release) {

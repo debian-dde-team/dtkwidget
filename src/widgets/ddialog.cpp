@@ -1,11 +1,19 @@
-﻿/**
- * Copyright (C) 2015 Deepin Technology Co., Ltd.
+/*
+ * Copyright (C) 2017 ~ 2017 Deepin Technology Co., Ltd.
  *
- * This program is free software; you can redistribute it and/or modify
+ * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 3 of the License, or
- * (at your option) any later version.
- **/
+ * the Free Software Foundation, either version 3 of the License, or
+ * any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 
 #include <QPushButton>
 #include <QLabel>
@@ -25,6 +33,7 @@
 
 #include "private/ddialog_p.h"
 
+#include "dimagebutton.h"
 #include "dialog_constants.h"
 #include "ddialog.h"
 #include "dthememanager.h"
@@ -113,7 +122,7 @@ void DDialogPrivate::init()
     topLayout->addLayout(contentLayout);
 
     // TopLayout--Close button
-    closeButton = new QPushButton(q);
+    closeButton = new DImageButton(q);
     closeButton->setObjectName("CloseButton");
     closeButton->setFixedSize(DIALOG::CLOSE_BUTTON_WIDTH, DIALOG::CLOSE_BUTTON_HEIGHT);
     closeButton->setAttribute(Qt::WA_NoMousePropagation);
@@ -426,7 +435,7 @@ void DDialog::insertButton(int index, QAbstractButton *button, bool isDefault)
     label->setFixedWidth(1);
     label->hide();
 
-    if(index > 0 && index >= buttonCount()) {
+    if (index > 0 && index >= buttonCount()) {
         QLabel *label = qobject_cast<QLabel*>(d->buttonLayout->itemAt(d->buttonLayout->count() - 1)->widget());
         if(label)
             label->show();
@@ -438,8 +447,26 @@ void DDialog::insertButton(int index, QAbstractButton *button, bool isDefault)
 
     connect(button, SIGNAL(clicked(bool)), this, SLOT(_q_onButtonClicked()));
 
-    if(isDefault) {
+    if (isDefault) {
         setDefaultButton(button);
+    }
+
+    const QString &text = button->text();
+
+    if (text.count() == 2) {
+        for (const QChar &ch : text) {
+            switch (ch.script()) {
+            case QChar::Script_Han:
+            case QChar::Script_Katakana:
+            case QChar::Script_Hiragana:
+            case QChar::Script_Hangul:
+                break;
+            default:
+                return;
+            }
+        }
+
+        button->setText(QString().append(text.at(0)).append(QChar::Nbsp).append(text.at(1)));
     }
 }
 
@@ -653,12 +680,10 @@ void DDialog::setIcon(const QIcon &icon)
     d->icon = icon;
 
     if(!icon.isNull()) {
-        const QList<QSize> &sizes = icon.availableSizes();
-        setIconPixmap(icon.pixmap(sizes.first()));
-        if(!sizes.isEmpty())
-            setIconPixmap(icon.pixmap(sizes.first()));
-        else
-            setIconPixmap(icon.pixmap(64, 64));
+        auto size = QSize(64, 64);
+        size = icon.availableSizes().value(0, size);
+        auto pixmap = icon.pixmap(size);
+        setIconPixmap(pixmap);
     }
 }
 

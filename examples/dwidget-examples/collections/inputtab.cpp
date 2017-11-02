@@ -1,11 +1,19 @@
-/**
- * Copyright (C) 2015 Deepin Technology Co., Ltd.
+/*
+ * Copyright (C) 2015 ~ 2017 Deepin Technology Co., Ltd.
  *
- * This program is free software; you can redistribute it and/or modify
+ * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 3 of the License, or
- * (at your option) any later version.
- **/
+ * the Free Software Foundation, either version 3 of the License, or
+ * any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 
 #include "inputtab.h"
 #include "dshortcutedit.h"
@@ -17,6 +25,7 @@
 
 #include <QPixmap>
 #include <QDebug>
+#include <QTimer>
 
 InputTab::InputTab(QWidget *parent) : QLabel(parent)
 {
@@ -44,11 +53,12 @@ InputTab::InputTab(QWidget *parent) : QLabel(parent)
     Dtk::Widget::DThemeManager::instance()->setTheme(searchEdit, "dark");
 
     DTK_WIDGET_NAMESPACE::DLineEdit *lineEdit = new DTK_WIDGET_NAMESPACE::DLineEdit(this);
-    lineEdit->setText("LineEdit");
+    lineEdit->setText("Test Alert Message");
     lineEdit->move(20, 180);
 //    lineEdit->setAlert(true);
 //    lineEdit->setFixedSize(200, 30);
     connect(lineEdit, &DTK_WIDGET_NAMESPACE::DLineEdit::focusChanged, [](bool focus) {qDebug() << "focus: " << focus;});
+    QTimer::singleShot(2000, nullptr, [=] {lineEdit->showAlertMessage("Test Alert Message !!");});
 
     DTK_WIDGET_NAMESPACE::DFileChooserEdit *fileChooser = new DTK_WIDGET_NAMESPACE::DFileChooserEdit(this);
     fileChooser->move(150, 180);

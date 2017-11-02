@@ -1,11 +1,19 @@
-/**
- * Copyright (C) 2017 Deepin Technology Co., Ltd.
+/*
+ * Copyright (C) 2017 ~ 2017 Deepin Technology Co., Ltd.
  *
- * This program is free software; you can redistribute it and/or modify
+ * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 3 of the License, or
- * (at your option) any later version.
- **/
+ * the Free Software Foundation, either version 3 of the License, or
+ * any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 
 #include "ddesktopservices.h"
 
@@ -13,7 +21,7 @@
 #include <QDBusPendingCall>
 #include <QDebug>
 #include <QFile>
-//#include <QMediaPlayer>
+#include <QMediaPlayer>
 #include <QGSettings>
 
 DWIDGET_BEGIN_NAMESPACE
@@ -22,19 +30,11 @@ DWIDGET_BEGIN_NAMESPACE
     QDBusInterface *interface = fileManager1DBusInterface();\
     return interface && interface->call(#name, urls2uris(urls), startupId).type() != QDBusMessage::ErrorMessage;
 
-static QMap<QString, QString> soundFileKeyMap = {{"sys-login", "login"}, {"sys-logout", "logout"}, {"sys-shutdown", "shutdown"},
-    {"suspend-resume", "wakeup"}, {"message-out", "notification"}, {"app-error", "unable-operate"},
-    {"trash-empty", "empty-trash"}, {"audio-volume-change", "volume-change"}, {"power-unplug-battery-low", "battery-low"},
-    {"power-plug", "power-plug"}, {"power-unplug", "power-unplug"}, {"device-added", "device-plug"},
-    {"device-removed", "device-unplug"}, {"send-to", "icon-to-desktop"}, {"camera-shutter", "camera-shutter"}, {"screen-capture", "screenshot"},
-    {"screen-capture-complete", "screenshot"}
-};
-
 static QDBusInterface *fileManager1DBusInterface()
 {
     static QDBusInterface interface(QStringLiteral("org.freedesktop.FileManager1"),
-                                        QStringLiteral("/org/freedesktop/FileManager1"));
-
+                                        QStringLiteral("/org/freedesktop/FileManager1"),
+                                        QStringLiteral("org.freedesktop.FileManager1"));
     return &interface;
 }
 
@@ -44,7 +44,7 @@ static QStringList urls2uris(const QList<QUrl> &urls)
 
     list.reserve(urls.size());
 
-    for (const QUrl url : urls) {
+    for (const QUrl &url : urls) {
         list << url.toString();
     }
 
@@ -64,17 +64,17 @@ static QList<QUrl> path2urls(const QList<QString> &paths)
     return list;
 }
 
-//static QMediaPlayer *soundEffectPlayer()
-//{
-//    static QMediaPlayer *player = Q_NULLPTR;
+static QMediaPlayer *soundEffectPlayer()
+{
+    static QMediaPlayer *player = Q_NULLPTR;
 
-//    if (!player) {
-//        player = new QMediaPlayer;
-//        player->setVolume(70);
-//    }
+    if (!player) {
+        player = new QMediaPlayer;
+        player->setVolume(70);
+    }
 
-//    return player;
-//}
+    return player;
+}
 
 static QString soundEffectFilePath(const QString &name)
 {
@@ -96,7 +96,12 @@ static bool systemSoundEffectEnabled(const QString &name)
     const bool effEnabled = settings.get("enabled").toBool();
 
     if (effEnabled) {
-        return settings.get(soundFileKeyMap[name]).toBool();
+        const QStringList list = settings.keys();
+        if (!list.contains(name)) {
+            return false;
+        }
+
+        return settings.get(name).toBool();
     }
 
     return effEnabled;
@@ -162,17 +167,38 @@ bool DDesktopServices::showFileItems(const QList<QUrl> urls, const QString &star
     EASY_CALL_DBUS(ShowItems)
 }
 
+bool DDesktopServices::trash(QString localFilePath)
+{
+    return trash(QUrl::fromLocalFile(localFilePath));
+}
+
+bool DDesktopServices::trash(const QList<QString> localFilePaths)
+{
+    return trash(path2urls(localFilePaths));
+}
+
+bool DDesktopServices::trash(QUrl url)
+{
+    return trash(QList<QUrl>() << url);
+}
+
+bool DDesktopServices::trash(const QList<QUrl> urls)
+{
+    QDBusInterface *interface = fileManager1DBusInterface();
+    return interface && interface->call("Trash", urls2uris(urls)).type() != QDBusMessage::ErrorMessage;
+}
+
 bool DDesktopServices::playSystemSoundEffect(const DDesktopServices::SystemSoundEffect &effect)
 {
     switch (effect) {
     case SSE_Notifications:
-        return playSystemSoundEffect("message-out");
+        return playSystemSoundEffect("message");
     case SSE_Screenshot:
         return playSystemSoundEffect("camera-shutter");
     case SSE_EmptyTrash:
         return playSystemSoundEffect("trash-empty");
     case SSE_SendFileComplete:
-        return playSystemSoundEffect("send-to");
+        return playSystemSoundEffect("complete-copy");
     default:
         return false;
     }
@@ -189,9 +215,9 @@ bool DDesktopServices::playSystemSoundEffect(const QString &name)
         return false;
     }
 
-//    QMediaPlayer *player = soundEffectPlayer();
-//    player->setMedia(QUrl::fromLocalFile(path));
-//    player->play();
+    QMediaPlayer *player = soundEffectPlayer();
+    player->setMedia(QUrl::fromLocalFile(path));
+    player->play();
 
     return true;
 }

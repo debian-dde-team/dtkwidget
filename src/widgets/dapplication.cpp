@@ -1,11 +1,19 @@
-/**
- * Copyright (C) 2015 Deepin Technology Co., Ltd.
+/*
+ * Copyright (C) 2015 ~ 2017 Deepin Technology Co., Ltd.
  *
- * This program is free software; you can redistribute it and/or modify
+ * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 3 of the License, or
- * (at your option) any later version.
- **/
+ * the Free Software Foundation, either version 3 of the License, or
+ * any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 
 #include <QDebug>
 #include <QDir>
@@ -19,13 +27,17 @@
 #include <QSystemSemaphore>
 #include <QtConcurrent/QtConcurrent>
 
+#ifdef DTK_DBUS_SINGLEINSTANCE
+#include <QDBusError>
+#include <QDBusConnection>
+#endif
+
 #include <qpa/qplatformintegrationfactory_p.h>
 
 #include <DStandardPaths>
 
 #include "dapplication.h"
 #include "dthememanager.h"
-#include "private/dthemehelper.h"
 #include "private/dapplication_p.h"
 #include "daboutdialog.h"
 
@@ -75,34 +87,6 @@ void DApplicationPrivate::setTheme(const QString &theme)
     themeManager->setTheme(theme);
 }
 
-bool DApplicationPrivate::setSingleInstance(const QString &key)
-{
-    D_Q(DApplication);
-
-    if (m_localServer) {
-        return m_localServer->isListening();
-    }
-
-    QLocalSocket *localSocket = new QLocalSocket;
-    localSocket->connectToServer(key);
-
-    // if connect success, another instance is running.
-    bool result = localSocket->waitForConnected(1000);
-    localSocket->deleteLater();
-
-    if (result) {
-        return false;
-    }
-
-    // create local server
-    m_localServer = new QLocalServer(q);
-    m_localServer->removeServer(key);
-
-    QObject::connect(m_localServer, &QLocalServer::newConnection, q, &DApplication::newInstanceStarted);
-
-    return m_localServer->listen(key);
-}
-
 static bool tryAcquireSystemSemaphore(QSystemSemaphore *ss, qint64 timeout = 10)
 {
     if (ss->error() != QSystemSemaphore::NoError) {
@@ -138,8 +122,9 @@ bool DApplicationPrivate::setSingleInstanceBySemaphore(const QString &key)
     static QSystemSemaphore ss(key, 1, QSystemSemaphore::Open);
     static bool singleInstance = false;
 
-    if (singleInstance)
+    if (singleInstance) {
         return true;
+    }
 
     Q_ASSERT_X(ss.error() == QSystemSemaphore::NoError, "DApplicationPrivate::setSingleInstanceBySemaphore:", ss.errorString().toLocal8Bit().constData());
 
@@ -147,9 +132,11 @@ bool DApplicationPrivate::setSingleInstanceBySemaphore(const QString &key)
 
     if (singleInstance) {
         QtConcurrent::run([] {
-            while (ss.acquire()) {
-                if (qApp->startingUp())
+            while (ss.acquire() && singleInstance)
+            {
+                if (qApp->startingUp() || qApp->closingDown()) {
                     break;
+                }
 
                 ss.release(1);
 
@@ -157,13 +144,37 @@ bool DApplicationPrivate::setSingleInstanceBySemaphore(const QString &key)
             }
         });
 
-        qAddPostRoutine([] {
+        auto clean_fun = [] {
             ss.release(1);
-        });
+            singleInstance = false;
+        };
+
+        qAddPostRoutine(clean_fun);
+        atexit(clean_fun);
     }
 
     return singleInstance;
 }
+
+#ifdef DTK_DBUS_SINGLEINSTANCE
+/**
+* \brief DApplicationPrivate::setSingleInstanceByDbus will check singleinstance by
+* register dbus service
+* \param key is the last of dbus service name, like "com.deepin.SingleInstance.key"
+* \return
+*/
+bool DApplicationPrivate::setSingleInstanceByDbus(const QString &key)
+{
+    auto basename = "com.deepin.SingleInstance.";
+    QString name = basename + key;
+    auto sessionBus = QDBusConnection::sessionBus();
+    if (!sessionBus.registerService(name)) {
+        qDebug() << "register service failed:" << sessionBus.lastError();
+        return  false;
+    }
+    return true;
+}
+#endif
 
 bool DApplicationPrivate::loadDtkTranslator(QList<QLocale> localeFallback)
 {
@@ -235,6 +246,11 @@ bool DApplicationPrivate::loadTranslator(QList<DPathBuf> translateDirs, const QS
     return false;
 }
 
+/**
+ * @brief DApplication::DApplication constructs an instance of DApplication.
+ * @param argc is the same as in the main function.
+ * @param argv is the same as in the main function.
+ */
 DApplication::DApplication(int &argc, char **argv) :
     QApplication(argc, argv),
     DObject(*new DApplicationPrivate(this))
@@ -242,6 +258,13 @@ DApplication::DApplication(int &argc, char **argv) :
     qputenv("QT_QPA_PLATFORM", QByteArray());
 }
 
+/**
+ * @brief DApplication::theme returns name of the theme that the application is currently using.
+ *
+ * theme name can be one of light, dark, semidark or semilight.
+ *
+ * @return the theme name.
+ */
 QString DApplication::theme() const
 {
     D_DC(DApplication);
@@ -249,6 +272,10 @@ QString DApplication::theme() const
     return d->theme();
 }
 
+/**
+ * @brief DApplication::setTheme for the application to use the theme we provide.
+ * @param theme is the name of the theme we want to set.
+ */
 void DApplication::setTheme(const QString &theme)
 {
     D_D(DApplication);
@@ -256,11 +283,25 @@ void DApplication::setTheme(const QString &theme)
     d->setTheme(theme);
 }
 
+/**
+ * @brief DApplication::setSingleInstance marks this application to be single instanced.
+ * @param key is used as the unique ID of every application.
+ *
+ * It should be in form of dde-dock, dde-desktop or dde-control-center etc.
+ *
+ * You can use dbus implement if you use an sandbox like flatpak and so on, just
+ * build with DTK_DBUS_SINGLEINSTANCE
+ *
+ * @return true if succeed, otherwise false.
+ */
 bool DApplication::setSingleInstance(const QString &key)
 {
     D_D(DApplication);
-
+#ifdef DTK_DBUS_SINGLEINSTANCE
+    return d->setSingleInstanceByDbus(key);
+#else
     return d->setSingleInstanceBySemaphore(key);
+#endif
 }
 
 //! load translate file form system or application data path;
@@ -306,6 +347,13 @@ bool DApplication::isDXcbPlatform()
     return qApp && qApp->platformName() == "dxcb";
 }
 
+/**
+ * @brief DApplication::productName returns the product name of this application.
+ *
+ * It's mainly used to construct an about dialog of the application.
+ *
+ * @return the product name of this application if set, otherwise the applicationDisplayName.
+ */
 QString DApplication::productName() const
 {
     D_DC(DApplication);
@@ -313,6 +361,10 @@ QString DApplication::productName() const
     return d->productName.isEmpty() ? applicationDisplayName() : d->productName;
 }
 
+/**
+ * @brief DApplication::setProductName sets the product name of this application.
+ * @param productName is the product name to be set.
+ */
 void DApplication::setProductName(const QString &productName)
 {
     D_D(DApplication);
@@ -320,20 +372,50 @@ void DApplication::setProductName(const QString &productName)
     d->productName = productName;
 }
 
-const QPixmap &DApplication::productIcon() const
+/**
+ * @brief DApplication::productIcon returns the product icon of this application.
+ *
+ * It's mainly used to construct an about dialog of the application.
+ *
+ * @return the product icon of this application if set, otherwise empty.
+ */
+const QIcon &DApplication::productIcon() const
 {
     D_DC(DApplication);
 
     return d->productIcon;
 }
 
-void DApplication::setProductIcon(const QPixmap &productIcon)
+/**
+ * @brief DApplication::setProductIcon sets the product icon of this application.
+ * @param productIcon is the product icon to be set.
+ */
+void DApplication::setProductIcon(const QPixmap &productIconPixmap)
+{
+    D_D(DApplication);
+
+    d->productIcon = productIconPixmap;
+}
+
+
+/**
+ * @brief DApplication::setProductIcon sets the product icon of this application.
+ * @param productIcon is the product icon to be set.
+ */
+void DApplication::setProductIcon(const QIcon &productIcon)
 {
     D_D(DApplication);
 
     d->productIcon = productIcon;
 }
 
+/**
+ * @brief DApplication::applicationLicense returns the license used by this application.
+ *
+ * It's mainly used to construct an about dialog of the application.
+ *
+ * @return the license used by this application.
+ */
 QString DApplication::applicationLicense() const
 {
     D_DC(DApplication);
@@ -341,6 +423,10 @@ QString DApplication::applicationLicense() const
     return d->appLicense;
 }
 
+/**
+ * @brief DApplication::setApplicationLicense sets the license of this application.
+ * @param license is the license to be set.
+ */
 void DApplication::setApplicationLicense(const QString &license)
 {
     D_D(DApplication);
@@ -348,6 +434,13 @@ void DApplication::setApplicationLicense(const QString &license)
     d->appLicense = license;
 }
 
+/**
+ * @brief DApplication::applicationDescription returns the long description of the application.
+ *
+ * It's mainly used to construct an about dialog of the application.
+ *
+ * @return the description of the application if set, otherwise empty.
+ */
 QString DApplication::applicationDescription() const
 {
     D_DC(DApplication);
@@ -355,6 +448,10 @@ QString DApplication::applicationDescription() const
     return d->appDescription;
 }
 
+/**
+ * @brief DApplication::setApplicationDescription sets the description of the application.
+ * @param description is description to be set.
+ */
 void DApplication::setApplicationDescription(const QString &description)
 {
     D_D(DApplication);
@@ -376,6 +473,13 @@ void DApplication::setApplicationHomePage(const QString &link)
     d->homePage = link;
 }
 
+/**
+ * @brief DApplication::applicationAcknowledgementPage returns the acknowlegement page of the application.
+ *
+ * It's mainly used to construct an about dialog of the application.
+ *
+ * @return the acknowlegement page of the application if set, otherwise empty.
+ */
 QString DApplication::applicationAcknowledgementPage() const
 {
     D_DC(DApplication);
@@ -383,6 +487,10 @@ QString DApplication::applicationAcknowledgementPage() const
     return d->acknowledgementPage;
 }
 
+/**
+ * @brief DApplication::setApplicationAcknowledgementPage sets the acknowlegement page of the application.
+ * @param link is the acknowlegement page link to be shown in the about dialog.
+ */
 void DApplication::setApplicationAcknowledgementPage(const QString &link)
 {
     D_D(DApplication);
@@ -390,6 +498,13 @@ void DApplication::setApplicationAcknowledgementPage(const QString &link)
     d->acknowledgementPage = link;
 }
 
+/**
+ * @brief DApplication::aboutDialog returns the about dialog of this application.
+ *
+ * If the about dialog is not set, it will automatically construct one.
+ *
+ * @return the about dialog instance.
+ */
 DAboutDialog *DApplication::aboutDialog()
 {
     D_D(DApplication);
@@ -397,6 +512,14 @@ DAboutDialog *DApplication::aboutDialog()
     return d->aboutDialog;
 }
 
+/**
+ * @brief DApplication::setAboutDialog sets the about dialog of this application.
+ *
+ * It's mainly used to override the auto-constructed about dialog which is not
+ * a common case, so please do double check before using this method.
+ *
+ * @param aboutDialog
+ */
 void DApplication::setAboutDialog(DAboutDialog *aboutDialog)
 {
     D_D(DApplication);

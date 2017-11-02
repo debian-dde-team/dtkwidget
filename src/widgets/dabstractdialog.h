@@ -1,11 +1,19 @@
-/**
- * Copyright (C) 2015 Deepin Technology Co., Ltd.
+/*
+ * Copyright (C) 2015 ~ 2017 Deepin Technology Co., Ltd.
  *
- * This program is free software; you can redistribute it and/or modify
+ * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 3 of the License, or
- * (at your option) any later version.
- **/
+ * the Free Software Foundation, either version 3 of the License, or
+ * any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 
 #ifndef DABSTRACTDIALOG_H
 #define DABSTRACTDIALOG_H
@@ -33,9 +41,12 @@ class DAbstractDialog : public QDialog, public DTK_CORE_NAMESPACE::DObject
     Q_PROPERTY(DisplayPostion displayPostion READ displayPostion WRITE setDisplayPostion)
 
 public:
+    /**
+     * @brief The DisplayPostion enum contains the position options that can be specified by all dialogs.
+     */
     enum DisplayPostion {
-        DisplayCenter,
-        DisplayTopRight
+        DisplayCenter, /*!< display this dialog in the center of the screen */
+        DisplayTopRight /*!< display this dialog in the top right of the screen */
     };
 
     Q_ENUMS(DisplayPostion)
@@ -57,6 +68,10 @@ public Q_SLOTS:
     void setDisplayPostion(DisplayPostion displayPostion);
 
 Q_SIGNALS:
+    /**
+     * @brief sizeChanged is emitted when the size of this dialog changed.
+     * @param size is the target size.
+     */
     void sizeChanged(QSize size);
 
 protected:

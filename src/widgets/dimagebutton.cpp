@@ -1,63 +1,118 @@
-/**
- * Copyright (C) 2015 Deepin Technology Co., Ltd.
+/*
+ * Copyright (C) 2015 ~ 2017 Deepin Technology Co., Ltd.
  *
- * This program is free software; you can redistribute it and/or modify
+ * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 3 of the License, or
- * (at your option) any later version.
- **/
+ * the Free Software Foundation, either version 3 of the License, or
+ * any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 
 #include "dimagebutton.h"
 #include "dconstants.h"
 #include "dthememanager.h"
+#include "private/dimagebutton_p.h"
 
 #include <QMouseEvent>
 #include <QEvent>
+#include <QIcon>
+#include <QApplication>
+#include <QImageReader>
 
 DWIDGET_BEGIN_NAMESPACE
 
+/*!
+ * \class DImageButton
+ * \brief The DImageButton class provides an easy way to create image based buttons.
+ *
+ * A DImageButton has four states: normal, hover, pressed and checked, developers
+ * should provide at least the normal state image to get it to work properly.
+ */
+
+/*!
+ * \brief DImageButton::DImageButton constructs an instance of DImageButton
+ * \param parent is the parent widget that the button will be attached to.
+ */
 DImageButton::DImageButton(QWidget *parent)
     : QLabel(parent)
+    , DObject(*new DImageButtonPrivate(this))
 {
     D_THEME_INIT_WIDGET(DImageButton);
-    updateIcon();
+
+    D_D(DImageButton);
+
+    d->updateIcon();
 }
 
+/*!
+ * \brief DImageButton::DImageButton This is an overloaded function.
+ *
+ * It's convinient to provide the images that used at the initialize stage.
+ *
+ * \param normalPic is the path of image to be used as the normal state.
+ * \param hoverPic is the path of image to be used as the hover state.
+ * \param pressPic is the path of image to be used as the pressed state.
+ * \param parent is the parent widget that the button will be attached to.
+ */
 DImageButton::DImageButton(const QString &normalPic, const QString &hoverPic, const QString &pressPic, QWidget *parent)
     : QLabel(parent)
+    , DObject(*new DImageButtonPrivate(this))
 {
     D_THEME_INIT_WIDGET(DImageButton);
 
+    D_D(DImageButton);
+
     if (!normalPic.isEmpty())
-        m_normalPic = normalPic;
+        d->m_normalPic = normalPic;
     if (!hoverPic.isEmpty())
-        m_hoverPic = hoverPic;
+        d->m_hoverPic = hoverPic;
     if (!pressPic.isEmpty())
-        m_pressPic = pressPic;
+        d->m_pressPic = pressPic;
 
     setCheckable(false);
 
-    updateIcon();
+    d->updateIcon();
 }
 
+/*!
+ * \brief DImageButton::DImageButton This is an overloaded function.
+ *
+ * It's convinient to provide the images that used at the initialize stage.
+ *
+ * \param normalPic is the path of image to be used as the normal state.
+ * \param hoverPic is the path of image to be used as the hover state.
+ * \param pressPic is the path of image to be used as the pressed state.
+ * \param checkedPic is the path of image to be used as the checked state.
+ * \param parent is the parent widget that the button will be attached to.
+ */
 DImageButton::DImageButton(const QString &normalPic, const QString &hoverPic,
                            const QString &pressPic, const QString &checkedPic, QWidget *parent)
     : QLabel(parent)
+    , DObject(*new DImageButtonPrivate(this))
 {
     D_THEME_INIT_WIDGET(DImageButton);
 
+    D_D(DImageButton);
+
     if (!normalPic.isEmpty())
-        m_normalPic = normalPic;
+        d->m_normalPic = normalPic;
     if (!hoverPic.isEmpty())
-        m_hoverPic = hoverPic;
+        d->m_hoverPic = hoverPic;
     if (!pressPic.isEmpty())
-        m_pressPic = pressPic;
+        d->m_pressPic = pressPic;
     if (!checkedPic.isEmpty())
-        m_checkedPic = checkedPic;
+        d->m_checkedPic = checkedPic;
 
     setCheckable(true);
 
-    updateIcon();
+    d->updateIcon();
 }
 
 DImageButton::~DImageButton()
@@ -66,10 +121,12 @@ DImageButton::~DImageButton()
 
 void DImageButton::enterEvent(QEvent *event)
 {
+    D_D(DImageButton);
+
     setCursor(Qt::PointingHandCursor);
 
-    if (!m_isChecked){
-        setState(Hover);
+    if (!d->m_isChecked){
+        d->setState(Hover);
     }
 
     event->accept();
@@ -78,8 +135,10 @@ void DImageButton::enterEvent(QEvent *event)
 
 void DImageButton::leaveEvent(QEvent *event)
 {
-    if (!m_isChecked){
-        setState(Normal);
+    D_D(DImageButton);
+
+    if (!d->m_isChecked){
+        d->setState(Normal);
     }
 
     event->accept();
@@ -88,10 +147,12 @@ void DImageButton::leaveEvent(QEvent *event)
 
 void DImageButton::mousePressEvent(QMouseEvent *event)
 {
+    D_D(DImageButton);
+
     if (event->button() != Qt::LeftButton)
         return;
 
-    setState(Press);
+    d->setState(Press);
 
     event->accept();
     //QLabel::mousePressEvent(event);
@@ -99,18 +160,20 @@ void DImageButton::mousePressEvent(QMouseEvent *event)
 
 void DImageButton::mouseReleaseEvent(QMouseEvent *event)
 {
+    D_D(DImageButton);
+
     if (!rect().contains(event->pos()))
         return;
 
-    if (m_isCheckable){
-        m_isChecked = !m_isChecked;
-        if (m_isChecked){
-            setState(Checked);
+    if (d->m_isCheckable){
+        d->m_isChecked = !d->m_isChecked;
+        if (d->m_isChecked){
+            d->setState(Checked);
         } else {
-            setState(Normal);
+            d->setState(Normal);
         }
     } else {
-        setState(Hover);
+        d->setState(Hover);
     }
 
     event->accept();
@@ -122,26 +185,190 @@ void DImageButton::mouseReleaseEvent(QMouseEvent *event)
 
 void DImageButton::mouseMoveEvent(QMouseEvent *event)
 {
-    if (!m_isCheckable && !rect().contains(event->pos())) {
-        setState(Normal);
+    D_D(DImageButton);
+
+    if (!d->m_isCheckable && !rect().contains(event->pos())) {
+        d->setState(Normal);
     }
 }
 
-void DImageButton::updateIcon()
+void DImageButton::setCheckable(bool flag)
 {
-    switch (m_state) {
-    case Hover:     if (!m_hoverPic.isEmpty()) setPixmap(QPixmap(m_hoverPic));      break;
-    case Press:     if (!m_pressPic.isEmpty()) setPixmap(QPixmap(m_pressPic));      break;
-    case Checked:   if (!m_checkedPic.isEmpty()) setPixmap(QPixmap(m_checkedPic));  break;
-    default:        if (!m_normalPic.isEmpty()) setPixmap(QPixmap(m_normalPic));    break;
+    D_D(DImageButton);
+
+    d->m_isCheckable = flag;
+
+    if (!d->m_isCheckable){
+        d->setState(Normal);
     }
-
-    setAlignment(Qt::AlignCenter);
-
-    Q_EMIT stateChanged();
 }
 
-void DImageButton::setState(DImageButton::State state)
+void DImageButton::setChecked(bool flag)
+{
+    D_D(DImageButton);
+
+    if (d->m_isCheckable == false){
+        return;
+    }
+
+    d->m_isChecked = flag;
+    if (d->m_isChecked){
+        d->setState(Checked);
+    } else {
+        d->setState(Normal);
+    }
+}
+
+/*!
+ * \property DImageButton::checked
+ * \brief This property indicates the DImageButton is in checked state of not.
+ */
+
+bool DImageButton::isChecked() const
+{
+    D_DC(DImageButton);
+
+    return d->m_isChecked;
+}
+
+/*!
+ * \property DImageButton::isCheckable
+ * \brief This property indicates the DImageButton can be checked or not.
+ */
+
+bool DImageButton::isCheckable() const
+{
+    D_DC(DImageButton);
+
+    return d->m_isCheckable;
+}
+
+void DImageButton::setNormalPic(const QString &normalPicPixmap)
+{
+    D_D(DImageButton);
+
+    d->m_normalPic = normalPicPixmap;
+    d->updateIcon();
+}
+
+void DImageButton::setHoverPic(const QString &hoverPicPixmap)
+{
+    D_D(DImageButton);
+
+    d->m_hoverPic = hoverPicPixmap;
+    d->updateIcon();
+}
+
+void DImageButton::setPressPic(const QString &pressPicPixmap)
+{
+    D_D(DImageButton);
+
+    d->m_pressPic = pressPicPixmap;
+    d->updateIcon();
+}
+
+void DImageButton::setCheckedPic(const QString &checkedPicPixmap)
+{
+    D_D(DImageButton);
+
+    d->m_checkedPic = checkedPicPixmap;
+    d->updateIcon();
+}
+
+/*!
+ * \property DImageButton::getNormalPic
+ * \brief This property holds the path of the image used as the normal state.
+ */
+const QString DImageButton::getNormalPic() const
+{
+    D_DC(DImageButton);
+
+    return d->m_normalPic;
+}
+
+/*!
+ * \property DImageButton::getHoverPic
+ * \brief This property holds the path of the image used as the hover state.
+ */
+const QString DImageButton::getHoverPic() const
+{
+    D_DC(DImageButton);
+
+    return d->m_hoverPic;
+}
+
+/*!
+ * \property DImageButton::getPressPic
+ * \brief This property holds the path of the image used as the pressed state.
+ */
+const QString DImageButton::getPressPic() const
+{
+    D_DC(DImageButton);
+
+    return d->m_pressPic;
+}
+
+/*!
+ * \property DImageButton::getCheckedPic
+ * \brief This property holds the path of the image used as the checked state.
+ */
+const QString DImageButton::getCheckedPic() const
+{
+    D_DC(DImageButton);
+
+    return d->m_checkedPic;
+}
+
+/*!
+ * \brief DImageButton::getState
+ * \return the state that the DImageButton is in.
+ */
+DImageButton::State DImageButton::getState() const
+{
+    D_DC(DImageButton);
+
+    return d->m_state;
+}
+
+DImageButton::DImageButton(DImageButtonPrivate &q, QWidget *parent)
+    : QLabel(parent)
+    , DObject(q)
+{
+    D_THEME_INIT_WIDGET(DImageButton);
+
+    D_D(DImageButton);
+
+    d->updateIcon();
+}
+
+DImageButtonPrivate::DImageButtonPrivate(DImageButton *qq)
+    :DObjectPrivate(qq)
+{
+
+}
+
+DImageButtonPrivate::~DImageButtonPrivate()
+{
+
+}
+
+void DImageButtonPrivate::updateIcon()
+{
+    D_Q(DImageButton);
+
+    switch (m_state) {
+    case DImageButton::Hover:     if (!m_hoverPic.isEmpty()) q->setPixmap(loadPixmap(m_hoverPic));      break;
+    case DImageButton::Press:     if (!m_pressPic.isEmpty()) q->setPixmap(loadPixmap(m_pressPic));      break;
+    case DImageButton::Checked:   if (!m_checkedPic.isEmpty()) q->setPixmap(loadPixmap(m_checkedPic));  break;
+    default:        if (!m_normalPic.isEmpty()) q->setPixmap(loadPixmap(m_normalPic));    break;
+    }
+
+    q->setAlignment(Qt::AlignCenter);
+
+    Q_EMIT q->stateChanged();
+}
+
+void DImageButtonPrivate::setState(DImageButton::State state)
 {
     if (m_state == state)
         return;
@@ -151,66 +378,29 @@ void DImageButton::setState(DImageButton::State state)
     updateIcon();
 }
 
-void DImageButton::setCheckable(bool flag)
+QPixmap DImageButtonPrivate::loadPixmap(const QString &path)
 {
-    m_isCheckable = flag;
+    D_Q(DImageButton);
 
-    if (!m_isCheckable){
-        setState(Normal);
-    }
-}
+    qreal ratio = 1.0;
 
-void DImageButton::setChecked(bool flag)
-{
-    if (m_isCheckable == false){
-        return;
-    }
+    const qreal devicePixelRatio = q->devicePixelRatioF();
 
-    m_isChecked = flag;
-    if (m_isChecked){
-        setState(Checked);
+    QPixmap pixmap;
+
+    if (!qFuzzyCompare(ratio, devicePixelRatio)) {
+        QImageReader reader;
+        reader.setFileName(qt_findAtNxFile(path, devicePixelRatio, &ratio));
+        if (reader.canRead()) {
+            reader.setScaledSize(reader.size() * (devicePixelRatio / ratio));
+            pixmap = QPixmap::fromImage(reader.read());
+            pixmap.setDevicePixelRatio(devicePixelRatio);
+        }
     } else {
-        setState(Normal);
+        pixmap.load(path);
     }
-}
 
-bool DImageButton::isChecked()
-{
-    return m_isChecked;
-}
-
-bool DImageButton::isCheckable()
-{
-    return m_isCheckable;
-}
-
-void DImageButton::setNormalPic(const QString &normalPicPixmap)
-{
-    m_normalPic = normalPicPixmap;
-    updateIcon();
-}
-
-void DImageButton::setHoverPic(const QString &hoverPicPixmap)
-{
-    m_hoverPic = hoverPicPixmap;
-    updateIcon();
-}
-
-void DImageButton::setPressPic(const QString &pressPicPixmap)
-{
-    m_pressPic = pressPicPixmap;
-    updateIcon();
-}
-
-void DImageButton::setCheckedPic(const QString &checkedPicPixmap)
-{
-    m_checkedPic = checkedPicPixmap;
-    updateIcon();
-}
-
-DImageButton::State DImageButton::getState() const
-{
-    return m_state;
+    return pixmap;
 }
 
 DWIDGET_END_NAMESPACE

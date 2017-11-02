@@ -1,11 +1,19 @@
-/**
- * Copyright (C) 2015 Deepin Technology Co., Ltd.
+/*
+ * Copyright (C) 2015 ~ 2017 Deepin Technology Co., Ltd.
  *
- * This program is free software; you can redistribute it and/or modify
+ * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 3 of the License, or
- * (at your option) any later version.
- **/
+ * the Free Software Foundation, either version 3 of the License, or
+ * any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 
 #include "darrowrectangle.h"
 #include "dplatformwindowhandle.h"
@@ -20,8 +28,23 @@
 #include <QScreen>
 #include <QEvent>
 
-DWIDGET_USE_NAMESPACE
+DWIDGET_BEGIN_NAMESPACE
 
+/*!
+ * \class DArrowRectangle
+ * \brief The DArrowRectangle class provides a widget that has an arrow on one
+ * of its four borders.
+ *
+ * It's usually used as a container of some other widgets,
+ * see DArrowRectangle::setContent()
+ */
+
+/*!
+ * \brief DArrowRectangle::DArrowRectangle constructs an instance of DArrowRectangle.
+ * \param direction is used to initialize the direction of which the arrow
+ * points to.
+ * \param parent is the parent widget the arrow rectangle will be attached to.
+ */
 DArrowRectangle::DArrowRectangle(ArrowDirection direction, QWidget * parent) :
     QWidget(parent),
     DObject(*new DArrowRectanglePrivate(direction, this))
@@ -31,6 +54,15 @@ DArrowRectangle::DArrowRectangle(ArrowDirection direction, QWidget * parent) :
     d->init();
 }
 
+/*!
+ * \brief DArrowRectangle::show shows the widget at the given coordinate.
+ *
+ * \note The coordiate is calculated to be the arrow head's position, so you
+ * don't need to calculate the position yourself.
+ *
+ * \param x is the x coordinate of the arrow head.
+ * \param y is the y coordinate of the arrow head.
+ */
 void DArrowRectangle::show(int x, int y)
 {
     D_D(DArrowRectangle);
@@ -38,6 +70,10 @@ void DArrowRectangle::show(int x, int y)
     d->show(x, y);
 }
 
+/*!
+ * \brief DArrowRectangle::setContent sets the content of the arrow rectangle.
+ * \param content
+ */
 void DArrowRectangle::setContent(QWidget *content)
 {
     D_D(DArrowRectangle);
@@ -45,6 +81,10 @@ void DArrowRectangle::setContent(QWidget *content)
     d->setContent(content);
 }
 
+/*!
+ * \brief DArrowRectangle::getContent
+ * \return the content that the arrow rectangle holds, null if not set.
+ */
 QWidget *DArrowRectangle::getContent() const
 {
     D_DC(DArrowRectangle);
@@ -52,6 +92,10 @@ QWidget *DArrowRectangle::getContent() const
     return d->m_content;
 }
 
+/*!
+ * \brief DArrowRectangle::resizeWithContent automatically adjust the rectangle's
+ * size to fit the its content.
+ */
 void DArrowRectangle::resizeWithContent()
 {
     D_D(DArrowRectangle);
@@ -59,13 +103,17 @@ void DArrowRectangle::resizeWithContent()
     d->resizeWithContent();
 }
 
+/*!
+ * \brief DArrowRectangle::getFixedSize
+ * \return the size of the whole widget.
+ */
 QSize DArrowRectangle::getFixedSize()
 {
     D_D(DArrowRectangle);
 
     if (d->m_content)
     {
-        qreal delta = (d->m_handle ? 0 : shadowBlurRadius() + shadowDistance()) + margin();
+        qreal delta = (d->m_handle ? 0 : shadowBlurRadius() + d->m_shadowDistance) + margin();
 
         switch(d->m_arrowDirection)
         {
@@ -81,6 +129,17 @@ QSize DArrowRectangle::getFixedSize()
     return QSize(0, 0);
 }
 
+/*!
+ * \brief DArrowRectangle::move moves the widget to the coordinate that provided,
+ *
+ * Like the rules in DArrowRectangle::show(int x, int y), it moves the widget so
+ * that the arrow head's coordinate matches the one that provided.
+ *
+ * \param x is the x coordinate of the arrow head.
+ * \param y is the y coordinate of the arrow head.
+ *
+ * \see DArrowRectangle::show(int x, int y)
+ */
 void DArrowRectangle::move(int x, int y)
 {
     D_D(DArrowRectangle);
@@ -136,6 +195,10 @@ const QRect DArrowRectanglePrivate::currentScreenRect(const int x, const int y)
     return QRect();
 }
 
+/*!
+ * \property DArrowRectangle::shadowYOffset
+ * \brief the offset of the widget and its shadow on y axis.
+ */
 qreal DArrowRectangle::shadowYOffset() const
 {
     D_DC(DArrowRectangle);
@@ -153,6 +216,10 @@ void DArrowRectangle::setShadowYOffset(const qreal &shadowYOffset)
         d->m_handle->setShadowOffset(QPoint(d->m_shadowXOffset, shadowYOffset));
 }
 
+/*!
+ * \property DArrowRectangle::shadowXOffset
+ * \brief the offset of the widget and its shadow on x axis.
+ */
 qreal DArrowRectangle::shadowXOffset() const
 {
     D_DC(DArrowRectangle);
@@ -184,6 +251,10 @@ void DArrowRectangle::setShadowDistance(const qreal &shadowDistance)
     d->m_shadowDistance = shadowDistance;
 }
 
+/*!
+ * \property DArrowRectangle::shadowBlurRadius
+ * \brief This property holds the blur radius of the widget's shadow.
+ */
 qreal DArrowRectangle::shadowBlurRadius() const
 {
     D_DC(DArrowRectangle);
@@ -201,6 +272,10 @@ void DArrowRectangle::setShadowBlurRadius(const qreal &shadowBlurRadius)
         d->m_handle->setShadowRadius(shadowBlurRadius);
 }
 
+/*!
+ * \property DArrowRectangle::borderColor
+ * \brief This property holds the border color of this widget.
+ */
 QColor DArrowRectangle::borderColor() const
 {
     D_DC(DArrowRectangle);
@@ -218,6 +293,10 @@ void DArrowRectangle::setBorderColor(const QColor &borderColor)
         d->m_handle->setBorderColor(borderColor);
 }
 
+/*!
+ * \property DArrowRectangle::borderWidth
+ * \brief This property holds the border width of this widget.
+ */
 int DArrowRectangle::borderWidth() const
 {
     D_DC(DArrowRectangle);
@@ -235,6 +314,10 @@ void DArrowRectangle::setBorderWidth(int borderWidth)
         d->m_handle->setBorderWidth(borderWidth);
 }
 
+/*!
+ * \property DArrowRectangle::backgroundColor
+ * \brief the background color of this rectangle.
+ */
 QColor DArrowRectangle::backgroundColor() const
 {
     D_DC(DArrowRectangle);
@@ -242,6 +325,10 @@ QColor DArrowRectangle::backgroundColor() const
     return d->m_backgroundColor;
 }
 
+/*!
+ * \property DArrowRectangle::arrowDirection
+ * \brief This property holds the direction of the rectangle's arrow points to.
+ */
 DArrowRectangle::ArrowDirection DArrowRectangle::arrowDirection() const
 {
     D_DC(DArrowRectangle);
@@ -249,6 +336,11 @@ DArrowRectangle::ArrowDirection DArrowRectangle::arrowDirection() const
     return d->m_arrowDirection;
 }
 
+/*!
+ * \brief DArrowRectangle::setBackgroundColor sets the background color of
+ * this widget.
+ * \param backgroundColor is the target background color.
+ */
 void DArrowRectangle::setBackgroundColor(const QColor &backgroundColor)
 {
     D_D(DArrowRectangle);
@@ -275,6 +367,14 @@ void DArrowRectangle::setBackgroundColor(const QColor &backgroundColor)
     }
 }
 
+/*!
+ * \brief DArrowRectangle::setBackgroundColor is an overloaded function.
+ *
+ * It sets the background color by modifing the mask color of the
+ * Dtk::Widget::DBlurEffectWidget.
+ *
+ * \param type is the mask color to set.
+ */
 void DArrowRectangle::setBackgroundColor(DBlurEffectWidget::MaskColorType type)
 {
     D_D(DArrowRectangle);
@@ -283,6 +383,10 @@ void DArrowRectangle::setBackgroundColor(DBlurEffectWidget::MaskColorType type)
         d->m_blurBackground->setMaskColor(type);
 }
 
+/*!
+ * \property DArrowRectangle::radius
+ * \brief radius of the rectangle
+ */
 int DArrowRectangle::radius() const
 {
     D_DC(DArrowRectangle);
@@ -290,6 +394,10 @@ int DArrowRectangle::radius() const
     return d->m_radius;
 }
 
+/*!
+ * \property DArrowRectangle::arrowHeight
+ * \brief height of rectangle's arrow
+ */
 int DArrowRectangle::arrowHeight() const
 {
     D_DC(DArrowRectangle);
@@ -297,6 +405,10 @@ int DArrowRectangle::arrowHeight() const
     return d->m_arrowHeight;
 }
 
+/*!
+ * \property DArrowRectangle::arrowWidth
+ * \brief width of the rectangle's arrow
+ */
 int DArrowRectangle::arrowWidth() const
 {
     D_DC(DArrowRectangle);
@@ -304,6 +416,10 @@ int DArrowRectangle::arrowWidth() const
     return d->m_arrowWidth;
 }
 
+/*!
+ * \property DArrowRectangle::arrowX
+ * \brief the x coordinate of the rectangle's arrow
+ */
 int DArrowRectangle::arrowX() const
 {
     D_DC(DArrowRectangle);
@@ -311,6 +427,10 @@ int DArrowRectangle::arrowX() const
     return d->m_arrowX;
 }
 
+/*!
+ * \property DArrowRectangle::arrowY
+ * \brief the y coordinate of the rectangle's arrow
+ */
 int DArrowRectangle::arrowY() const
 {
     D_DC(DArrowRectangle);
@@ -318,6 +438,15 @@ int DArrowRectangle::arrowY() const
     return d->m_arrowY;
 }
 
+/*!
+ * \property DArrowRectangle::margin
+ * \brief This property holds the width of the margin
+ *
+ * The margin is the distance between the innermost pixel of the rectangle and the
+ * outermost pixel of its contents.
+ *
+ * The default margin is 0.
+ */
 int DArrowRectangle::margin() const
 {
     D_DC(DArrowRectangle);
@@ -391,7 +520,7 @@ QPainterPath DArrowRectanglePrivate::getLeftCornerPath()
     QRect rect = q->rect();
 
     if (!m_handle) {
-        qreal delta = q->shadowBlurRadius() + q->shadowDistance();
+        qreal delta = q->shadowBlurRadius() + m_shadowDistance;
 
         rect = rect.marginsRemoved(QMargins(delta, delta, delta, delta));
     }
@@ -429,7 +558,7 @@ QPainterPath DArrowRectanglePrivate::getRightCornerPath()
     QRect rect = q->rect();
 
     if (!m_handle) {
-        qreal delta = q->shadowBlurRadius() + q->shadowDistance();
+        qreal delta = q->shadowBlurRadius() + m_shadowDistance;
 
         rect = rect.marginsRemoved(QMargins(delta, delta, delta, delta));
     }
@@ -467,7 +596,7 @@ QPainterPath DArrowRectanglePrivate::getTopCornerPath()
     QRect rect = q->rect();
 
     if (!m_handle) {
-        qreal delta = q->shadowBlurRadius() + q->shadowDistance();
+        qreal delta = q->shadowBlurRadius() + m_shadowDistance;
 
         rect = rect.marginsRemoved(QMargins(delta, delta, delta, delta));
     }
@@ -505,7 +634,7 @@ QPainterPath DArrowRectanglePrivate::getBottomCornerPath()
     QRect rect = q->rect();
 
     if (!m_handle) {
-        qreal delta = q->shadowBlurRadius() + q->shadowDistance();
+        qreal delta = q->shadowBlurRadius() + m_shadowDistance;
 
         rect = rect.marginsRemoved(QMargins(delta, delta, delta, delta));
     }
@@ -541,7 +670,7 @@ void DArrowRectanglePrivate::verticalMove(int x, int y)
     D_Q(DArrowRectangle);
 
     const QRect dRect = currentScreenRect(x, y);
-    qreal delta = m_handle ? 0 : q->shadowBlurRadius() - q->shadowDistance();
+    qreal delta = m_handle ? 0 : (q->shadowBlurRadius() - m_shadowDistance);
 
     int lRelativeY = y - dRect.y() - (q->height() - delta) / 2;
     int rRelativeY = y - dRect.y() + (q->height() - delta) / 2 - dRect.height();
@@ -582,7 +711,7 @@ void DArrowRectanglePrivate::horizontalMove(int x, int y)
     D_Q(DArrowRectangle);
 
     const QRect dRect = currentScreenRect(x, y);
-    qreal delta = m_handle ? 0 : q->shadowBlurRadius() - q->shadowDistance();
+    qreal delta = m_handle ? 0 : (q->shadowBlurRadius() - m_shadowDistance);
 
     int lRelativeX = x - dRect.x() - (q->width() - delta) / 2;
     int rRelativeX = x - dRect.x() + (q->width() - delta) / 2 - dRect.width();
@@ -601,8 +730,9 @@ void DArrowRectanglePrivate::horizontalMove(int x, int y)
     }
     else
     {
-        q->setArrowX(0);
-        absoluteX = x - q->width() / 2;
+        q->setArrowX(m_arrowX);
+//        absoluteX = x - q->width() / 2;
+        absoluteX = x - (m_arrowX > 0 ? m_arrowX : (q->width() / 2));
     }
 
     switch (m_arrowDirection)
@@ -690,7 +820,7 @@ void DArrowRectanglePrivate::init()
     } else {
         DGraphicsGlowEffect *glowEffect = new DGraphicsGlowEffect;
         glowEffect->setBlurRadius(q->shadowBlurRadius());
-        glowEffect->setDistance(q->shadowDistance());
+        glowEffect->setDistance(m_shadowDistance);
         glowEffect->setXOffset(q->shadowXOffset());
         glowEffect->setYOffset(q->shadowYOffset());
         q->setGraphicsEffect(glowEffect);
@@ -728,7 +858,7 @@ void DArrowRectanglePrivate::setContent(QWidget *content)
     m_content->setParent(q);
     m_content->show();
 
-    qreal delta = (m_handle ? 0 : q->shadowBlurRadius() + q->shadowDistance()) + q->margin();
+    qreal delta = (m_handle ? 0 : q->shadowBlurRadius() + m_shadowDistance) + q->margin();
 
     q->resizeWithContent();
 
@@ -761,12 +891,13 @@ void DArrowRectanglePrivate::resizeWithContent()
     q->setFixedSize(q->getFixedSize());
 
 #ifdef Q_OS_LINUX
+    const qreal ratio = qApp->devicePixelRatio();
     if (!m_handle) {
         XRectangle m_contentXRect;
-        m_contentXRect.x = m_content->pos().x();
-        m_contentXRect.y = m_content->pos().y();
-        m_contentXRect.width = m_content->width();
-        m_contentXRect.height = m_content->height();
+        m_contentXRect.x = m_content->pos().x() * ratio;
+        m_contentXRect.y = m_content->pos().y() * ratio;
+        m_contentXRect.width = m_content->width() * ratio;
+        m_contentXRect.height = m_content->height() * ratio;
         XShapeCombineRectangles(QX11Info::display(), q->winId(), ShapeInput,
                                 0,
                                 0,
@@ -831,3 +962,5 @@ void DArrowRectanglePrivate::resizeEvent(QResizeEvent *e)
 
     updateClipPath();
 }
+
+DWIDGET_END_NAMESPACE

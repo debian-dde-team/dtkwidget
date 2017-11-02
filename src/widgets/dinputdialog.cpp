@@ -1,11 +1,19 @@
-/**
- * Copyright (C) 2015 Deepin Technology Co., Ltd.
+/*
+ * Copyright (C) 2015 ~ 2017 Deepin Technology Co., Ltd.
  *
- * This program is free software; you can redistribute it and/or modify
+ * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 3 of the License, or
- * (at your option) any later version.
- **/
+ * the Free Software Foundation, either version 3 of the License, or
+ * any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 
 #include <QAbstractButton>
 #include <QHBoxLayout>
@@ -169,7 +177,9 @@ void DInputDialog::setTextEchoMode(QLineEdit::EchoMode mode)
     }
 
     disconnect(d->lineEdit, &DLineEdit::alertChanged, this, &DInputDialog::textAlertChanged);
+    disconnect(d->lineEdit, &DLineEdit::textChanged, this, &DInputDialog::textValueChanged);
     connect(edit, &DLineEdit::alertChanged, this, &DInputDialog::textAlertChanged);
+    connect(edit, &DLineEdit::textChanged, this, &DInputDialog::textValueChanged);
 
     edit->setText(d->lineEdit->text());
     insertContent(d->getContentLayout()->indexOf(d->lineEdit), edit);
@@ -375,6 +385,20 @@ QString DInputDialog::okButtonText() const
     D_DC(DInputDialog);
 
     return d->okButton->text();
+}
+
+void DInputDialog::setOkButtonEnabled(const bool enable)
+{
+    D_DC(DInputDialog);
+
+    d->okButton->setEnabled(enable);
+}
+
+bool DInputDialog::okButtonIsEnabled() const
+{
+    D_DC(DInputDialog);
+
+    return d->okButton->isEnabled();
 }
 
 void DInputDialog::setCancelButtonText(const QString &text)

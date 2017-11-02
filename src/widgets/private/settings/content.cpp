@@ -1,11 +1,19 @@
-/**
- * Copyright (C) 2016 Deepin Technology Co., Ltd.
+/*
+ * Copyright (C) 2016 ~ 2017 Deepin Technology Co., Ltd.
  *
- * This program is free software; you can redistribute it and/or modify
+ * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 3 of the License, or
- * (at your option) any later version.
- **/
+ * the Free Software Foundation, either version 3 of the License, or
+ * any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 
 #include "content.h"
 
@@ -20,8 +28,9 @@
 #include <DSettingsGroup>
 #include <DSettingsOption>
 
+#include "dsettingswidgetfactory.h"
+
 #include "contenttitle.h"
-#include "widgetfactory.h"
 
 DWIDGET_BEGIN_NAMESPACE
 
@@ -30,7 +39,7 @@ class ContentPrivate
 public:
     ContentPrivate(Content *parent) : q_ptr(parent)
     {
-        widgetFactory = new WidgetFactory;
+        widgetFactory = new DSettingsWidgetFactory;
     }
 
 
@@ -40,7 +49,7 @@ public:
 
     QMap<QString, QWidget *> titles;
 
-    WidgetFactory       *widgetFactory;
+    DSettingsWidgetFactory       *widgetFactory;
 
     Content *q_ptr;
     Q_DECLARE_PUBLIC(Content)
@@ -105,9 +114,9 @@ Content::~Content()
 
 }
 
-WidgetFactory *Content::widgetFactory()
+DSettingsWidgetFactory *Content::widgetFactory() const
 {
-    Q_D(Content);
+    Q_D(const Content);
     return d->widgetFactory;
 }
 

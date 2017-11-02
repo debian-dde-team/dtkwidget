@@ -1,11 +1,19 @@
-/**
- * Copyright (C) 2017 Deepin Technology Co., Ltd.
+/*
+ * Copyright (C) 2017 ~ 2017 Deepin Technology Co., Ltd.
  *
- * This program is free software; you can redistribute it and/or modify
+ * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 3 of the License, or
- * (at your option) any later version.
- **/
+ * the Free Software Foundation, either version 3 of the License, or
+ * any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 
 #ifndef DABOUTDIALOG_H
 #define DABOUTDIALOG_H
@@ -24,8 +32,8 @@ class DAboutDialog : public DDialog
     Q_PROPERTY(QString version READ version WRITE setVersion)
     Q_PROPERTY(QString description READ description WRITE setDescription)
     Q_PROPERTY(QString license READ license WRITE setLicense)
-    Q_PROPERTY(QString websiteName READ websiteName WRITE setWebsiteName NOTIFY websiteNameChanged)
-    Q_PROPERTY(QString websiteLink READ websiteLink WRITE setWebsiteLink NOTIFY websiteLinkChanged)
+    Q_PROPERTY(QString websiteName READ websiteName WRITE setWebsiteName)
+    Q_PROPERTY(QString websiteLink READ websiteLink WRITE setWebsiteLink)
     Q_PROPERTY(QString acknowledgementLink READ acknowledgementLink WRITE setAcknowledgementLink)
 
 public:
@@ -52,10 +60,6 @@ public Q_SLOTS:
     void setWebsiteLink(const QString &websiteLink);
     void setAcknowledgementLink(const QString &acknowledgementLink);
     void setLicense(const QString &license);
-
-Q_SIGNALS:
-    void websiteNameChanged(QString websiteName);
-    void websiteLinkChanged(QString websiteLink);
 
 protected:
     void keyPressEvent(QKeyEvent *event) Q_DECL_OVERRIDE;

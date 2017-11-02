@@ -1,30 +1,43 @@
-/**
- * Copyright (C) 2015 Deepin Technology Co., Ltd.
+/*
+ * Copyright (C) 2015 ~ 2017 Deepin Technology Co., Ltd.
  *
- * This program is free software; you can redistribute it and/or modify
+ * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 3 of the License, or
- * (at your option) any later version.
- **/
+ * the Free Software Foundation, either version 3 of the License, or
+ * any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 
 #include "widgetstab.h"
 #include "darrowrectangle.h"
 #ifdef Q_OS_LINUX
 #include "dmpriscontrol.h"
-#include "dcalendar.h"
+#include "dregionmonitor.h"
+using Dtk::Widget::DRegionMonitor;
 #endif
 
+
 #include <QCheckBox>
+
 
 WidgetsTab::WidgetsTab(QWidget *parent) : QLabel(parent)
 {
     setStyleSheet("WidgetsTab {background-color:#252627;} QCheckBox {color:#666;}");
 
-#ifdef CALENDARWIDGET_H
-    DTK_WIDGET_NAMESPACE::DCalendar *calendar = new DTK_WIDGET_NAMESPACE::DCalendar(this);
-    calendar->setFixedSize(300, 300);
-    calendar->move(8, 8);
-//    calendar->setLunarFestivalHighlight(false);
+#ifdef Q_OS_LINUX
+    DRegionMonitor *rm = new DRegionMonitor(this);
+    rm->registerRegion(QRegion(0, 0, 500, 500));
+    Q_ASSERT(rm->registered());
+
+    connect(rm, &DRegionMonitor::buttonPress, [=](const QPoint &p, const int flag) { qDebug() << "btn press:" << p << flag; });
+    connect(rm, &DRegionMonitor::buttonRelease, [=](const QPoint &p, const int flag) { qDebug() << "btn release:" << p << flag; });
 #endif
 
     QCheckBox *lunarVisible = new QCheckBox(this);
@@ -47,14 +60,6 @@ WidgetsTab::WidgetsTab(QWidget *parent) : QLabel(parent)
     dateInfoVisible->setText("date info visible");
     dateInfoVisible->setChecked(false);
     dateInfoVisible->move(320, 170);
-
-#ifdef CALENDARWIDGET_H
-    connect(cellSelectable, &QCheckBox::stateChanged, [calendar] (int state) -> void {calendar->setSelectionMode(DCalendar::SelectionMode(state));});
-    connect(festivalHighlight, &QCheckBox::stateChanged, [calendar] (int state) -> void {calendar->setLunarFestivalHighlight(state);});
-    connect(lunarVisible, &QCheckBox::stateChanged, [calendar] (int state) -> void {calendar->setLunarVisible(state);});
-    connect(controlPanelVisible, &QCheckBox::stateChanged, [calendar] (int state) -> void {calendar->setControlPanelVisible(state);});
-    connect(dateInfoVisible, &QCheckBox::stateChanged, [calendar] (int state) -> void {calendar->setDateInfoVisible(state);});
-#endif
 
     ////////////////////ArrowRectangle//////////////////
     DArrowRectangle *rectangle = new DArrowRectangle(DArrowRectangle::ArrowLeft);

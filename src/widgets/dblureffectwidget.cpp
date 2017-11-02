@@ -1,3 +1,20 @@
+/*
+ * Copyright (C) 2017 ~ 2017 Deepin Technology Co., Ltd.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 #include "dblureffectwidget.h"
 #include "private/dblureffectwidget_p.h"
 #include "dplatformwindowhandle.h"
@@ -155,6 +172,28 @@ bool DBlurEffectWidgetPrivate::updateWindowBlurArea(QWidget *topLevelWidget)
     return ok;
 }
 
+/*!
+ * \class DBlurEffectWidget
+ * \brief The DBlurEffectWidget class provides widget that backgrounds are blurred and semitranslucent.
+ *
+ * DBlurEffectWidget is QWidget that has blurry background. With different
+ * blend mode set, DBlurEffectWidget can do in-window-blend, which means the
+ * the widget is blended with the widgets between the top level window and the
+ * widget itself, and behind-window-blend, which means the widget is blended with
+ * the scene behind the window (with the help of WM).
+ *
+ * The effect has optional styles can choose from: DBlurEffectWidget::DarkColor, DBlurEffectWidget::LightColor, and
+ * DBlurEffectWidget::CustomColor. Usually the first two are sufficient, you can also choose
+ * CustomColor and set the color you want by setting DBlurEffectWidget::maskColor.
+ *
+ * \note DBlurEffectWidget with BehindWindowBlend mode will become opaque if
+ * WM supports no X11 composite protocol.
+ */
+
+/*!
+ * \brief DBlurEffectWidget::DBlurEffectWidget constructs an instance of DBlurEffectWidget.
+ * \param parent is passed to QWidget constructor.
+ */
 DBlurEffectWidget::DBlurEffectWidget(QWidget *parent)
     : QWidget(parent)
     , DObject(*new DBlurEffectWidgetPrivate(this))
@@ -192,6 +231,13 @@ DBlurEffectWidget::~DBlurEffectWidget()
     }
 }
 
+/*!
+ * \property DBlurEffectWidget::radius
+ * \brief This property holds the radius of the blur effect.
+ *
+ * \note This property has no effect with the DBlurEffectWidget::blendMode set
+ * to DBlurEffectWidget::BehindWindowBlend.
+ */
 int DBlurEffectWidget::radius() const
 {
     D_DC(DBlurEffectWidget);
@@ -199,6 +245,12 @@ int DBlurEffectWidget::radius() const
     return d->radius;
 }
 
+/*!
+ * \property DBlurEffectWidget::mode
+ * \brief This property holds which blur alghorithm to be used.
+ *
+ * Currently it only supports DBlurEffectWidget::GaussianBlur.
+ */
 DBlurEffectWidget::BlurMode DBlurEffectWidget::mode() const
 {
     D_DC(DBlurEffectWidget);
@@ -206,6 +258,10 @@ DBlurEffectWidget::BlurMode DBlurEffectWidget::mode() const
     return d->mode;
 }
 
+/*!
+ * \property DBlurEffectWidget::blendMode
+ * \brief This property holds which mode is used to blend the widget and its background scene.
+ */
 DBlurEffectWidget::BlendMode DBlurEffectWidget::blendMode() const
 {
     D_DC(DBlurEffectWidget);
@@ -213,6 +269,15 @@ DBlurEffectWidget::BlendMode DBlurEffectWidget::blendMode() const
     return d->blendMode;
 }
 
+/*!
+ * \property DBlurEffectWidget::blurRectXRadius
+ * \brief This property holds the xRadius of the effective background.
+ *
+ * The xRadius and yRadius specify the radius of the ellipses defining
+ * the corners of the effective background.
+ *
+ * \see DBlurEffectWidget::blurRectYRadius
+ */
 int DBlurEffectWidget::blurRectXRadius() const
 {
     D_DC(DBlurEffectWidget);
@@ -220,6 +285,15 @@ int DBlurEffectWidget::blurRectXRadius() const
     return d->blurRectXRadius;
 }
 
+/*!
+ * \property DBlurEffectWidget::blurRectYRadius
+ * \brief This property holds the yRadius of the effective background.
+ *
+ * The xRadius and yRadius specify the radius of the ellipses defining
+ * the corners of the effective background.
+ *
+ * \see DBlurEffectWidget::blurRectXRadius
+ */
 int DBlurEffectWidget::blurRectYRadius() const
 {
     D_DC(DBlurEffectWidget);
@@ -227,6 +301,15 @@ int DBlurEffectWidget::blurRectYRadius() const
     return d->blurRectYRadius;
 }
 
+/*!
+ * \property DBlurEffectWidget::maskColor
+ * \brief This property holds the background color of this widget.
+ *
+ * It returns predefined colors if the DBlurEffectWidget::maskColorType is set
+ * to DBlurEffectWidget::DarkColor or BlurEffectWidget::LightColor, returns
+ * the color set by DBlurEffectWidget::setMaskColor if
+ * DBlurEffectWidget::maskColorType is set to BlurEffectWidget::CustomColor.
+ */
 QColor DBlurEffectWidget::maskColor() const
 {
     D_DC(DBlurEffectWidget);
@@ -259,6 +342,10 @@ QColor DBlurEffectWidget::maskColor() const
     return d->maskColor;
 }
 
+/*!
+ * \brief DBlurEffectWidget::setMaskPath set custom area as the effective background.
+ * \param path a QPainterPath to be used as the effectvie background.
+ */
 void DBlurEffectWidget::setMaskPath(const QPainterPath &path)
 {
     D_D(DBlurEffectWidget);
@@ -397,6 +484,11 @@ DBlurEffectWidget::DBlurEffectWidget(DBlurEffectWidgetPrivate &dd, QWidget *pare
 
 }
 
+inline QRect operator *(const QRect &rect, qreal scale)
+{
+    return QRect(rect.left() * scale, rect.top() * scale, rect.width() * scale, rect.height() * scale);
+}
+
 void DBlurEffectWidget::paintEvent(QPaintEvent *event)
 {
     D_D(DBlurEffectWidget);
@@ -429,19 +521,28 @@ void DBlurEffectWidget::paintEvent(QPaintEvent *event)
         int radius = d->radius;
         QPoint point_offset = mapTo(window(), QPoint(0, 0));
         const QRect &paintRect = event->rect();
+        qreal device_pixel_ratio = devicePixelRatioF();
 
         if (d->sourceImage.isNull()) {
             const QRect &tmp_rect = rect().translated(point_offset).adjusted(-radius, -radius, radius, radius);
 
-            d->sourceImage = window()->backingStore()->handle()->toImage().copy(tmp_rect);
+            d->sourceImage = window()->backingStore()->handle()->toImage().copy(tmp_rect * device_pixel_ratio);
+            d->sourceImage = d->sourceImage.scaledToWidth(d->sourceImage.width() / device_pixel_ratio);
         } else {
             QPainter pa_image(&d->sourceImage);
 
             pa_image.setCompositionMode(QPainter::CompositionMode_Source);
 
             for (const QRect &rect : event->region().rects()) {
-                pa_image.drawImage(rect.topLeft() + QPoint(radius, radius),
-                                   window()->backingStore()->handle()->toImage().copy(rect.translated(point_offset)));
+                if (device_pixel_ratio > 1) {
+                    const QRect &tmp_rect = this->rect().translated(point_offset);
+                    const QImage &area = window()->backingStore()->handle()->toImage().copy(tmp_rect * device_pixel_ratio);
+
+                    pa_image.drawImage(rect.topLeft() + QPoint(radius, radius), area.scaledToWidth(area.width() / device_pixel_ratio).copy(rect));
+                } else {
+                    pa_image.drawImage(rect.topLeft() + QPoint(radius, radius),
+                                       window()->backingStore()->handle()->toImage().copy(rect.translated(point_offset)));
+                }
             }
 
             pa_image.end();
@@ -455,7 +556,7 @@ void DBlurEffectWidget::paintEvent(QPaintEvent *event)
         pa.setTransform(old_transform);
     }
 
-    pa.fillRect(event->rect(), maskColor());
+    pa.fillRect(rect(), maskColor());
 }
 
 void DBlurEffectWidget::moveEvent(QMoveEvent *event)

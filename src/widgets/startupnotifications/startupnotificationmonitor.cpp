@@ -1,3 +1,20 @@
+/*
+ * Copyright (C) 2017 ~ 2017 Deepin Technology Co., Ltd.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 #include <QtWidgets>
 #include <QX11Info>
 
@@ -49,6 +66,15 @@ static void monitor_event_func (SnMonitorEvent *event, void *user_data)
     }
 }
 
+/*!
+ * \class StartupNotificationMonitor
+ * \brief The StartupNotificationMonitor class is used to monitor the startup of applications on the system.
+ *
+ * As the stated in https://specifications.freedesktop.org/startup-notification-spec/startup-notification-0.1.txt, \n
+ * StartupNotificationMonitor monitors all the startup events on the system and notifies the user of application \n
+ * startup and startup finish.
+ */
+
 StartupNotificationMonitor::StartupNotificationMonitor() :
     QObject()
 {
@@ -68,6 +94,10 @@ StartupNotificationMonitor::StartupNotificationMonitor() :
     qApp->installNativeEventFilter(this);
 }
 
+/**
+ * @brief StartupNotificationMonitor::StartupNotificationMonitor::instance
+ * @return an instance of the StartupNotificationMonitor instance.
+ */
 StartupNotificationMonitor* StartupNotificationMonitor::StartupNotificationMonitor::instance()
 {
     return StartupNotificationMonitorInstance;

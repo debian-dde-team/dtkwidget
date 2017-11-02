@@ -1,15 +1,11 @@
 linux{
     HEADERS += \
-        $$PWD/DCalendarWidget/dcalendardbus.h \
-        $$PWD/DCalendarWidget/calendarview.h \
         $$PWD/mpris/dmprismonitor.h \
         $$PWD/mpris/dbusinterface.h \
         $$PWD/dmpriscontrol_p.h \
         $$PWD/mpris/dbusmpris.h
 
     SOURCES += \
-        $$PWD/DCalendarWidget/dcalendardbus.cpp \
-        $$PWD/DCalendarWidget/calendarview.cpp \
         $$PWD/mpris/dmprismonitor.cpp \
         $$PWD/mpris/dbusinterface.cpp \
         $$PWD/mpris/dbusmpris.cpp
@@ -47,7 +43,9 @@ HEADERS += \
     $$PWD/daboutdialog_p.h \
     $$PWD/darrowrectangle_p.h \
     $$PWD/dpushbutton_p.h \
-    $$PWD/dtickeffect_p.h
+    $$PWD/dtickeffect_p.h \
+    $$PWD/dswitchbutton_p.h \
+    $$PWD/dimagebutton_p.h
 
 SOURCES += \
     $$PWD/dthemehelper.cpp

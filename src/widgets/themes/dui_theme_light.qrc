@@ -10,9 +10,7 @@
         <file>light/DTextButton.theme</file>
         <file>light/DImageButton.theme</file>
         <file>light/DLoadingIndicator.theme</file>
-        <file>light/DCalendar.theme</file>
         <file>light/DButtonList.theme</file>
-        <file>light/DButtonGrid.theme</file>
         <file>light/DLabel.theme</file>
         <file>light/DSwitchButton.theme</file>
         <file>light/DSegmentedControl.theme</file>
@@ -43,6 +41,10 @@
         <file>light/images/arrow_down_hover.png</file>
         <file>light/images/arrow_down_normal.png</file>
         <file>light/images/arrow_down_press.png</file>
+        <file>light/images/arrow_down_hover.svg</file>
+        <file>light/images/arrow_down_normal.svg</file>
+        <file>light/images/arrow_down_press.svg</file>
+        <file>light/images/arrow_down_insensitive.svg</file>
         <file>light/images/arrow_left_hover.png</file>
         <file>light/images/arrow_left_normal.png</file>
         <file>light/images/arrow_left_press.png</file>
@@ -52,27 +54,31 @@
         <file>light/images/arrow_up_hover.png</file>
         <file>light/images/arrow_up_normal.png</file>
         <file>light/images/arrow_up_press.png</file>
+        <file>light/images/arrow_up_hover.svg</file>
+        <file>light/images/arrow_up_normal.svg</file>
+        <file>light/images/arrow_up_press.svg</file>
+        <file>light/images/arrow_up_insensitive.svg</file>
         <file>light/images/checkbox_checked_hover.png</file>
         <file>light/images/checkbox_checked_insensitive.png</file>
         <file>light/images/checkbox_checked.png</file>
         <file>light/images/checkbox_unchecked_hover.png</file>
         <file>light/images/checkbox_unchecked_insensitive.png</file>
         <file>light/images/checkbox_unchecked.png</file>
-        <file>light/images/clear_content_hover.png</file>
-        <file>light/images/clear_content_normal.png</file>
-        <file>light/images/clear_content_press.png</file>
+        <file>light/images/input_clear_hover.svg</file>
+        <file>light/images/input_clear_normal.svg</file>
+        <file>light/images/input_clear_press.svg</file>
         <file>light/images/delete_multi_hover.png</file>
         <file>light/images/delete_multi_normal.png</file>
         <file>light/images/delete_multi_press.png</file>
         <file>light/images/multiselect_active_normal.png</file>
         <file>light/images/multiselect_inactive_hover.png</file>
         <file>light/images/multiselect_inactive_normal.png</file>
-        <file>light/images/password_hide_hover.png</file>
-        <file>light/images/password_hide_normal.png</file>
-        <file>light/images/password_hide_press.png</file>
-        <file>light/images/password_show_hover.png</file>
-        <file>light/images/password_show_normal.png</file>
-        <file>light/images/password_show_press.png</file>
+        <file>light/images/hide_password_hover.svg</file>
+        <file>light/images/hide_password_normal.svg</file>
+        <file>light/images/hide_password_press.svg</file>
+        <file>light/images/show_password_hover.svg</file>
+        <file>light/images/show_password_normal.svg</file>
+        <file>light/images/show_password_press.svg</file>
         <file>light/images/radio_selected_hover.png</file>
         <file>light/images/radio_selected_insensitive.png</file>
         <file>light/images/radio_selected.png</file>
@@ -94,18 +100,6 @@
         <file>light/images/tick_hover.png</file>
         <file>light/images/tick_insensitive.png</file>
         <file>light/images/tick_normal.png</file>
-        <file>light/images/window_close_hover.png</file>
-        <file>light/images/window_close_normal.png</file>
-        <file>light/images/window_close_press.png</file>
-        <file>light/images/window_min_hover.png</file>
-        <file>light/images/window_min_normal.png</file>
-        <file>light/images/window_min_press.png</file>
-        <file>light/images/window_option_hover.png</file>
-        <file>light/images/window_option_normal.png</file>
-        <file>light/images/window_option_press.png</file>
-        <file>light/images/window_unmax_hover.png</file>
-        <file>light/images/window_unmax_normal.png</file>
-        <file>light/images/window_unmax_press.png</file>
         <file>light/images/slider_bg_active.png</file>
         <file>light/images/slider_bg.png</file>
         <file>light/images/slider_round.png</file>
@@ -113,9 +107,6 @@
         <file>light/images/button_press_bg.png</file>
         <file>light/images/button_normal_bg.png</file>
         <file>light/images/button_hover_bg.png</file>
-        <file>light/images/window_max_press.png</file>
-        <file>light/images/window_max_normal.png</file>
-        <file>light/images/window_max_hover.png</file>
         <file>light/dialogs/images/light_minimise_small_hover.png</file>
         <file>light/dialogs/images/light_minimise_small_press.png</file>
         <file>light/dialogs/images/light_minimise_small_normal.png</file>
@@ -129,6 +120,28 @@
         <file>light/dialogs/images/user-trash-full.png</file>
         <file>light/images/combobox_arrow.png</file>
         <file>light/images/combobox_arrow_active.png</file>
-        <file>light/images/search.png</file>
+        <file>light/images/search.svg</file>
+        <file>light/images/water_back.svg</file>
+        <file>light/images/water_front.svg</file>
+        <file>light/images/window/close_disabled.svg</file>
+        <file>light/images/window/close_hover.svg</file>
+        <file>light/images/window/close_normal.svg</file>
+        <file>light/images/window/close_press.svg</file>
+        <file>light/images/window/maximize_disabled.svg</file>
+        <file>light/images/window/maximize_hover.svg</file>
+        <file>light/images/window/maximize_normal.svg</file>
+        <file>light/images/window/maximize_press.svg</file>
+        <file>light/images/window/menu_disabled.svg</file>
+        <file>light/images/window/menu_hover.svg</file>
+        <file>light/images/window/menu_normal.svg</file>
+        <file>light/images/window/menu_press.svg</file>
+        <file>light/images/window/minimise_hover.svg</file>
+        <file>light/images/window/minimise_normal.svg</file>
+        <file>light/images/window/minimise_press.svg</file>
+        <file>light/images/window/minimize_disabled.svg</file>
+        <file>light/images/window/unmaximize_disabled.svg</file>
+        <file>light/images/window/unmaximize_hover.svg</file>
+        <file>light/images/window/unmaximize_normal.svg</file>
+        <file>light/images/window/unmaximize_press.svg</file>
     </qresource>
 </RCC>

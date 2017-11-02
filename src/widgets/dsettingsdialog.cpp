@@ -1,3 +1,20 @@
+/*
+ * Copyright (C) 2017 ~ 2017 Deepin Technology Co., Ltd.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 #include "dsettingsdialog.h"
 
 #include <QDebug>
@@ -6,15 +23,17 @@
 #include <DSettingsOption>
 #include <DSettings>
 
+#include "dsettingswidgetfactory.h"
+
 #include "private/settings/content.h"
 #include "private/settings/navigation.h"
-#include "private/settings/widgetfactory.h"
 
 #include "dthememanager.h"
 #include "dwindowclosebutton.h"
 #include "dspinbox.h"
 #include "dbuttonlist.h"
 #include "doptionlist.h"
+
 
 
 DWIDGET_BEGIN_NAMESPACE
@@ -61,7 +80,8 @@ DSettingsDialog::DSettingsDialog(QWidget *parent) :
 
     d->content = new Content;
 
-    auto closeBt = new DWindowCloseButton;
+    auto closeBt = new DImageButton;
+    closeBt->setObjectName("DSettingsDialogClose");
     d->rightLayout->addWidget(closeBt, 0, Qt::AlignVCenter | Qt::AlignRight);
     d->rightLayout->addWidget(d->content);
 
@@ -76,6 +96,12 @@ DSettingsDialog::DSettingsDialog(QWidget *parent) :
 DSettingsDialog::~DSettingsDialog()
 {
 
+}
+
+DSettingsWidgetFactory *DSettingsDialog::widgetFactory() const
+{
+    Q_D(const DSettingsDialog);
+    return  d->content->widgetFactory();
 }
 
 void DSettingsDialog::updateSettings(Dtk::Core::DSettings *settings)
