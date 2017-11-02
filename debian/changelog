@@ -1,3 +1,10 @@
+dtkwidget (2.0.4.1-1~exp1) experimental; urgency=medium
+
+  * New upstream release.
+  * Adds libdtkwidget-bin package for dtk-svgc binary tool.
+
+ -- Boyuan Yang <073plan@gmail.com>  Thu, 02 Nov 2017 09:35:03 +0800
+
 dtkwidget (2.0.0-4) unstable; urgency=medium
 
   * Use shlibs file to circumvent symbols problems.

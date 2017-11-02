@@ -9,19 +9,22 @@ Uploaders:
 Build-Depends:
  debhelper (>= 10),
  libdtkcore-dev,
+ libdframeworkdbus-dev,
  libegl1-mesa-dev,
  libfontconfig1-dev,
  libfreetype6-dev,
  libglib2.0-dev,
  libgsettings-qt-dev,
  libmtdev-dev,
+ libpulse-dev,
+ libqt5svg5-dev,
  libqt5x11extras5-dev,
+ librsvg2-dev,
  libstartup-notification0-dev,
  libudev-dev,
  libxcb-util0-dev,
  libxext-dev,
  libxrender-dev,
- libpulse-dev,
  pkg-config,
  pkg-kde-tools,
  qtbase5-dev,
@@ -34,17 +37,33 @@ Homepage: https://github.com/linuxdeepin/dtkwidget
 Vcs-Git: https://anonscm.debian.org/git/pkg-deepin/dtkwidget.git
 Vcs-Browser: https://anonscm.debian.org/git/pkg-deepin/dtkwidget.git
 
+Package: libdtkwidget-bin
+Architecture: linux-any
+Depends:
+ libdtkwidget2 (= ${binary:Version}),
+ ${misc:Depends},
+ ${shlibs:Depends},
+Section: utils
+Description: Deepin Tool Kit Widget library (tools)
+ DtkWidget is the Deepin graphical user interface for deepin
+ desktop development.
+ .
+ This package is part of DDE (Deepin Desktop Environment).
+ .
+ This package contains utilities useful in the developement of DtkWidget.
+
 Package: libdtkwidget-dev
 Architecture: linux-any
 Section: libdevel
 Depends:
  libdtkcore-dev,
+ libdtkwidget2 (= ${binary:Version}),
  libqt5x11extras5-dev,
  qtmultimedia5-dev,
  ${misc:Depends},
- libdtkwidget2 (= ${binary:Version}),
-Description: Deepin graphical user interface library (development files)
- DtkWidget is Deepin graphical user interface for deepin desktop development.
+Description: Deepin Tool Kit Widget library (development files)
+ DtkWidget is the Deepin graphical user interface library for deepin
+ desktop development.
  .
  This package is part of DDE (Deepin Desktop Environment).
  .
@@ -56,8 +75,9 @@ Architecture: linux-any
 Depends:
  ${misc:Depends},
  ${shlibs:Depends},
-Description: Deepin graphical user interface library
- DtkWidget is Deepin graphical user interface for deepin desktop development.
+Description: Deepin Tool Kit Widget library
+ DtkWidget is the Deepin graphical user interface library for deepin
+ desktop development.
  .
  This package is part of DDE (Deepin Desktop Environment).
  .
