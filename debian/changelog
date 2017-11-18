@@ -1,3 +1,9 @@
+dtkwidget (2.0.5-1~exp1) experimental; urgency=medium
+
+  * New upstream release.
+
+ -- Boyuan Yang <073plan@gmail.com>  Sat, 18 Nov 2017 21:12:18 +0800
+
 dtkwidget (2.0.4.1-1~exp1) experimental; urgency=medium
 
   * New upstream release.
