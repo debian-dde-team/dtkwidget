@@ -50,7 +50,7 @@ Description: Deepin Tool Kit Widget library (tools)
  .
  This package is part of DDE (Deepin Desktop Environment).
  .
- This package contains utilities useful in the developement of DtkWidget.
+ This package contains utilities useful in the development of DtkWidget.
 
 Package: libdtkwidget-dev
 Architecture: linux-any
