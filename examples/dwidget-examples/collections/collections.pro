@@ -27,6 +27,11 @@ SOURCES += main.cpp\
     widgetstab.cpp \
     comboboxtab.cpp \
     cameraform.cpp \
+    simplelistviewtab.cpp \
+    singlelistview.cpp \
+    singlelistitem.cpp \
+    multilistview.cpp \
+    multilistitem.cpp \
     graphicseffecttab.cpp
 
 HEADERS  += mainwindow.h \
@@ -41,6 +46,11 @@ HEADERS  += mainwindow.h \
     widgetstab.h \
     comboboxtab.h \
     cameraform.h \
+    simplelistviewtab.h \
+    singlelistview.h \
+    singlelistitem.h \
+    multilistview.h \
+    multilistitem.h \
     graphicseffecttab.h
 
 RESOURCES += \
@@ -66,7 +76,8 @@ else:win32:CONFIG(debug, debug|release): LIBS += -L$$OUT_PWD/../../../src/debug 
 else:unix: LIBS += -L$$OUT_PWD/../../../src/ -ldtkwidget
 
 INCLUDEPATH += $$PWD/../../../src
-INCLUDEPATH += $$PWD/../../../src/widgets $$PWD/../../../src/util
+INCLUDEPATH += $$PWD/../../../src/widgets
+INCLUDEPATH += $$PWD/../../../src/util
 DEPENDPATH += $$PWD/../../../src
 
 CONFIG(debug, debug|release) {

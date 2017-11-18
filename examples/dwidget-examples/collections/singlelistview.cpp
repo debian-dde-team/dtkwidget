@@ -15,47 +15,21 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef MAINWINDOW_H
-#define MAINWINDOW_H
-
-#include <QWidget>
-#include <QLabel>
-#include <QTabWidget>
-#include <QVBoxLayout>
-#include <qtypetraits.h>
-
-#include "widgets/dmainwindow.h"
-
-#include "bartab.h"
-#include "buttontab.h"
-#include "inputtab.h"
-#include "linetab.h"
-#include "slidertab.h"
-#include "indicatortab.h"
-#include "widgetstab.h"
-#include "comboboxtab.h"
-
-
-class QAction;
+#include "singlelistview.h"
+#include "singlelistitem.h"
 
 DWIDGET_USE_NAMESPACE
 
-class MainWindow : public DMainWindow
+SingleListView::SingleListView(DSimpleListView *parent) : DSimpleListView(parent)
 {
-    Q_OBJECT
+    QStringList rockStars;
+    rockStars << "Bob Dylan" << "Neil Young" << "Eric Clapton" << "John Lennon";
 
-public:
-    MainWindow(QWidget *parent = 0);
-    ~MainWindow();
+    QList<DSimpleListItem*> items;
+    for (auto rockStarName : rockStars){
+        SingleListItem *item = new SingleListItem(rockStarName);
+        items << item;
+    }
 
-protected Q_SLOTS:
-    void menuItemInvoked(QAction *action);
-
-private:
-    void initTabWidget();
-
-private:
-    QTabWidget *m_mainTab = NULL;
-};
-
-#endif // MAINWINDOW_H
+    addItems(items);
+}

@@ -15,47 +15,21 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef MAINWINDOW_H
-#define MAINWINDOW_H
-
-#include <QWidget>
-#include <QLabel>
-#include <QTabWidget>
 #include <QVBoxLayout>
-#include <qtypetraits.h>
+#include "simplelistviewtab.h"
+#include "singlelistview.h"
+#include "multilistview.h"
 
-#include "widgets/dmainwindow.h"
-
-#include "bartab.h"
-#include "buttontab.h"
-#include "inputtab.h"
-#include "linetab.h"
-#include "slidertab.h"
-#include "indicatortab.h"
-#include "widgetstab.h"
-#include "comboboxtab.h"
-
-
-class QAction;
-
-DWIDGET_USE_NAMESPACE
-
-class MainWindow : public DMainWindow
+SimpleListViewTab::SimpleListViewTab(QWidget *parent) : QWidget(parent)
 {
-    Q_OBJECT
+    QHBoxLayout *layout = new QHBoxLayout(this);
+    SingleListView *singleListView = new SingleListView();
+    MultiListView *multiListView = new MultiListView();
 
-public:
-    MainWindow(QWidget *parent = 0);
-    ~MainWindow();
+    layout->addWidget(singleListView);
+    layout->addWidget(multiListView);
+}
 
-protected Q_SLOTS:
-    void menuItemInvoked(QAction *action);
-
-private:
-    void initTabWidget();
-
-private:
-    QTabWidget *m_mainTab = NULL;
-};
-
-#endif // MAINWINDOW_H
+SimpleListViewTab::~SimpleListViewTab()
+{
+}

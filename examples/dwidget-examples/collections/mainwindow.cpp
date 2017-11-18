@@ -42,6 +42,7 @@
 #include "buttonlisttab.h"
 #include "cameraform.h"
 #include "graphicseffecttab.h"
+#include "simplelistviewtab.h"
 
 DTK_USE_NAMESPACE
 DWIDGET_USE_NAMESPACE
@@ -61,6 +62,8 @@ MainWindow::MainWindow(QWidget *parent)
     QHBoxLayout *styleLayout = new QHBoxLayout();
     QPushButton *darkButton = new QPushButton("Dark", this);
     QPushButton *lightBUtton = new QPushButton("Light", this);
+    QPushButton *enableButtons = new QPushButton("Enable Titlebar ", this);
+    QPushButton *disableButtons = new QPushButton("Disable Titlebar", this);
 
     themeManager->setTheme(lightBUtton, "light");
 
@@ -70,8 +73,19 @@ MainWindow::MainWindow(QWidget *parent)
     connect(lightBUtton, &QPushButton::clicked, [ = ] {
         themeManager->setTheme("light");
     });
+    connect(enableButtons, &QPushButton::clicked, [ = ] {
+        titlebar()->setDisableFlags(Qt::Widget);
+    });
+    connect(disableButtons, &QPushButton::clicked, [ = ] {
+        titlebar()->setDisableFlags(Qt::WindowMinimizeButtonHint
+        | Qt::WindowCloseButtonHint
+        | Qt::WindowMaximizeButtonHint
+        | Qt::WindowSystemMenuHint);
+    });
     styleLayout->addWidget(darkButton);
     styleLayout->addWidget(lightBUtton);
+    styleLayout->addWidget(enableButtons);
+    styleLayout->addWidget(disableButtons);
     styleLayout->addStretch();
 
     mainLayout->addLayout(styleLayout);
@@ -94,8 +108,11 @@ MainWindow::MainWindow(QWidget *parent)
         QMenu *menu = titlebar->menu()->addMenu("menu1");
         menu->addAction("menu1->action1");
         menu->addAction("menu1->action2");
-
         connect(titlebar->menu(), &QMenu::triggered, this, &MainWindow::menuItemInvoked);
+
+        titlebar->setDisableFlags(Qt::WindowMinimizeButtonHint
+                                  | Qt::WindowMaximizeButtonHint
+                                  | Qt::WindowSystemMenuHint);
     }
 }
 
@@ -178,6 +195,8 @@ void MainWindow::initTabWidget()
 
     GraphicsEffectTab *effectTab = new GraphicsEffectTab(this);
 
+    SimpleListViewTab *simplelistviewTab = new SimpleListViewTab(this);
+    
     m_mainTab->addTab(widgetsTab, "Widgets");
     m_mainTab->addTab(effectTab, "GraphicsEffect");
     m_mainTab->addTab(comboBoxTab, "ComboBox");
@@ -191,6 +210,7 @@ void MainWindow::initTabWidget()
     m_mainTab->addTab(buttonListGroupTab, "ButtonList");
     m_mainTab->addTab(segmentedControl, "Segmented Control");
     m_mainTab->addTab(cameraform, "Camera View");
+    m_mainTab->addTab(simplelistviewTab, "SimpleListView");
 
     m_mainTab->setCurrentIndex(0);
 }

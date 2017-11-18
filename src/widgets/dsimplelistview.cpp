@@ -63,6 +63,7 @@ public:
     bool defaultSortingOrder;
     bool mouseAtScrollArea;
     bool mouseDragScrollbar;
+    bool drawFrame;
     int alwaysVisibleColumn;
     int clipRadius;
     int defaultSortingColumn;
@@ -100,6 +101,7 @@ DSimpleListView::DSimpleListView(QWidget *parent) : QWidget(parent), DObject(*ne
     d->titleHeight = 0;
     d->titleArrowPadding = 4;
     d->titlePadding = 14;
+    d->rowHeight = 36;
 
     d->searchContent = "";
     d->searchAlgorithm = NULL;
@@ -137,6 +139,7 @@ DSimpleListView::DSimpleListView(QWidget *parent) : QWidget(parent), DObject(*ne
 
     d->mouseAtScrollArea = false;
     d->mouseDragScrollbar = false;
+    d->drawFrame = false;
     d->scrollbarDefaultWidth = 4;
     d->scrollbarDragWidth = 8;
     d->scrollbarMinHeight = 30;
@@ -144,7 +147,7 @@ DSimpleListView::DSimpleListView(QWidget *parent) : QWidget(parent), DObject(*ne
     d->hideScrollbarDuration = 2000;
 
     d->oldRenderOffset = 0;
-    d->clipRadius = 8;
+    d->clipRadius = 0;
 
     d->hideScrollbarTimer = NULL;
 
@@ -246,6 +249,14 @@ void DSimpleListView::setClipRadius(int radius)
     d->clipRadius = radius;
 }
 
+void DSimpleListView::setFrame(bool enableFrame, QColor color, double opacity)
+{
+    D_D(DSimpleListView);
+    
+    d->drawFrame = enableFrame;
+    frameColor = color;
+    frameOpacity = opacity;
+}
 
 void DSimpleListView::addItems(QList<DSimpleListItem*> items)
 {
@@ -957,10 +968,12 @@ void DSimpleListView::paintEvent(QPaintEvent *)
     painter.setClipPath(framePath);
 
     // Draw title.
-    QPainterPath titlePath;
-    titlePath.addRect(QRectF(rect().x(), rect().y(), rect().width(), d->titleHeight));
-    painter.setOpacity(titleAreaOpacity);
-    painter.fillPath(titlePath, QColor(titleAreaColor));
+    if (d->titleHeight > 0) {
+        QPainterPath titlePath;
+        titlePath.addRect(QRectF(rect().x(), rect().y(), rect().width(), d->titleHeight));
+        painter.setOpacity(titleAreaOpacity);
+        painter.fillPath(titlePath, QColor(titleAreaColor));
+    }
 
     int renderY = 0;
     int renderHeight = 0;
@@ -1083,11 +1096,12 @@ void DSimpleListView::paintEvent(QPaintEvent *)
     }
 
     // Draw frame.
-    QPen framePen;
-    framePen.setColor(frameColor);
-
-    painter.setOpacity(frameOpacity);
-    painter.drawPath(framePath);
+    if (d->drawFrame) {
+        QPen framePen;
+        framePen.setColor(frameColor);
+        painter.setOpacity(frameOpacity);
+        painter.drawPath(framePath);
+    }
 
     // Draw scrollbar.
     if (d->mouseAtScrollArea) {
@@ -1287,7 +1301,9 @@ void DSimpleListView::shiftSelectPrevItemWithOffset(int scrollOffset)
 
             shiftSelectItemsWithBound(selectionStartIndex, selectionEndIndex);
 
-            d->renderOffset = adjustRenderOffset((selectionStartIndex - 1) * d->rowHeight + d->titleHeight);
+            if (d->renderOffset / d->rowHeight >= selectionStartIndex) {
+                d->renderOffset = adjustRenderOffset((selectionStartIndex - 1) * d->rowHeight + d->titleHeight);
+            }
 
             repaint();
         }
@@ -1332,7 +1348,10 @@ void DSimpleListView::shiftSelectNextItemWithOffset(int scrollOffset)
 
             shiftSelectItemsWithBound(selectionStartIndex, selectionEndIndex);
 
-            d->renderOffset = adjustRenderOffset((selectionEndIndex + 1) * d->rowHeight + d->titleHeight - rect().height());
+            if ((d->renderOffset + rect().height()) / d->rowHeight <= selectionEndIndex + 1) {
+                d->renderOffset = adjustRenderOffset((selectionEndIndex + 1) * d->rowHeight + d->titleHeight - rect().height());
+            }
+            
 
             repaint();
         }
@@ -1344,38 +1363,45 @@ QList<int> DSimpleListView::getRenderWidths()
     D_D(DSimpleListView);
     
     QList<int> renderWidths;
-    if (d->columnWidths.contains(-1)) {
-        for (int i = 0; i < d->columnWidths.count(); i++) {
-            if (d->columnWidths[i] != -1) {
+    if (d->columnWidths.length() > 0) {
+        if (d->columnWidths.contains(-1)) {
+            for (int i = 0; i < d->columnWidths.count(); i++) {
+                if (d->columnWidths[i] != -1) {
+                    if (columnVisibles[i]) {
+                        renderWidths << d->columnWidths[i];
+                    } else {
+                        renderWidths << 0;
+                    }
+                } else {
+                    if (columnVisibles[i]) {
+                        int totalWidthOfOtherColumns = 0;
+
+                        for (int j = 0; j < d->columnWidths.count(); j++) {
+                            if (d->columnWidths[j] != -1 && columnVisibles[j]) {
+                                totalWidthOfOtherColumns += d->columnWidths[j];
+                            }
+                        }
+
+                        renderWidths << rect().width() - totalWidthOfOtherColumns;
+                    } else {
+                        renderWidths << 0;
+                    }
+                }
+            }
+        } else {
+            for (int i = 0; i < d->columnWidths.count(); i++) {
                 if (columnVisibles[i]) {
                     renderWidths << d->columnWidths[i];
                 } else {
                     renderWidths << 0;
                 }
-            } else {
-                if (columnVisibles[i]) {
-                    int totalWidthOfOtherColumns = 0;
-
-                    for (int j = 0; j < d->columnWidths.count(); j++) {
-                        if (d->columnWidths[j] != -1 && columnVisibles[j]) {
-                            totalWidthOfOtherColumns += d->columnWidths[j];
-                        }
-                    }
-
-                    renderWidths << rect().width() - totalWidthOfOtherColumns;
-                } else {
-                    renderWidths << 0;
-                }
             }
-        }
-    } else {
-        for (int i = 0; i < d->columnWidths.count(); i++) {
-            if (columnVisibles[i]) {
-                renderWidths << d->columnWidths[i];
-            } else {
-                renderWidths << 0;
-            }
-        }
+        }        
+    }
+    // Return widget width if user don't set column withs throught function 'setColumnTitleInfo'.
+    // Avoid listview don't draw item's foregound cause by emptry 'columnWidths'.
+    else {
+        renderWidths << rect().width();
     }
 
     return renderWidths;
