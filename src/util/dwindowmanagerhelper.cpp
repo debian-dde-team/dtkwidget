@@ -44,6 +44,7 @@ DEFINE_CONST_CHAR(getMWMFunctions);
 DEFINE_CONST_CHAR(setMWMDecorations);
 DEFINE_CONST_CHAR(getMWMDecorations);
 DEFINE_CONST_CHAR(connectWindowMotifWMHintsChanged);
+DEFINE_CONST_CHAR(popupSystemWindowMenu);
 
 static bool connectWindowManagerChangedSignal(QObject *object, std::function<void ()> slot)
 {
@@ -167,7 +168,7 @@ DWindowManagerHelper::MotifFunctions DWindowManagerHelper::getMotifFunctions(con
     if (getMWMFunctions && window->handle()) {
         quint32 hints = reinterpret_cast<quint32(*)(quint32)>(getMWMFunctions)(window->handle()->winId());
 
-        if (hints != MWM_FUNC_ALL)
+        if (!(hints & MWM_FUNC_ALL))
             return (MotifFunctions)hints;
     }
 
@@ -215,11 +216,24 @@ DWindowManagerHelper::MotifDecorations DWindowManagerHelper::getMotifDecorations
     if (getMWMDecorations && window->handle()) {
         quint32 hints = reinterpret_cast<quint32(*)(quint32)>(getMWMDecorations)(window->handle()->winId());
 
-        if (hints != MWM_DECOR_ALL )
+        if (!(hints & MWM_DECOR_ALL))
             return (MotifDecorations)hints;
     }
 
     return DECOR_ALL;
+}
+
+void DWindowManagerHelper::popupSystemWindowMenu(const QWindow *window)
+{
+    QFunctionPointer popupSystemWindowMenu = Q_NULLPTR;
+
+#if QT_VERSION >= QT_VERSION_CHECK(5, 4, 0)
+    popupSystemWindowMenu = qApp->platformFunction(_popupSystemWindowMenu);
+#endif
+
+    if (popupSystemWindowMenu && window->handle()) {
+        reinterpret_cast<void(*)(quint32)>(popupSystemWindowMenu)(window->handle()->winId());
+    }
 }
 
 bool DWindowManagerHelper::hasBlurWindow() const

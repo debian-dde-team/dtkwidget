@@ -42,10 +42,12 @@
 #include "daboutdialog.h"
 
 #ifdef Q_OS_LINUX
+#include <QDBusInterface>
 #include "startupnotificationmonitor.h"
 #endif
 
 #define DXCB_PLUGIN_KEY "dxcb"
+#define DXCB_PLUGIN_SYMBOLIC_PROPERTY "_d_isDxcb"
 
 DCORE_USE_NAMESPACE
 
@@ -246,6 +248,15 @@ bool DApplicationPrivate::loadTranslator(QList<DPathBuf> translateDirs, const QS
     return false;
 }
 
+bool DApplicationPrivate::isUserManualExists()
+{
+    const QString appName = qApp->applicationName();
+    bool dmanAppExists = QFile::exists("/usr/bin/dman");
+    bool dmanDataExists = QFile::exists("/usr/share/dman/" + appName) ||
+                          QFile::exists("/app/share/dman/" + appName);
+    return  dmanAppExists && dmanDataExists;
+}
+
 /**
  * @brief DApplication::DApplication constructs an instance of DApplication.
  * @param argc is the same as in the main function.
@@ -339,12 +350,15 @@ bool DApplication::loadDXcbPlugin()
         return false;
     }
 
+    // fix QGuiApplication::platformName() to xcb
+    qputenv("DXCB_FAKE_PLATFORM_NAME_XCB", "true");
+
     return qputenv("QT_QPA_PLATFORM", DXCB_PLUGIN_KEY);
 }
 
 bool DApplication::isDXcbPlatform()
 {
-    return qApp && qApp->platformName() == "dxcb";
+    return qApp && (qApp->platformName() == DXCB_PLUGIN_KEY || qApp->property(DXCB_PLUGIN_SYMBOLIC_PROPERTY).toBool());
 }
 
 /**
@@ -541,8 +555,26 @@ void DApplication::setAboutDialog(DAboutDialog *aboutDialog)
  */
 void DApplication::handleHelpAction()
 {
-    const QString appName = applicationName();
-    QProcess::startDetached("dman", QStringList() << appName);
+    QString appid = applicationName();
+#ifdef DTK_DMAN_PORTAL
+    if (!qgetenv("FLATPAK_APPID").isEmpty()) {
+        appid = qgetenv("FLATPAK_APPID");
+    }
+
+    QDBusInterface dmanInterface("com.deepin.dman",
+                                 "/com/deepin/dman",
+                                 "com.deepin.dman");
+    if (dmanInterface.isValid()) {
+        auto reply = dmanInterface.call("ShowManual", appid);
+        if (dmanInterface.lastError().isValid()) {
+            qCritical() << "failed call ShowManual" << appid << dmanInterface.lastError();
+        }
+    } else {
+        qCritical() << "can not create dman dbus interface";
+    }
+#else
+    QProcess::startDetached("dman", QStringList() << appid);
+#endif
 }
 
 /**

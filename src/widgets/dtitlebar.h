@@ -41,7 +41,7 @@ public:
     QWidget *customWidget() const;
     void setCustomWidget(QWidget *, bool fixCenterPos = false);
     void setCustomWidget(QWidget *, Qt::AlignmentFlag flag = Qt::AlignCenter, bool fixCenterPos = false);
-    Q_DECL_DEPRECATED void setWindowFlags(Qt::WindowFlags type);
+    D_DECL_DEPRECATED void setWindowFlags(Qt::WindowFlags type);
 
     int buttonAreaWidth() const;
     bool separatorVisible() const;
@@ -60,7 +60,7 @@ Q_SIGNALS:
     void mousePressed(Qt::MouseButtons buttons);
     void mouseMoving(Qt::MouseButton botton);
 
-#ifdef Q_OS_WIN
+#ifdef DTK_TITLE_DRAG_WINDOW
     void mousePosPressed(Qt::MouseButtons buttons, QPoint pos);
     void mousePosMoving(Qt::MouseButton botton, QPoint pos);
 #endif
@@ -70,8 +70,8 @@ public Q_SLOTS:
     void setSeparatorVisible(bool visible);
     void setTitle(const QString &title);
     void setIcon(const QIcon &icon);
-    void Q_DECL_DEPRECATED setIcon(const QPixmap &icon);
-    Q_DECL_DEPRECATED void setWindowState(Qt::WindowState windowState);
+    void D_DECL_DEPRECATED setIcon(const QPixmap &icon);
+    D_DECL_DEPRECATED void setWindowState(Qt::WindowState windowState);
     /// Maximized/Minumized
     void toggleWindowState();
 

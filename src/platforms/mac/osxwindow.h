@@ -15,23 +15,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef DWINDOWRESTOREBUTTON_H
-#define DWINDOWRESTOREBUTTON_H
-
-#include <QObject>
-#include <QString>
-
-#include "dimagebutton.h"
-
-DWIDGET_BEGIN_NAMESPACE
-
-class D_DECL_DEPRECATED_X("DWindowMaxButton is sufficient representing the two states.") DWindowRestoreButton : public DImageButton
-{
-    Q_OBJECT
-public:
-    DWindowRestoreButton(QWidget * parent = 0);
-};
-
-DWIDGET_END_NAMESPACE
-
-#endif // DWINDOWRESTOREBUTTON_H
+namespace OSX {
+     void HideWindowTitlebar(long winid);
+}

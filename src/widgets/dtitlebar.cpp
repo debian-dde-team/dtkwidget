@@ -37,6 +37,7 @@
 #endif
 #include "daboutdialog.h"
 #include "dapplication.h"
+#include "private/dapplication_p.h"
 #include "dthememanager.h"
 #include "util/dwindowmanagerhelper.h"
 
@@ -65,7 +66,6 @@ private:
     void _q_aboutActionTriggered();
     void _q_quitActionTriggered();
 
-    bool isUserManualExists() const;
 #endif
 
     QHBoxLayout         *mainLayout;
@@ -132,19 +132,23 @@ void DTitlebarPrivate::init()
     mainLayout->setSpacing(0);
 
     iconLabel->setFixedSize(DefaultIconWidth, DefaultIconHeight);
+    iconLabel->setWindowFlags(Qt::WindowTransparentForInput);
     titleLabel->setText(qApp->applicationName());
     // TODO: use QSS
     titleLabel->setStyleSheet("font-size: 12px;");
     titleLabel->setContentsMargins(0, 0, DefaultIconWidth + 10, 0);
+    titleLabel->setWindowFlags(Qt::WindowTransparentForInput);
 //    q->setStyleSheet("background-color: green;");
 
     separatorTop->setFixedHeight(1);
     separatorTop->setStyleSheet("background: rgba(0, 0, 0, 20);");
     separatorTop->hide();
+    separatorTop->setWindowFlags(Qt::WindowTransparentForInput);
 
     separator->setFixedHeight(1);
     separator->setStyleSheet("background: rgba(0, 0, 0, 20);");
     separator->hide();
+    separator->setWindowFlags(Qt::WindowTransparentForInput);
 
     QHBoxLayout *buttonAreaLayout = new QHBoxLayout;
     buttonAreaLayout->setContentsMargins(0, 1, 0, 0);
@@ -162,6 +166,7 @@ void DTitlebarPrivate::init()
     titleAreaLayout->addWidget(iconLabel);
     titleAreaLayout->setAlignment(iconLabel, Qt::AlignLeft);
     titlePadding->setFixedSize(buttonArea->size());
+    titlePadding->setWindowFlags(Qt::WindowTransparentForInput);
     titleAreaLayout->addWidget(titlePadding);
     titleAreaLayout->addStretch();
     titleAreaLayout->addWidget(titleLabel);
@@ -169,6 +174,7 @@ void DTitlebarPrivate::init()
 
     titleAreaLayout->addStretch();
     titleArea->setLayout(titleAreaLayout);
+    titleArea->setWindowFlags(Qt::WindowTransparentForInput);
 
     QHBoxLayout *coustomAteaLayout = new QHBoxLayout;
     coustomAteaLayout->setMargin(0);
@@ -250,12 +256,15 @@ void DTitlebarPrivate::_q_toggleWindowState()
         parentWindow->showNormal();
     } else if (!parentWindow->isFullScreen()
                && (maxButton->isVisible())) {
+        maxButton->setState(DImageButton::Normal);
         parentWindow->showMaximized();
     }
 }
 
 void DTitlebarPrivate::_q_showMinimized()
 {
+    minButton->setState(DImageButton::Normal);
+
     if (DPlatformWindowHandle::isEnabledDXcb(parentWindow)) {
         parentWindow->showMinimized();
     } else {
@@ -338,7 +347,7 @@ void DTitlebarPrivate::_q_addDefaultMenuItems()
     }
 
     // add help menu item.
-    if (!helpAction && isUserManualExists()) {
+    if (!helpAction && DApplicationPrivate::isUserManualExists()) {
         helpAction = new QAction(qApp->translate("TitleBarMenu", "Help"), menu);
         QObject::connect(helpAction, SIGNAL(triggered(bool)), q, SLOT(_q_helpActionTriggered()));
         menu->addAction(helpAction);
@@ -381,14 +390,6 @@ void DTitlebarPrivate::_q_quitActionTriggered()
     if (dapp) {
         dapp->handleQuitAction();
     }
-}
-
-bool DTitlebarPrivate::isUserManualExists() const
-{
-    const QString appName = qApp->applicationName();
-
-    return QFile::exists("/usr/bin/dman") && \
-           QFile::exists("/usr/share/dman/" + appName);
 }
 
 #endif
@@ -480,8 +481,7 @@ void DTitlebar::showMenu()
     D_D(DTitlebar);
 
     if (d->menu) {
-        d->menu->exec(d->optionButton->mapToGlobal(d->optionButton->rect().bottomLeft()));
-    } else {
+        d->optionButton->setState(DImageButton::Normal);
         d->menu->exec(d->optionButton->mapToGlobal(d->optionButton->rect().bottomLeft()));
     }
 }
@@ -512,7 +512,13 @@ void DTitlebar::mousePressEvent(QMouseEvent *event)
     D_D(DTitlebar);
     d->mousePressed = (event->buttons() == Qt::LeftButton);
 
-#ifdef Q_OS_WIN
+    if (event->button() == Qt::RightButton) {
+        DWindowManagerHelper::popupSystemWindowMenu(window()->windowHandle());
+
+        return;
+    }
+
+#ifdef DTK_TITLE_DRAG_WINDOW
     Q_EMIT mousePosPressed(event->buttons(), event->globalPos());
 #endif
     Q_EMIT mousePressed(event->buttons());
@@ -536,14 +542,6 @@ bool DTitlebar::eventFilter(QObject *obj, QEvent *event)
 //            if (d->maxButton->isEnabled()) {
             d->maxButton->setMaximized(d->parentWindow->windowState() == Qt::WindowMaximized);
 //            }
-            break;
-        case QEvent::Resize:
-        case QEvent::Show:
-            if (d->embedMode) {
-                const auto margins = d->parentWindow->contentsMargins();
-                auto horizontalOffset = margins.left() + margins.right();
-                setFixedWidth(d->parentWindow->width() - horizontalOffset);
-            }
             break;
         case QEvent::ShowToParent:
             d->updateButtonsFunc();
@@ -822,7 +820,7 @@ void DTitlebar::mouseMoveEvent(QMouseEvent *event)
         Q_EMIT mouseMoving(button);
     }
 
-#ifdef Q_OS_WIN
+#ifdef DTK_TITLE_DRAG_WINDOW
     D_D(DTitlebar);
     if (d->mousePressed) {
         Q_EMIT mousePosMoving(button, event->globalPos());

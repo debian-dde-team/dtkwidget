@@ -21,8 +21,16 @@
 #include "dtitlebar.h"
 
 #include "private/dmainwindow_p.h"
+#include "private/dapplication_p.h"
 
+#include <QKeySequence>
+#include <QShortcut>
 #include <QWindow>
+#include <QMouseEvent>
+
+#ifdef Q_OS_MAC
+#include "osxwindow.h"
+#endif
 
 /// shadow
 #define SHADOW_COLOR_NORMAL QColor(0, 0, 0, 255 * 35/100)
@@ -38,8 +46,12 @@ DMainWindowPrivate::DMainWindowPrivate(DMainWindow *qq)
         handle = new DPlatformWindowHandle(qq, qq);
         qq->setMenuWidget(titlebar);
     } else {
+        qq->setMenuWidget(titlebar);
+#ifdef Q_OS_MAC
+        OSX::HideWindowTitlebar(qq->winId());
+#else
         titlebar->setEmbedMode(true);
-        qq->setContentsMargins(0, titlebar->height(), 0, 0);
+#endif
     }
 }
 
@@ -80,6 +92,20 @@ void DMainWindowPrivate::init()
             }
         });
     }
+
+    if (!help && DApplicationPrivate::isUserManualExists()) {
+        help = new QShortcut(QKeySequence(Qt::Key_F1), q);
+        help->setContext(Qt::ApplicationShortcut);
+        QObject::connect(help, &QShortcut::activated,
+        q, [ = ]() {
+            DApplication *dapp = qobject_cast<DApplication *>(qApp);
+            if (dapp) {
+                dapp->handleHelpAction();
+            }
+        });
+    }
+
+
 }
 
 /*!
@@ -500,6 +526,14 @@ void DMainWindow::setAutoInputMaskByClipPath(bool autoInputMaskByClipPath)
 
     d->handle->setAutoInputMaskByClipPath(autoInputMaskByClipPath);
 }
+
+#ifdef Q_OS_MAC
+void DMainWindow::setWindowFlags(Qt::WindowFlags type)
+{
+    QMainWindow::setWindowFlags(type);
+    OSX::HideWindowTitlebar(winId());
+}
+#endif
 
 DMainWindow::DMainWindow(DMainWindowPrivate &dd, QWidget *parent)
     : QMainWindow(parent)

@@ -15,23 +15,27 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef DWINDOWRESTOREBUTTON_H
-#define DWINDOWRESTOREBUTTON_H
+#include "osxwindow.h"
 
-#include <QObject>
-#include <QString>
+#include <Cocoa/Cocoa.h>
 
-#include "dimagebutton.h"
+namespace OSX {
 
-DWIDGET_BEGIN_NAMESPACE
-
-class D_DECL_DEPRECATED_X("DWindowMaxButton is sufficient representing the two states.") DWindowRestoreButton : public DImageButton
+void HideWindowTitlebar(long winId)
 {
-    Q_OBJECT
-public:
-    DWindowRestoreButton(QWidget * parent = 0);
-};
+    NSView *view = reinterpret_cast<NSView *>(winId);
+    NSWindow* window = [view window];
 
-DWIDGET_END_NAMESPACE
+    [window setStyleMask: [window styleMask] | NSFullSizeContentViewWindowMask | NSWindowTitleHidden];
 
-#endif // DWINDOWRESTOREBUTTON_H
+    [window setTitlebarAppearsTransparent:YES];
+    [window setMovableByWindowBackground:YES];
+
+    [[window standardWindowButton:NSWindowCloseButton] setHidden:YES];
+    [[window standardWindowButton:NSWindowMiniaturizeButton] setHidden:YES];
+    [[window standardWindowButton:NSWindowZoomButton] setHidden:YES];
+
+    window.titleVisibility = NSWindowTitleHidden;
+}
+
+}
