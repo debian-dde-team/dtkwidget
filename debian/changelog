@@ -1,15 +1,9 @@
-dtkwidget (2.0.5-1~exp1) experimental; urgency=medium
+dtkwidget (2.0.5.2-1) unstable; urgency=medium
 
   * New upstream release.
+  * Do not provide svgc tool for now since upstream will move it away soon.
 
- -- Boyuan Yang <073plan@gmail.com>  Sat, 18 Nov 2017 21:12:18 +0800
-
-dtkwidget (2.0.4.1-1~exp1) experimental; urgency=medium
-
-  * New upstream release.
-  * Adds libdtkwidget-bin package for dtk-svgc binary tool.
-
- -- Boyuan Yang <073plan@gmail.com>  Thu, 02 Nov 2017 09:35:03 +0800
+ -- Boyuan Yang <073plan@gmail.com>  Wed, 29 Nov 2017 01:04:44 +0800
 
 dtkwidget (2.0.0-4) unstable; urgency=medium
 
