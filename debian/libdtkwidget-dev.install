@@ -1,3 +1,4 @@
 usr/include/libdtk-2.0
 usr/lib/*/libdtkwidget.so
 usr/lib/*/pkgconfig
+usr/include/*/qt5/QtXcb

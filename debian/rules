@@ -10,6 +10,10 @@ export QT_SELECT := 5
 
 DEB_HOST_MULTIARCH ?= $(shell dpkg-architecture -qDEB_HOST_MULTIARCH)
 
+_QT_COMPAT_VERSION := 5.9.2
+_TMPDIR := debian/tmp
+_QTXCBDIR := $(_TMPDIR)/usr/include/$(DEB_HOST_MULTIARCH)/qt5/QtXcb/$(_QT_COMPAT_VERSION)/QtXcb/private
+
 %:
 	dh $@ --with pkgkde_symbolshelper
 
@@ -22,3 +26,12 @@ override_dh_makeshlibs:
 override_dh_clean:
 	dh_clean
 	rm -vf translations/*qm
+
+override_dh_missing:
+	dh_missing --fail-missing
+
+override_dh_install:
+	mkdir -p $(_QTXCBDIR)
+	cp -t $(_QTXCBDIR)/ libqt5xcbqpa-dev/$(_QT_COMPAT_VERSION)/*.h
+	rm -f $(_TMPDIR)/usr/lib/dtk2/dtk-svgc
+	dh_install
