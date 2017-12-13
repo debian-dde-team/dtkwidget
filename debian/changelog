@@ -1,3 +1,11 @@
+dtkwidget (2.0.5.2-3) unstable; urgency=medium
+
+  * Do not provide QtXcb private headers.
+  * Bump Standards-Version to 4.1.2. (No changes needed)
+  * Backport upstream patch to fix bug in getQssForWidget().
+
+ -- Boyuan Yang <073plan@gmail.com>  Wed, 13 Dec 2017 16:54:49 +0800
+
 dtkwidget (2.0.5.2-2) unstable; urgency=medium
 
   * Workaround QtXcb private headers and provide them with a patch.

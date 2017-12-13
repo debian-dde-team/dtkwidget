@@ -32,7 +32,7 @@ Build-Depends:
  qtmultimedia5-dev,
  qttools5-dev-tools,
  x11proto-xext-dev,
-Standards-Version: 4.1.1
+Standards-Version: 4.1.2
 Homepage: https://github.com/linuxdeepin/dtkwidget
 Vcs-Git: https://anonscm.debian.org/git/pkg-deepin/dtkwidget.git
 Vcs-Browser: https://anonscm.debian.org/git/pkg-deepin/dtkwidget.git
