@@ -14,7 +14,7 @@ DEB_HOST_MULTIARCH ?= $(shell dpkg-architecture -qDEB_HOST_MULTIARCH)
 	dh $@ --with pkgkde_symbolshelper
 
 override_dh_auto_configure:
-	dh_auto_configure -- LIB_INSTALL_DIR=/usr/lib/$(DEB_HOST_MULTIARCH)
+	dh_auto_configure -- LIB_INSTALL_DIR=/usr/lib/$(DEB_HOST_MULTIARCH) DBUS_VERSION_0_4_2=YES
 
 override_dh_makeshlibs:
 	dh_makeshlibs -V

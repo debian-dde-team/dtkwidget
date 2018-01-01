@@ -37,6 +37,8 @@ public:
     void _q_showFileChooserDialog();
 
     DFileChooserEdit::DialogDisplayPosition dialogDisplayPosition = DFileChooserEdit::FoloowParentWindow;
+    QFileDialog::FileMode fileMode = QFileDialog::ExistingFile;
+    QStringList nameFilters;
 };
 
 DWIDGET_END_NAMESPACE
