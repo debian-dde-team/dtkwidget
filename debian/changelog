@@ -1,3 +1,9 @@
+dtkwidget (2.0.5.3-1) unstable; urgency=medium
+
+  * New upstream release.
+
+ -- Boyuan Yang <073plan@gmail.com>  Mon, 01 Jan 2018 15:52:04 +0800
+
 dtkwidget (2.0.5.2-3) unstable; urgency=medium
 
   * Do not provide QtXcb private headers.
