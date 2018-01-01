@@ -1,0 +1,37 @@
+From: kirigaya <kirigaya@mkacg.com>
+Date: Thu, 28 Dec 2017 17:04:48 +0800
+Subject: fix(DDialog): reset DLineEdit theme error
+Forwarded: not-needed
+
+Change-Id: Iee4f3be97ca4eafe39edc7ba69f00dae1f72e65a
+---
+ src/widgets/ddialog.cpp       | 2 +-
+ src/widgets/dthememanager.cpp | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/src/widgets/ddialog.cpp b/src/widgets/ddialog.cpp
+index c9ce3cd..49d4c0a 100644
+--- a/src/widgets/ddialog.cpp
++++ b/src/widgets/ddialog.cpp
+@@ -796,7 +796,7 @@ void DDialog::childEvent(QChildEvent *event)
+             if (child->inherits("Dtk::Widget::DLineEdit")) {
+                 DThemeManager *dtm = DThemeManager::instance();
+                 // NOTE(sbw): want to force reset to light theme.
+-                QString qss = dtm->getQssForWidget(child->metaObject()->className(), "light");
++                QString qss = dtm->getQssForWidget("DLineEdit", "light");
+ 
+                 child->setStyleSheet(qss);
+                 dtm->disconnect(child);
+diff --git a/src/widgets/dthememanager.cpp b/src/widgets/dthememanager.cpp
+index e43bafa..aad61b7 100644
+--- a/src/widgets/dthememanager.cpp
++++ b/src/widgets/dthememanager.cpp
+@@ -161,7 +161,7 @@ QString DThemeManager::getQssForWidget(const QString className, const QString &t
+         qss = themeFile.readAll();
+         themeFile.close();
+     } else {
+-        qWarning() << "open qss file failed" << themeURL;
++        qWarning() << "open qss file failed" << themeURL << themeFile.errorString();
+     }
+ 
+     return qss;
