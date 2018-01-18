@@ -1,3 +1,0 @@
-0001-fix-memory-leak-in-DPictureSequenceView.patch
-0002-fix-DDialog-reset-DLineEdit-theme-error.patch
-0003-fix-blur-area-not-scale-on-not-use-dxcb-window.patch

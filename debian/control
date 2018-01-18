@@ -46,6 +46,7 @@ Depends:
  libqt5x11extras5-dev,
  qtmultimedia5-dev,
  ${misc:Depends},
+Multi-Arch: same
 Description: Deepin Tool Kit Widget library (development files)
  DtkWidget is the Deepin graphical user interface library for deepin
  desktop development.
@@ -60,6 +61,7 @@ Architecture: any
 Depends:
  ${misc:Depends},
  ${shlibs:Depends},
+Multi-Arch: same
 Description: Deepin Tool Kit Widget library
  DtkWidget is the Deepin graphical user interface library for deepin
  desktop development.
