@@ -269,7 +269,7 @@ void DDialogPrivate::_q_defaultButtonTriggered()
 DDialog::DDialog(QWidget *parent) :
     DAbstractDialog(*new DDialogPrivate(this), parent)
 {
-    D_THEME_INIT_WIDGET(dialogs/DDialog);
+    DThemeManager::registerWidget(this);
 
     d_func()->init();
 }
@@ -277,7 +277,7 @@ DDialog::DDialog(QWidget *parent) :
 DDialog::DDialog(const QString &title, const QString &message, QWidget *parent) :
     DAbstractDialog(*new DDialogPrivate(this), parent)
 {
-    D_THEME_INIT_WIDGET(dialogs/DDialog);
+    DThemeManager::registerWidget(this);
 
     d_func()->init();
 
@@ -734,7 +734,7 @@ int DDialog::exec()
 DDialog::DDialog(DDialogPrivate &dd, QWidget *parent) :
     DAbstractDialog(dd, parent)
 {
-    D_THEME_INIT_WIDGET(dialogs/DDialog);
+    DThemeManager::registerWidget(this);
 
     d_func()->init();
 }
@@ -796,10 +796,8 @@ void DDialog::childEvent(QChildEvent *event)
             if (child->inherits("Dtk::Widget::DLineEdit")) {
                 DThemeManager *dtm = DThemeManager::instance();
                 // NOTE(sbw): want to force reset to light theme.
-                QString qss = dtm->getQssForWidget("DLineEdit", "light");
-
-                child->setStyleSheet(qss);
-                dtm->disconnect(child);
+                // FIXME(zccrs): fixation the DLineEdit widget theme to light.
+                dtm->setTheme(child, "light");
             }
         }
     }

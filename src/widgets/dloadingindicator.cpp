@@ -36,6 +36,8 @@ void DLoadingIndicatorPrivate::init()
 
     q->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
     q->setScene(new QGraphicsScene(q));
+    q->setRenderHint(QPainter::SmoothPixmapTransform);
+    q->setViewportUpdateMode(QGraphicsView::SmartViewportUpdate);
 
     rotateAni.setDuration(1000);
     rotateAni.setEasingCurve(QEasingCurve::OutInQuad);
@@ -80,7 +82,7 @@ DLoadingIndicator::DLoadingIndicator(QWidget *parent) :
     QGraphicsView(parent),
     DObject(*new DLoadingIndicatorPrivate(this))
 {
-    D_THEME_INIT_WIDGET(DLoadingIndicator);
+    DThemeManager::registerWidget(this);
 
     d_func()->init();
 }

@@ -21,3 +21,5 @@ build*/
 
 src/DtkWidgets
 src/dtkwidget_config.h
+cmake/DtkWidget/DtkWidgetConfig.cmake
+src/qt_lib_dtk*.pri

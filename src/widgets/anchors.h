@@ -30,7 +30,7 @@
 DWIDGET_BEGIN_NAMESPACE
 
 class AnchorsBase;
-struct AnchorInfo {
+struct D_DECL_DEPRECATED AnchorInfo {
     AnchorInfo(AnchorsBase *b, const Qt::AnchorPoint &t):
         base(b),
         type(t)
@@ -69,7 +69,7 @@ struct AnchorInfo {
     }
 };
 
-class ARect: public QRect
+class D_DECL_DEPRECATED ARect: public QRect
 {
 public:
     ARect() {}
@@ -113,7 +113,7 @@ public:
 
 class AnchorsBasePrivate;
 class DEnhancedWidget;
-class AnchorsBase : public QObject
+class D_DECL_DEPRECATED AnchorsBase : public QObject
 {
     Q_OBJECT
 
@@ -251,7 +251,7 @@ private:
 };
 
 template<class T>
-class Anchors : public AnchorsBase
+class D_DECL_DEPRECATED Anchors : public AnchorsBase
 {
 public:
     inline Anchors(): AnchorsBase((QWidget*)NULL), m_widget(NULL) {}

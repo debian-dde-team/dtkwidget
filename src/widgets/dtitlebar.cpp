@@ -40,6 +40,7 @@
 #include "private/dapplication_p.h"
 #include "dthememanager.h"
 #include "util/dwindowmanagerhelper.h"
+#include "dmainwindow.h"
 
 DWIDGET_BEGIN_NAMESPACE
 
@@ -54,8 +55,18 @@ protected:
 
 private:
     void init();
+    QWidget *targetWindow();
+    // FIXME: get a batter salution
+    // hide title will make eventFilter not work, instead set Height to zero
+    bool isVisableOnFullscreen();
+    void hideOnFullscreen();
+    void showOnFullscreen();
+
+    void updateFullscreen();
     void updateButtonsState(Qt::WindowFlags type);
     void updateButtonsFunc();
+    void handleParentWindowStateChange();
+    void handleParentWindowIdChange();
     void _q_toggleWindowState();
     void _q_showMinimized();
     void _q_onTopWindowMotifHintsChanged(quint32 winId);
@@ -65,7 +76,6 @@ private:
     void _q_helpActionTriggered();
     void _q_aboutActionTriggered();
     void _q_quitActionTriggered();
-
 #endif
 
     QHBoxLayout         *mainLayout;
@@ -75,6 +85,7 @@ private:
     DWindowMaxButton    *maxButton;
     DWindowCloseButton  *closeButton;
     DWindowOptionButton *optionButton;
+    DImageButton        *quitFullButton;
 
     QWidget             *customWidget = Q_NULLPTR;
     QWidget             *coustomAtea;
@@ -85,18 +96,18 @@ private:
     QLabel              *separator;
 
 #ifndef QT_NO_MENU
-    QMenu               *menu = Q_NULLPTR;
-    QAction             *helpAction = Q_NULLPTR;
-    QAction             *aboutAction = Q_NULLPTR;
-    QAction             *quitAction = Q_NULLPTR;
+    QMenu               *menu           = Q_NULLPTR;
+    QAction             *helpAction     = Q_NULLPTR;
+    QAction             *aboutAction    = Q_NULLPTR;
+    QAction             *quitAction     = Q_NULLPTR;
 #endif
 
-    QWidget             *parentWindow = Q_NULLPTR;
+    QWindow            *targetWindowHandle = Q_NULLPTR;
 
     Qt::WindowFlags     disableFlags;
     bool                mousePressed    = false;
-    bool                useWindowFlags  = false;
     bool                embedMode       = false;
+    bool                autoHideOnFullscreen = false;
 
     Q_DECLARE_PUBLIC(DTitlebar)
 };
@@ -116,6 +127,7 @@ void DTitlebarPrivate::init()
     maxButton       = new DWindowMaxButton;
     closeButton     = new DWindowCloseButton;
     optionButton    = new DWindowOptionButton;
+    quitFullButton  = new DImageButton;
     coustomAtea     = new QWidget;
     buttonArea      = new QWidget;
     titleArea       = new QWidget;
@@ -127,6 +139,8 @@ void DTitlebarPrivate::init()
     minButton->setObjectName("DTitlebarDWindowMinButton");
     maxButton->setObjectName("DTitlebarDWindowMaxButton");
     closeButton->setObjectName("DTitlebarDWindowCloseButton");
+    quitFullButton->setObjectName("DTitlebarDWindowQuitFullscreenButton");
+    quitFullButton->hide();
 
     mainLayout->setContentsMargins(6, 0, 0, 0);
     mainLayout->setSpacing(0);
@@ -158,10 +172,11 @@ void DTitlebarPrivate::init()
     buttonAreaLayout->addWidget(minButton);
     buttonAreaLayout->addWidget(maxButton);
     buttonAreaLayout->addWidget(closeButton);
+    buttonAreaLayout->addWidget(quitFullButton);
     buttonArea->setLayout(buttonAreaLayout);
 
     QHBoxLayout *titleAreaLayout = new QHBoxLayout;
-    titleAreaLayout->setContentsMargins(10, 0, 10 + iconLabel->width(), 0);
+    titleAreaLayout->setContentsMargins(4, 0, 10 + iconLabel->width(), 0);
     titleAreaLayout->setSpacing(0);
     titleAreaLayout->addWidget(iconLabel);
     titleAreaLayout->setAlignment(iconLabel, Qt::AlignLeft);
@@ -192,24 +207,107 @@ void DTitlebarPrivate::init()
     coustomAtea->setFixedHeight(q->height());
     buttonArea->setFixedHeight(q->height());
 
+    q->connect(quitFullButton, &DImageButton::clicked, q, [ = ]() {
+        bool isFullscreen = targetWindow()->windowState().testFlag(Qt::WindowFullScreen);
+        if (isFullscreen) {
+            targetWindow()->showNormal();
+        } else {
+            targetWindow()->showFullScreen();
+        }
+    });
     q->connect(optionButton, &DWindowOptionButton::clicked, q, &DTitlebar::optionClicked);
     q->connect(DWindowManagerHelper::instance(), SIGNAL(windowMotifWMHintsChanged(quint32)),
                q, SLOT(_q_onTopWindowMotifHintsChanged(quint32)));
 }
 
-void DTitlebarPrivate::updateButtonsState(Qt::WindowFlags type)
+QWidget *DTitlebarPrivate::targetWindow()
 {
-    if (titleLabel) {
-        titleLabel->setVisible((type & Qt::WindowTitleHint) && !embedMode);
+    D_Q(DTitlebar);
+    return q->topLevelWidget()->window();
+}
+
+bool DTitlebarPrivate::isVisableOnFullscreen()
+{
+    D_Q(DTitlebar);
+    return !q->property("_restore_height").isValid();
+}
+
+void DTitlebarPrivate::hideOnFullscreen()
+{
+    D_Q(DTitlebar);
+    q->setProperty("_restore_height", q->height());
+    q->setFixedHeight(0);
+}
+
+void DTitlebarPrivate::showOnFullscreen()
+{
+    D_Q(DTitlebar);
+    if (q->property("_restore_height").isValid()) {
+        q->setFixedHeight(q->property("_restore_height").toInt());
+        q->setProperty("_restore_height", QVariant());
     }
-    if (iconLabel) {
-        iconLabel->setVisible((type & Qt::WindowTitleHint) && !embedMode);
+}
+
+void DTitlebarPrivate::updateFullscreen()
+{
+    D_Q(DTitlebar);
+
+    if (!autoHideOnFullscreen) {
+        return;
     }
 
-    minButton->setVisible((type & Qt::WindowMinimizeButtonHint) && !embedMode);
-    maxButton->setVisible((type & Qt::WindowMaximizeButtonHint) && !embedMode);
-    closeButton->setVisible((type & Qt::WindowCloseButtonHint) && !embedMode);
-    optionButton->setVisible(type & Qt::WindowSystemMenuHint);
+    bool isFullscreen = targetWindow()->windowState().testFlag(Qt::WindowFullScreen);
+    auto mainWindow = qobject_cast<DMainWindow *>(targetWindow());
+    if (!isFullscreen) {
+        quitFullButton->hide();
+        mainWindow->setMenuWidget(q);
+        showOnFullscreen();
+    } else {
+        // must set to empty
+        quitFullButton->show();
+        mainWindow->menuWidget()->setParent(nullptr);
+        mainWindow->setMenuWidget(Q_NULLPTR);
+        q->setParent(mainWindow);
+        q->show();
+        hideOnFullscreen();
+    }
+}
+
+void DTitlebarPrivate::updateButtonsState(Qt::WindowFlags type)
+{
+    D_Q(DTitlebar);
+    bool useDXcb = DPlatformWindowHandle::isEnabledDXcb(targetWindow());
+    bool isFullscreen = targetWindow()->windowState().testFlag(Qt::WindowFullScreen);
+
+    bool showTitle = (type.testFlag(Qt::WindowTitleHint) || !useDXcb) && !embedMode;
+    if (titleLabel) {
+        titleLabel->setVisible(showTitle);
+    }
+    if (iconLabel) {
+        iconLabel->setVisible(showTitle);
+    }
+
+    // Never show in embed/fullscreen
+    bool forceHide = embedMode || isFullscreen;
+
+    bool showMin = (type.testFlag(Qt::WindowMinimizeButtonHint) || !useDXcb) && !forceHide;
+    minButton->setVisible(showMin);
+
+    bool allowResize = true;
+    if (q->window() && q->window()->windowHandle()) {
+        auto functions_hints = DWindowManagerHelper::getMotifFunctions(q->window()->windowHandle());
+        allowResize = functions_hints.testFlag(DWindowManagerHelper::FUNC_RESIZE);
+    }
+
+    bool showMax = (type.testFlag(Qt::WindowMaximizeButtonHint) || !useDXcb) && !forceHide && allowResize;
+    maxButton->setVisible(showMax);
+
+    bool showClose = (type.testFlag(Qt::WindowCloseButtonHint) || !useDXcb) && !forceHide;
+    closeButton->setVisible(showClose);
+
+    bool showOption = (type.testFlag(Qt::WindowSystemMenuHint) || !useDXcb) && !isFullscreen;
+    optionButton->setVisible(showOption);
+
     buttonArea->adjustSize();
     buttonArea->resize(buttonArea->size());
 
@@ -220,37 +318,61 @@ void DTitlebarPrivate::updateButtonsState(Qt::WindowFlags type)
 
 void DTitlebarPrivate::updateButtonsFunc()
 {
-    Q_Q(DTitlebar);
     optionButton->setDisabled(disableFlags.testFlag(Qt::WindowSystemMenuHint));
     minButton->setDisabled(disableFlags.testFlag(Qt::WindowMinimizeButtonHint));
     maxButton->setDisabled(disableFlags.testFlag(Qt::WindowMaximizeButtonHint));
     closeButton->setDisabled(disableFlags.testFlag(Qt::WindowCloseButtonHint));
 
     DWindowManagerHelper::setMotifFunctions(
-        q->topLevelWidget()->windowHandle(),
+        targetWindow()->windowHandle(),
         DWindowManagerHelper::FUNC_MAXIMIZE,
         !disableFlags.testFlag(Qt::WindowMaximizeButtonHint));
     DWindowManagerHelper::setMotifFunctions(
-        q->topLevelWidget()->windowHandle(),
+        targetWindow()->windowHandle(),
         DWindowManagerHelper::FUNC_MINIMIZE,
         !disableFlags.testFlag(Qt::WindowMinimizeButtonHint));
     DWindowManagerHelper::setMotifFunctions(
-        q->topLevelWidget()->windowHandle(),
+        targetWindow()->windowHandle(),
         DWindowManagerHelper::FUNC_CLOSE,
         !disableFlags.testFlag(Qt::WindowCloseButtonHint));
 }
 
+void DTitlebarPrivate::handleParentWindowStateChange()
+{
+    maxButton->setMaximized(targetWindow()->windowState() == Qt::WindowMaximized);
+    updateFullscreen();
+    updateButtonsState(targetWindow()->windowFlags());
+}
+
+//!
+//! \brief DTitlebarPrivate::handleParentWindowIdChange
+//! Them WindowStateChnage Event will miss some state changed message,
+//! So use windowHandle::windowStateChanged instead
+void DTitlebarPrivate::handleParentWindowIdChange()
+{
+    D_Q(DTitlebar);
+    if (!targetWindowHandle) {
+        targetWindowHandle = targetWindow()->windowHandle();
+        targetWindowHandle->disconnect(targetWindow()->windowHandle(), &QWindow::windowStateChanged,
+                                       q, Q_NULLPTR);
+        targetWindowHandle->connect(targetWindow()->windowHandle(), &QWindow::windowStateChanged,
+        q, [ = ](Qt::WindowState) {
+            handleParentWindowStateChange();
+        });
+    } else if (targetWindow()->windowHandle() != targetWindowHandle) {
+        // Parent change???, show never here
+        qWarning() << "targetWindowHandle change" << targetWindowHandle << targetWindow()->windowHandle();
+    }
+
+}
+
 void DTitlebarPrivate::_q_toggleWindowState()
 {
-    D_QC(DTitlebar);
-
-    QWidget *parentWindow = q->parentWidget();
+    QWidget *parentWindow = targetWindow();
 
     if (!parentWindow || disableFlags.testFlag(Qt::WindowMaximizeButtonHint)) {
         return;
     }
-
-    parentWindow = parentWindow->window();
 
     if (parentWindow->isMaximized()) {
         parentWindow->showNormal();
@@ -264,27 +386,14 @@ void DTitlebarPrivate::_q_toggleWindowState()
 void DTitlebarPrivate::_q_showMinimized()
 {
     minButton->setState(DImageButton::Normal);
-
-    if (DPlatformWindowHandle::isEnabledDXcb(parentWindow)) {
-        parentWindow->showMinimized();
-    } else {
-#ifdef Q_OS_LINUX
-        XUtils::ShowMinimizedWindow(parentWindow, true);
-#else
-        parentWindow->showMinimized();
-#endif
-    }
+    targetWindow()->showMinimized();
 }
 
 void DTitlebarPrivate::_q_onTopWindowMotifHintsChanged(quint32 winId)
 {
     D_QC(DTitlebar);
 
-    if (useWindowFlags) {
-        return;
-    }
-
-    if (!DPlatformWindowHandle::isEnabledDXcb(q->window())) {
+    if (!DPlatformWindowHandle::isEnabledDXcb(targetWindow())) {
         q->disconnect(DWindowManagerHelper::instance(), SIGNAL(windowMotifWMHintsChanged(quint32)),
                       q, SLOT(_q_onTopWindowMotifHintsChanged(quint32)));
         return;
@@ -294,7 +403,6 @@ void DTitlebarPrivate::_q_onTopWindowMotifHintsChanged(quint32 winId)
         return;
     }
 
-    DWindowManagerHelper::MotifFunctions functions_hints = DWindowManagerHelper::getMotifFunctions(q->window()->windowHandle());
     DWindowManagerHelper::MotifDecorations decorations_hints = DWindowManagerHelper::getMotifDecorations(q->window()->windowHandle());
 
     if (titleLabel) {
@@ -305,11 +413,7 @@ void DTitlebarPrivate::_q_onTopWindowMotifHintsChanged(quint32 winId)
         iconLabel->setVisible(decorations_hints.testFlag(DWindowManagerHelper::DECOR_TITLE));
     }
 
-    minButton->setVisible(decorations_hints.testFlag(DWindowManagerHelper::DECOR_MINIMIZE) && !embedMode);
-    maxButton->setVisible(decorations_hints.testFlag(DWindowManagerHelper::DECOR_MAXIMIZE) && !embedMode);
-    optionButton->setVisible(decorations_hints.testFlag(DWindowManagerHelper::DECOR_MENU));
-    buttonArea->adjustSize();
-    buttonArea->resize(buttonArea->size());
+    updateButtonsState(targetWindow()->windowFlags());
 
 //    minButton->setEnabled(functions_hints.testFlag(DWindowManagerHelper::FUNC_MINIMIZE) && !embedMode);
 //    maxButton->setEnabled(functions_hints.testFlag(DWindowManagerHelper::FUNC_MAXIMIZE) && !embedMode);
@@ -408,10 +512,14 @@ void DTitlebarPrivate::_q_quitActionTriggered()
  * @param parent
  */
 DTitlebar::DTitlebar(QWidget *parent) :
-    QWidget(parent),
+    QFrame(parent),
     DObject(*new DTitlebarPrivate(this))
 {
-    D_THEME_INIT_WIDGET(DTitlebar)
+    if (DApplication::buildDtkVersion() < DTK_VERSION_CHECK(2, 0, 6, 1)) {
+        setBackgroundTransparent(true);
+    }
+
+    DThemeManager::registerWidget(this, QStringList({"transparent"}));
 
     D_D(DTitlebar);
     d->init();
@@ -471,8 +579,7 @@ QWidget *DTitlebar::customWidget() const
 void DTitlebar::setWindowFlags(Qt::WindowFlags type)
 {
     D_D(DTitlebar);
-    d->useWindowFlags = true;
-    d->updateButtonsState(type);
+    d->targetWindow()->setWindowFlags(type);
 }
 
 #ifndef QT_NO_MENU
@@ -536,16 +643,31 @@ bool DTitlebar::eventFilter(QObject *obj, QEvent *event)
 {
     D_D(DTitlebar);
 
-    if (obj == d->parentWindow) {
+    if (obj == d->targetWindow()) {
         switch (event->type()) {
-        case QEvent::WindowStateChange:
-//            if (d->maxButton->isEnabled()) {
-            d->maxButton->setMaximized(d->parentWindow->windowState() == Qt::WindowMaximized);
-//            }
-            break;
         case QEvent::ShowToParent:
+            d->handleParentWindowIdChange();
             d->updateButtonsFunc();
+            d->updateButtonsState(d->targetWindow()->windowFlags());
             break;
+        case QEvent::Resize:
+            if (d->autoHideOnFullscreen) {
+                setFixedWidth(d->targetWindow()->width());
+            }
+            break;
+        case QEvent::HoverMove: {
+            auto mouseEvent = reinterpret_cast<QMouseEvent *>(event);
+            bool isFullscreen = d->targetWindow()->windowState().testFlag(Qt::WindowFullScreen);
+            if (isFullscreen && d->autoHideOnFullscreen) {
+                if (mouseEvent->pos().y() > height() && d->isVisableOnFullscreen()) {
+                    d->hideOnFullscreen();
+                }
+                if (mouseEvent->pos().y() < 2) {
+                    d->showOnFullscreen();
+                }
+            }
+            break;
+        }
         default:
             break;
         }
@@ -630,6 +752,15 @@ void DTitlebar::setFixedHeight(int h)
     QWidget::setFixedHeight(h);
     d->coustomAtea->setFixedHeight(h);
     d->buttonArea->setFixedHeight(h);
+}
+
+/**
+ * @brief DTitlebar::setBackgroundTransparent set the title background transparent
+ * @param transparent is the targeting value.
+ */
+void DTitlebar::setBackgroundTransparent(bool transparent)
+{
+    setProperty("transparent", transparent);
 }
 
 /**
@@ -723,6 +854,18 @@ bool DTitlebar::separatorVisible() const
     return d->separator->isVisible();
 }
 
+bool DTitlebar::autoHideOnFullscreen() const
+{
+    D_DC(DTitlebar);
+    return d->autoHideOnFullscreen;
+}
+
+void DTitlebar::setAutoHideOnFullscreen(bool autohide)
+{
+    D_D(DTitlebar);
+    d->autoHideOnFullscreen = autohide;
+}
+
 /**
  * @brief DTitlebar::setVisible overrides QWidget::setVisible(bool visible)
  */
@@ -737,30 +880,26 @@ void DTitlebar::setVisible(bool visible)
     QWidget::setVisible(visible);
 
     if (visible) {
-        d->parentWindow = parentWidget();
-
-        if (!d->parentWindow) {
+        if (!d->targetWindow()) {
             return;
         }
-
-        d->parentWindow = d->parentWindow->window();
-        d->parentWindow->installEventFilter(this);
+        d->targetWindow()->installEventFilter(this);
 
         connect(d->maxButton, SIGNAL(clicked()), this, SLOT(_q_toggleWindowState()));
         connect(this, SIGNAL(doubleClicked()), this, SLOT(_q_toggleWindowState()));
         connect(d->minButton, SIGNAL(clicked()), this, SLOT(_q_showMinimized()));
-        connect(d->closeButton, &DWindowCloseButton::clicked, d->parentWindow, &QWidget::close);
+        connect(d->closeButton, &DWindowCloseButton::clicked, d->targetWindow(), &QWidget::close);
     } else {
-        if (!d->parentWindow) {
+        if (!d->targetWindow()) {
             return;
         }
 
-        d->parentWindow->removeEventFilter(this);
+        d->targetWindow()->removeEventFilter(this);
 
         disconnect(d->maxButton, SIGNAL(clicked()), this, SLOT(_q_toggleWindowState()));
         disconnect(this, SIGNAL(doubleClicked()), this, SLOT(_q_toggleWindowState()));
         disconnect(d->minButton, SIGNAL(clicked()), this, SLOT(_q_showMinimized()));
-        disconnect(d->closeButton, &DWindowCloseButton::clicked, d->parentWindow, &QWidget::close);
+        disconnect(d->closeButton, &DWindowCloseButton::clicked, d->targetWindow(), &QWidget::close);
     }
 }
 

@@ -94,7 +94,7 @@ DWIDGET_BEGIN_NAMESPACE
 
 DButtonList::DButtonList(QWidget *parent) : QListWidget(parent)
 {
-    D_THEME_INIT_WIDGET(DButtonList);
+    DThemeManager::registerWidget(this);
 
     setSelectionMode(DButtonList::NoSelection);
     setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
@@ -218,7 +218,7 @@ IconButton* DButtonList::getButtonByIndex(int index){
 
 void DButtonList::clear(){
     Q_FOREACH (QAbstractButton* button, m_buttonGroup->buttons()) {
-        qDebug() << static_cast<IconButton*>(button)->text();
+//        qDebug() << static_cast<IconButton*>(button)->text();
         static_cast<IconButton*>(button)->disconnect();
         m_buttonGroup->removeButton(static_cast<IconButton*>(button));
     }

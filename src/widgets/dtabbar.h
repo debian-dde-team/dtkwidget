@@ -26,6 +26,10 @@
 #include <dtkwidget_global.h>
 #include <dobject.h>
 
+QT_BEGIN_NAMESPACE
+class QMimeData;
+QT_END_NAMESPACE
+
 DCORE_USE_NAMESPACE
 DWIDGET_BEGIN_NAMESPACE
 
@@ -46,9 +50,15 @@ class DTabBar : public QWidget, public DObject
     Q_PROPERTY(QTabBar::SelectionBehavior selectionBehaviorOnRemove READ selectionBehaviorOnRemove WRITE setSelectionBehaviorOnRemove)
     Q_PROPERTY(bool expanding READ expanding WRITE setExpanding)
     Q_PROPERTY(bool movable READ isMovable WRITE setMovable)
+    Q_PROPERTY(bool dragable READ isDragable WRITE setDragable)
     Q_PROPERTY(bool documentMode READ documentMode WRITE setDocumentMode)
     Q_PROPERTY(bool autoHide READ autoHide WRITE setAutoHide)
     Q_PROPERTY(bool changeCurrentOnDrag READ changeCurrentOnDrag WRITE setChangeCurrentOnDrag)
+    Q_PROPERTY(int startDragDistance READ startDragDistance WRITE setStartDragDistance)
+    // on drag enter
+    Q_PROPERTY(QColor maskColor READ maskColor WRITE setMaskColor)
+    // on inserted tab from mime data
+    Q_PROPERTY(QColor flashColor READ flashColor WRITE setFlashColor)
 
 public:
     explicit DTabBar(QWidget *parent = 0);
@@ -75,9 +85,6 @@ public:
 
     QString tabText(int index) const;
     void setTabText(int index, const QString &text);
-
-    QColor tabTextColor(int index) const;
-    void setTabTextColor(int index, const QColor &color);
 
     QIcon tabIcon(int index) const;
     void setTabIcon(int index, const QIcon &icon);
@@ -128,6 +135,9 @@ public:
     bool isMovable() const;
     void setMovable(bool movable);
 
+    bool isDragable() const;
+    void setDragable(bool dragable);
+
     bool documentMode() const;
     void setDocumentMode(bool set);
 
@@ -137,6 +147,11 @@ public:
     bool changeCurrentOnDrag() const;
     void setChangeCurrentOnDrag(bool change);
 
+    int startDragDistance() const;
+
+    QColor maskColor() const;
+    QColor flashColor() const;
+
 Q_SIGNALS:
     void currentChanged(int index);
     void tabCloseRequested(int index);
@@ -145,13 +160,29 @@ Q_SIGNALS:
     void tabBarDoubleClicked(int index);
     void tabAddRequested();
     void tabReleaseRequested(int index);
+    void tabDroped(int index, Qt::DropAction action, QObject *target);
 
 public Q_SLOTS:
     void setCurrentIndex(int index);
     void setVisibleAddButton(bool visibleAddButton);
+    void setStartDragDistance(int startDragDistance);
+
+    void setMaskColor(QColor maskColor);
+    void setFlashColor(QColor flashColor);
 
 protected:
-    virtual bool paintTab(QPainter *painter, int index, const QStyleOptionTab &option);
+    void dragEnterEvent(QDragEnterEvent *e) override;
+    void dragLeaveEvent(QDragLeaveEvent *e) override;
+    void dragMoveEvent(QDragMoveEvent *e) override;
+    void dropEvent(QDropEvent *e) override;
+    void resizeEvent(QResizeEvent *e) override;
+
+    virtual void paintTab(QPainter *painter, int index, const QStyleOptionTab &option) const;
+
+    virtual QPixmap createDragPixmapFromTab(int index, const QStyleOptionTab &option, QPoint *hotspot) const;
+    virtual QMimeData *createMimeDataFromTab(int index, const QStyleOptionTab &option) const;
+    virtual bool canInsertFromMimeData(int index, const QMimeData *source) const;
+    virtual void insertFromMimeData(int index, const QMimeData *source);
 
 private:
     DTabBarPrivate* d_func();

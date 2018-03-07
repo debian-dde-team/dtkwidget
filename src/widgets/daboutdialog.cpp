@@ -29,16 +29,49 @@
 #include <QIcon>
 #include <QKeyEvent>
 #include <QApplication>
-#include<QImageReader>
+#include <QImageReader>
+#include <QSettings>
+
+#ifdef Q_OS_UNIX
+#include <unistd.h>
+#include <pwd.h>
+#endif
 
 DWIDGET_BEGIN_NAMESPACE
+
+#ifdef Q_OS_UNIX
+class EnvReplaceGuard
+{
+public:
+    EnvReplaceGuard(const int uid);
+    ~EnvReplaceGuard();
+
+    char *m_backupLogName;
+    char *m_backupHome;
+};
+
+EnvReplaceGuard::EnvReplaceGuard(const int uid)
+{
+    m_backupLogName = getenv("LOGNAME");
+    m_backupHome = getenv("HOME");
+
+    struct passwd *pwd = getpwuid(uid);
+
+    setenv("LOGNAME", pwd->pw_name, 1);
+    setenv("HOME", pwd->pw_dir, 1);
+}
+
+EnvReplaceGuard::~EnvReplaceGuard()
+{
+    setenv("LOGNAME", m_backupLogName, 1);
+    setenv("HOME", m_backupHome, 1);
+}
+#endif
 
 const QString DAboutDialogPrivate::websiteLinkTemplate = "<a href='%1' style='text-decoration: none; font-size:13px; color: #004EE5;'>%2</a>";
 
 DAboutDialogPrivate::DAboutDialogPrivate(DAboutDialog *qq)
     : DDialogPrivate(qq)
-    , websiteName("www.deepin.org")
-    , websiteLink("https://www.deepin.org")
 {
 
 }
@@ -46,6 +79,8 @@ DAboutDialogPrivate::DAboutDialogPrivate(DAboutDialog *qq)
 void DAboutDialogPrivate::init()
 {
     D_Q(DAboutDialog);
+
+    initWebsiteInfo();
 
     logoLabel = new QLabel();
     logoLabel->setContentsMargins(0, 0, 0, 0);
@@ -126,6 +161,25 @@ void DAboutDialogPrivate::init()
     q->setFocus();
 }
 
+void DAboutDialogPrivate::initWebsiteInfo()
+{
+#ifdef Q_OS_LINUX
+    static const QString cfgPath = "/etc/deepin-version";
+
+    bool isProfessional = false;
+    if (QFile::exists(cfgPath)) {
+        QSettings deepinVersion(cfgPath, QSettings::IniFormat);
+        isProfessional = deepinVersion.value("Release/Type").toString() == "Professional";
+    }
+
+    websiteName = isProfessional ? "www.deepin.com" : "www.deepin.org";
+    websiteLink = QString("https://www.deepin.org/original/%1/").arg(qApp->applicationName());
+#else
+    websiteName = "www.deepin.org";
+    websiteLink = "https://www.deepin.org";
+#endif
+}
+
 void DAboutDialogPrivate::updateWebsiteLabel()
 {
     QString websiteText = QString(websiteLinkTemplate).arg(websiteLink).arg(websiteName);
@@ -140,7 +194,23 @@ void DAboutDialogPrivate::updateAcknowledgementLabel()
 
 void DAboutDialogPrivate::_q_onLinkActivated(const QString &link)
 {
-    QDesktopServices::openUrl(QUrl(link));
+#ifdef Q_OS_UNIX
+    // workaround for pkexec apps
+    bool ok = false;
+    const int pkexecUid = qEnvironmentVariableIntValue("PKEXEC_UID", &ok);
+
+    if (ok)
+    {
+        EnvReplaceGuard _env_guard(pkexecUid);
+        Q_UNUSED(_env_guard);
+
+        QDesktopServices::openUrl(QUrl(link));
+    }
+    else
+#endif
+    {
+        QDesktopServices::openUrl(QUrl(link));
+    }
 }
 
 QPixmap DAboutDialogPrivate::loadPixmap(const QString &file)
@@ -171,7 +241,7 @@ QPixmap DAboutDialogPrivate::loadPixmap(const QString &file)
 DAboutDialog::DAboutDialog(QWidget *parent)
     : DDialog(*new DAboutDialogPrivate(this), parent)
 {
-    D_THEME_INIT_WIDGET(dialogs/DAboutDialog);
+    DThemeManager::registerWidget(this);
 
     D_D(DAboutDialog);
 

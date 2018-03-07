@@ -15,6 +15,15 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <QtGlobal>
+#ifdef Q_OS_LINUX
+#ifdef private
+#undef private
+#endif
+#define private public
+#include <QWidget>
+#undef private
+#endif
 #include <QDebug>
 #include <QDir>
 #include <QLocalSocket>
@@ -28,12 +37,8 @@
 #include <QSystemSemaphore>
 #include <QtConcurrent/QtConcurrent>
 
-#ifdef DTK_DBUS_SINGLEINSTANCE
-#include <QDBusError>
-#include <QDBusConnection>
-#endif
-
 #include <qpa/qplatformintegrationfactory_p.h>
+#include <private/qwidget_p.h>
 
 #include <DStandardPaths>
 
@@ -46,8 +51,15 @@
 #include "private/dapplication_p.h"
 #include "daboutdialog.h"
 
-#ifdef Q_OS_LINUX
+#ifdef Q_OS_UNIX
+#include <QDBusError>
+#include <QDBusReply>
 #include <QDBusInterface>
+#include <QDBusPendingCall>
+#include <QDBusConnection>
+#endif
+
+#ifdef Q_OS_LINUX
 #include "startupnotificationmonitor.h"
 #endif
 
@@ -163,7 +175,7 @@ bool DApplicationPrivate::setSingleInstanceBySemaphore(const QString &key)
     return singleInstance;
 }
 
-#ifdef DTK_DBUS_SINGLEINSTANCE
+#ifdef Q_OS_UNIX
 /**
 * \brief DApplicationPrivate::setSingleInstanceByDbus will check singleinstance by
 * register dbus service
@@ -255,11 +267,23 @@ bool DApplicationPrivate::loadTranslator(QList<DPathBuf> translateDirs, const QS
 
 bool DApplicationPrivate::isUserManualExists()
 {
-    const QString appName = qApp->applicationName();
-    bool dmanAppExists = QFile::exists("/usr/bin/dman");
-    bool dmanDataExists = QFile::exists("/usr/share/dman/" + appName) ||
-                          QFile::exists("/app/share/dman/" + appName);
-    return  dmanAppExists && dmanDataExists;
+#ifdef Q_OS_LINUX
+    QDBusInterface manualSearch("com.deepin.Manual.Search",
+                                "/com/deepin/Manual/Search",
+                                "com.deepin.Manual.Search");
+    if (manualSearch.isValid()) {
+        QDBusReply<bool> reply = manualSearch.call("ManualExists", qApp->applicationName());
+        return reply.value();
+    } else {
+        const QString appName = qApp->applicationName();
+        bool dmanAppExists = QFile::exists("/usr/bin/dman");
+        bool dmanDataExists = QFile::exists("/usr/share/dman/" + appName) ||
+                              QFile::exists("/app/share/dman/" + appName);
+        return  dmanAppExists && dmanDataExists;
+    }
+#else
+    return false;
+#endif
 }
 
 /**
@@ -333,11 +357,12 @@ bool DApplication::setSingleInstance(const QString &key, SingleScope singleScope
     }
 #endif
 
-#ifdef DTK_DBUS_SINGLEINSTANCE
-    return d->setSingleInstanceByDbus(k);
-#else
-    return d->setSingleInstanceBySemaphore(k);
+#ifdef Q_OS_UNIX
+    if (qgetenv("DTK_USE_DBUS_SINGLEINSTANCE") == "TRUE") {
+        return d->setSingleInstanceByDbus(k);
+    }
 #endif
+    return d->setSingleInstanceBySemaphore(k);
 }
 
 //! load translate file form system or application data path;
@@ -384,6 +409,16 @@ bool DApplication::loadDXcbPlugin()
 bool DApplication::isDXcbPlatform()
 {
     return qApp && (qApp->platformName() == DXCB_PLUGIN_KEY || qApp->property(DXCB_PLUGIN_SYMBOLIC_PROPERTY).toBool());
+}
+
+int DApplication::buildDtkVersion()
+{
+    return DtkBuildVersion::value;
+}
+
+int DApplication::runtimeDtkVersion()
+{
+    return DTK_VERSION;
 }
 
 /**
@@ -570,6 +605,48 @@ void DApplication::setAboutDialog(DAboutDialog *aboutDialog)
     d->aboutDialog = aboutDialog;
 }
 
+bool DApplication::visibleMenuShortcutText() const
+{
+    D_DC(DApplication);
+
+    return d->visibleMenuShortcutText;
+}
+
+void DApplication::setVisibleMenuShortcutText(bool value)
+{
+    D_D(DApplication);
+
+    d->visibleMenuShortcutText = value;
+}
+
+bool DApplication::visibleMenuCheckboxWidget() const
+{
+    D_DC(DApplication);
+
+    return d->visibleMenuCheckboxWidget;
+}
+
+void DApplication::setVisibleMenuCheckboxWidget(bool value)
+{
+    D_D(DApplication);
+
+    d->visibleMenuCheckboxWidget = value;
+}
+
+bool DApplication::visibleMenuIcon() const
+{
+    D_DC(DApplication);
+
+    return d->visibleMenuIcon;
+}
+
+void DApplication::setVisibleMenuIcon(bool value)
+{
+    D_D(DApplication);
+
+    d->visibleMenuIcon = value;
+}
+
 /**
  * @brief DApplication::helpActionHandler
  *
@@ -580,25 +657,35 @@ void DApplication::setAboutDialog(DAboutDialog *aboutDialog)
  */
 void DApplication::handleHelpAction()
 {
+#ifdef Q_OS_LINUX
     QString appid = applicationName();
-#ifdef DTK_DMAN_PORTAL
-    if (!qgetenv("FLATPAK_APPID").isEmpty()) {
-        appid = qgetenv("FLATPAK_APPID");
+
+    // new interface use applicationName as id
+    QDBusInterface manual("com.deepin.Manual.Open",
+                          "/com/deepin/Manual/Open",
+                          "com.deepin.Manual.Open");
+    if (manual.isValid()) {
+        manual.asyncCall("ShowManual", appid);
+        return;
     }
 
-    QDBusInterface dmanInterface("com.deepin.dman",
-                                 "/com/deepin/dman",
-                                 "com.deepin.dman");
-    if (dmanInterface.isValid()) {
-        auto reply = dmanInterface.call("ShowManual", appid);
-        if (dmanInterface.lastError().isValid()) {
-            qCritical() << "failed call ShowManual" << appid << dmanInterface.lastError();
+    // fallback to old interface
+    if (!qgetenv("FLATPAK_APPID").isEmpty()) {
+        appid = qgetenv("FLATPAK_APPID");
+        QDBusInterface legacydman("com.deepin.dman",
+                                  "/com/deepin/dman",
+                                  "com.deepin.dman");
+        if (legacydman.isValid()) {
+            legacydman.asyncCall("ShowManual", appid);
+            return;
         }
+
+        qWarning() << "can not call dman dbus interface";
     } else {
-        qCritical() << "can not create dman dbus interface";
+        QProcess::startDetached("dman", QStringList() << appid);
     }
 #else
-    QProcess::startDetached("dman", QStringList() << appid);
+    qWarning() << "not support dman now";
 #endif
 }
 
@@ -650,20 +737,75 @@ void DApplication::handleQuitAction()
     quit();
 }
 
+static inline bool basePrintPropertiesDialog(const QWidget *w)
+{
+    while (w) {
+        if (w->inherits("QPrintPropertiesDialog")
+                || w->inherits("QPageSetupDialog")) {
+            return true;
+        }
+
+        w = w->parentWidget();
+    }
+
+    return false;
+}
+
 bool DApplication::notify(QObject *obj, QEvent *event)
 {
     if (event->type() == QEvent::PolishRequest) {
         // Fixed the style for the menu widget to dlight
         // ugly code will no longer needed.
+        static QStyle *light_style = nullptr;
+
         if (QMenu *menu = qobject_cast<QMenu *>(obj)) {
-            if (!menu->testAttribute(Qt::WA_SetStyle))
-                if (QStyle *style = QStyleFactory::create("dlight")) {
-                    menu->setStyle(style);
+            if (!menu->testAttribute(Qt::WA_SetStyle)) {
+                if (!light_style) {
+                    light_style = QStyleFactory::create("dlight");
                 }
+
+                if (light_style) {
+                    menu->setStyle(light_style);
+                }
+            }
+        }
+#ifdef Q_OS_LINUX
+        else if (QWidget *widget = qobject_cast<QWidget *>(obj)) {
+            if (!widget->testAttribute(Qt::WA_SetStyle)
+                    && (widget->inherits("QPrintDialog")
+                        || widget->inherits("QPrintPropertiesDialog")
+                        || widget->inherits("QPageSetupDialog")
+                        || widget->inherits("QPrintPreviewDialog")
+                        || (widget->inherits("QComboBoxPrivateContainer")
+                            && basePrintPropertiesDialog(widget)))) {
+                if (!light_style) {
+                    light_style = QStyleFactory::create("dlight");
+                }
+
+                if (light_style) {
+                    widget->setStyle(light_style);
+
+                    if (widget->style() != light_style) {
+                        widget->style()->deleteLater();
+                        widget->d_func()->setStyle_helper(light_style, false);
+                    }
+
+                    for (QWidget *w : widget->findChildren<QWidget *>()) {
+                        w->setStyle(light_style);
+                    }
+                }
+            }
+        }
+#endif
+    } else if (event->type() == QEvent::ParentChange) {
+        if (QWidget *widget = qobject_cast<QWidget *>(obj)) {
+            DThemeManager::instance()->updateThemeOnParentChanged(widget);
         }
     }
 
     return QApplication::notify(obj, event);
 }
+
+int DtkBuildVersion::value = 0;
 
 DWIDGET_END_NAMESPACE

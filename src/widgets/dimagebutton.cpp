@@ -44,7 +44,7 @@ DImageButton::DImageButton(QWidget *parent)
     : QLabel(parent)
     , DObject(*new DImageButtonPrivate(this))
 {
-    D_THEME_INIT_WIDGET(DImageButton);
+    DThemeManager::registerWidget(this, QStringList({"checked", "state"}));
 
     D_D(DImageButton);
 
@@ -65,7 +65,7 @@ DImageButton::DImageButton(const QString &normalPic, const QString &hoverPic, co
     : QLabel(parent)
     , DObject(*new DImageButtonPrivate(this))
 {
-    D_THEME_INIT_WIDGET(DImageButton);
+    DThemeManager::registerWidget(this, QStringList({"checked", "state"}));
 
     D_D(DImageButton);
 
@@ -100,7 +100,7 @@ DImageButton::DImageButton(const QString &normalPic, const QString &hoverPic,
     : QLabel(parent)
     , DObject(*new DImageButtonPrivate(this))
 {
-    D_THEME_INIT_WIDGET(DImageButton);
+    DThemeManager::registerWidget(this, QStringList({"checked", "state"}));
 
     D_D(DImageButton);
 
@@ -170,6 +170,12 @@ void DImageButton::mouseReleaseEvent(QMouseEvent *event)
 {
     D_D(DImageButton);
 
+    event->accept();
+
+    if (event->button() != Qt::LeftButton) {
+        return;
+    }
+
     if (!rect().contains(event->pos())) {
         return;
     }
@@ -185,12 +191,7 @@ void DImageButton::mouseReleaseEvent(QMouseEvent *event)
         d->setState(Hover);
     }
 
-    event->accept();
-    //QLabel::mouseReleaseEvent(event);
-
-    if (event->button() == Qt::LeftButton) {
-        Q_EMIT clicked();
-    }
+    Q_EMIT clicked();
 }
 
 void DImageButton::mouseMoveEvent(QMouseEvent *event)
@@ -244,6 +245,8 @@ void DImageButton::setChecked(bool flag)
     } else {
         d->setState(Normal);
     }
+
+    Q_EMIT checkedChanged(d->m_isChecked);
 }
 
 /*!
@@ -388,7 +391,7 @@ DImageButton::DImageButton(DImageButtonPrivate &q, QWidget *parent)
     : QLabel(parent)
     , DObject(q)
 {
-    D_THEME_INIT_WIDGET(DImageButton);
+    DThemeManager::registerWidget(this, QStringList({"checked", "state"}));
 
     D_D(DImageButton);
 
@@ -412,18 +415,23 @@ void DImageButtonPrivate::updateIcon()
 
     switch (m_state) {
     case DImageButton::Hover:
+        q->setProperty("state", "hover");
         if (!m_hoverPic.isEmpty()) { q->setPixmap(loadPixmap(m_hoverPic)); }
         break;
     case DImageButton::Press:
+        q->setProperty("state", "press");
         if (!m_pressPic.isEmpty()) { q->setPixmap(loadPixmap(m_pressPic)); }
         break;
     case DImageButton::Checked:
+        q->setProperty("state", "checked");
         if (!m_checkedPic.isEmpty()) { q->setPixmap(loadPixmap(m_checkedPic)); }
         break;
     case DImageButton::Disabled:
+        q->setProperty("state", "disabled");
         if (!m_disabledPic.isEmpty()) { q->setPixmap(loadPixmap(m_disabledPic)); }
         break;
     default:
+        q->setProperty("state", "");
         if (!m_normalPic.isEmpty()) { q->setPixmap(loadPixmap(m_normalPic)); }
         break;
     }

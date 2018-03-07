@@ -41,6 +41,9 @@ class LIBDTKWIDGETSHARED_EXPORT DApplication : public QApplication, public DTK_C
 {
     Q_OBJECT
     D_DECLARE_PRIVATE(DApplication)
+    Q_PROPERTY(bool visibleMenuShortcutText READ visibleMenuShortcutText WRITE setVisibleMenuShortcutText)
+    Q_PROPERTY(bool visibleMenuCheckboxWidget READ visibleMenuCheckboxWidget WRITE setVisibleMenuCheckboxWidget)
+    Q_PROPERTY(bool visibleMenuIcon READ visibleMenuIcon WRITE setVisibleMenuIcon)
 
 public:
     DApplication(int &argc, char **argv);
@@ -62,6 +65,11 @@ public:
     //! warning: Must call before QGuiApplication defined object
     static bool loadDXcbPlugin();
     static bool isDXcbPlatform();
+
+    // return the libdtkwidget version of build application
+    static int buildDtkVersion();
+    // return the libdtkwidget version of runing application
+    static int runtimeDtkVersion();
 
     // meta information that necessary to create a about dialog for the application.
     QString productName() const;
@@ -85,6 +93,15 @@ public:
 
     DAboutDialog *aboutDialog();
     void setAboutDialog(DAboutDialog *aboutDialog);
+
+    bool visibleMenuShortcutText() const;
+    void setVisibleMenuShortcutText(bool value);
+
+    bool visibleMenuCheckboxWidget() const;
+    void setVisibleMenuCheckboxWidget(bool value);
+
+    bool visibleMenuIcon() const;
+    void setVisibleMenuIcon(bool value);
 
 #ifdef VERSION
     static inline QString buildVersion(const QString &fallbackVersion)
@@ -119,6 +136,22 @@ private:
     friend class DTitlebarPrivate;
     friend class DMainWindowPrivate;
 };
+
+class DtkBuildVersion {
+public:
+    static int value;
+};
+
+#ifndef LIBDTKWIDGET_LIBRARY
+class Q_DECL_HIDDEN _DtkBuildVersion {
+public:
+    _DtkBuildVersion() {
+        DtkBuildVersion::value = DTK_VERSION;
+    }
+};
+
+static _DtkBuildVersion _dtk_build_version;
+#endif
 
 DWIDGET_END_NAMESPACE
 

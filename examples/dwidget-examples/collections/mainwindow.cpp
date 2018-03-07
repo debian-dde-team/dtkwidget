@@ -22,11 +22,12 @@
 #include <QFontDatabase>
 #include <QTextCodec>
 #include <QDebug>
+#include <QTemporaryFile>
 
-#include <DSettingsOption>
-#include <DSettings>
-
+#include "qsettingbackend.h"
 #include "dsettingsdialog.h"
+#include "dsettingsoption.h"
+#include "dsettings.h"
 
 #include "dslider.h"
 #include "dthememanager.h"
@@ -43,13 +44,18 @@
 #include "cameraform.h"
 #include "graphicseffecttab.h"
 #include "simplelistviewtab.h"
+#include "dtoast.h"
 
-DTK_USE_NAMESPACE
+DCORE_USE_NAMESPACE
 DWIDGET_USE_NAMESPACE
 
 MainWindow::MainWindow(QWidget *parent)
     : DMainWindow(parent)
 {
+    auto flags = windowFlags() & ~Qt::WindowMaximizeButtonHint;
+    flags = flags & ~Qt::WindowMinimizeButtonHint;
+    setWindowFlags(flags);
+
     DThemeManager *themeManager = DThemeManager::instance();
 
     initTabWidget();
@@ -64,6 +70,8 @@ MainWindow::MainWindow(QWidget *parent)
     QPushButton *lightBUtton = new QPushButton("Light", this);
     QPushButton *enableButtons = new QPushButton("Enable Titlebar ", this);
     QPushButton *disableButtons = new QPushButton("Disable Titlebar", this);
+    QPushButton *toggleMinMaxButtons = new QPushButton("Toggle MinMax", this);
+    QPushButton *fullscreenButtons = new QPushButton("Fullscreen", this);
 
     themeManager->setTheme(lightBUtton, "light");
 
@@ -82,10 +90,37 @@ MainWindow::MainWindow(QWidget *parent)
         | Qt::WindowMaximizeButtonHint
         | Qt::WindowSystemMenuHint);
     });
+    connect(fullscreenButtons, &QPushButton::clicked, [ = ] {
+        if (!isFullScreen())
+        {
+            showFullScreen();
+        } else
+        {
+            showNormal();
+        }
+    });
+
+    connect(toggleMinMaxButtons, &QPushButton::clicked, [ = ] {
+        auto flags = windowFlags();
+        if (flags.testFlag(Qt::WindowMinimizeButtonHint))
+        {
+            flags  &= ~Qt::WindowMaximizeButtonHint;
+            flags  &= ~Qt::WindowMinimizeButtonHint;
+        } else
+        {
+            flags |= Qt::WindowMaximizeButtonHint;
+            flags |= Qt::WindowMinimizeButtonHint;
+        }
+        setWindowFlags(flags);
+        show();
+    });
+
     styleLayout->addWidget(darkButton);
     styleLayout->addWidget(lightBUtton);
     styleLayout->addWidget(enableButtons);
     styleLayout->addWidget(disableButtons);
+    styleLayout->addWidget(toggleMinMaxButtons);
+    styleLayout->addWidget(fullscreenButtons);
     styleLayout->addStretch();
 
     mainLayout->addLayout(styleLayout);
@@ -113,11 +148,21 @@ MainWindow::MainWindow(QWidget *parent)
         titlebar->setDisableFlags(Qt::WindowMinimizeButtonHint
                                   | Qt::WindowMaximizeButtonHint
                                   | Qt::WindowSystemMenuHint);
+        titlebar->setAutoHideOnFullscreen(true);
     }
-}
 
-#include <QTemporaryFile>
-#include <qsettingbackend.h>
+    auto toast = new DToast(this);
+    toast->setText("Successfully close window");
+    toast->setIcon(":/images/light/images/window/close_press.svg");
+    QTimer::singleShot(1000, [ = ]() {
+        toast->pop();
+        toast->move((width() - toast->width()) / 2,
+                    (height() - toast->height()) / 2);
+    });
+    QTimer::singleShot(4000, [ = ]() {
+        toast->pop();
+    });
+}
 
 void MainWindow::menuItemInvoked(QAction *action)
 {
@@ -145,8 +190,26 @@ void MainWindow::menuItemInvoked(QAction *action)
 
         QFontDatabase fontDatabase;
         auto fontFamliy = settings->option("base.font.family");
-        fontFamliy->setData("items", fontDatabase.families());
-        fontFamliy->setValue(0);
+        QMap<QString, QVariant> fontDatas;
+
+        QStringList values = fontDatabase.families();
+        QStringList keys;
+        for (auto &v : values) {
+            keys << v.toLower().trimmed();
+        }
+        fontDatas.insert("keys", keys);
+        fontDatas.insert("values", values);
+        fontFamliy->setData("items", fontDatas);
+
+        // or you can set default value by json
+        if (fontFamliy->value().toString().isEmpty()) {
+            fontFamliy->setValue("droid serif");
+        }
+
+        connect(fontFamliy, &DSettingsOption::valueChanged,
+        this, [](QVariant value) {
+            qDebug() << "fontFamliy change" << value;
+        });
 
         QStringList codings;
         for (auto coding : QTextCodec::availableCodecs()) {
@@ -196,7 +259,7 @@ void MainWindow::initTabWidget()
     GraphicsEffectTab *effectTab = new GraphicsEffectTab(this);
 
     SimpleListViewTab *simplelistviewTab = new SimpleListViewTab(this);
-    
+
     m_mainTab->addTab(widgetsTab, "Widgets");
     m_mainTab->addTab(effectTab, "GraphicsEffect");
     m_mainTab->addTab(comboBoxTab, "ComboBox");
@@ -213,6 +276,7 @@ void MainWindow::initTabWidget()
     m_mainTab->addTab(simplelistviewTab, "SimpleListView");
 
     m_mainTab->setCurrentIndex(0);
+
 }
 
 MainWindow::~MainWindow()

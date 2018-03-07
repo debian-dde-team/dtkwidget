@@ -32,7 +32,7 @@ bool MultiListItem::sameAs(DSimpleListItem *item)
     return artist == (static_cast<MultiListItem*>(item))->artist && song == (static_cast<MultiListItem*>(item))->song && length == (static_cast<MultiListItem*>(item))->length;
 }
 
-void MultiListItem::drawBackground(QRect rect, QPainter *painter, int index, bool isSelect)
+void MultiListItem::drawBackground(QRect rect, QPainter *painter, int index, bool isSelect, bool isHover)
 {
     QPainterPath path;
     path.addRect(QRectF(rect));
@@ -45,7 +45,7 @@ void MultiListItem::drawBackground(QRect rect, QPainter *painter, int index, boo
     }
 }
 
-void MultiListItem::drawForeground(QRect rect, QPainter *painter, int column, int index, bool isSelect)
+void MultiListItem::drawForeground(QRect rect, QPainter *painter, int column, int index, bool isSelect, bool isHover)
 {
     int padding = 10;
     painter->setOpacity(1);

@@ -1,4 +1,5 @@
-usr/include/libdtk-2.0
+usr/include
 usr/lib/*/libdtkwidget.so
 usr/lib/*/pkgconfig
 usr/lib/*/cmake/*/*.cmake
+usr/lib/*/qt5/*
