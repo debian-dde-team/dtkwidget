@@ -44,8 +44,5 @@ override_dh_clean:
 	rm -vf translations/*qm
 
 override_dh_missing:
+	sh -c "rm -f debian/tmp/usr/lib/*/cmake/DtkWidget/DtkWidgetConfig.cmake.in"
 	dh_missing --fail-missing
-
-override_dh_install:
-	rm -f debian/tmp/usr/lib/dtk2/dtk-svgc
-	dh_install

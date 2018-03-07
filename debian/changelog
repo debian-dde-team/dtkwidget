@@ -1,3 +1,13 @@
+dtkwidget (2.0.7-1~exp1) experimental; urgency=medium
+
+  * New upstream release.
+  * d/rules: Refresh for version parsing.
+  * d/rules: Add workaround to remove useless .in file.
+  * d/control: Use Salsa platform for Vcs field.
+  * d/copyright: Refresh copyright information.
+
+ -- Boyuan Yang <073plan@gmail.com>  Thu, 08 Mar 2018 20:45:11 +0800
+
 dtkwidget (2.0.6.1-1) unstable; urgency=medium
 
   * New upstream release.
