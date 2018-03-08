@@ -72,6 +72,7 @@ Description: Deepin Tool Kit Widget library
 
 Package: libdtkwidget-bin
 Architecture: any
+Section: utils
 Depends:
  ${shlibs:Depends},
  ${misc:Depends},
