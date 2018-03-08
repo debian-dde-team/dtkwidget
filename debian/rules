@@ -45,4 +45,5 @@ override_dh_clean:
 
 override_dh_missing:
 	sh -c "rm -f debian/tmp/usr/lib/*/cmake/DtkWidget/DtkWidgetConfig.cmake.in"
+	rm -rf debian/tmp/usr/lib/dtk2
 	dh_missing --fail-missing

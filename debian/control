@@ -69,17 +69,3 @@ Description: Deepin Tool Kit Widget library
  This package is part of DDE (Deepin Desktop Environment).
  .
  This package contains the shared libraries.
-
-Package: libdtkwidget-bin
-Architecture: any
-Section: utils
-Depends:
- ${shlibs:Depends},
- ${misc:Depends},
- libdtkwidget2 (= ${binary:Version}),
-Description: Deepin Tool Kit Widget library utilities
- DtkWidget is the Deepin graphical user interface library for deepin
- desktop development.
- .
- This package provides some utilities needed when developing Deepin
- application.

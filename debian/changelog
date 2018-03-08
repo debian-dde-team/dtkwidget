@@ -1,4 +1,4 @@
-dtkwidget (2.0.7-1~exp1) experimental; urgency=medium
+dtkwidget (2.0.7-1) unstable; urgency=medium
 
   * New upstream release.
   * d/rules: Refresh for version parsing.
@@ -6,7 +6,7 @@ dtkwidget (2.0.7-1~exp1) experimental; urgency=medium
   * d/control: Use Salsa platform for Vcs field.
   * d/copyright: Refresh copyright information.
 
- -- Boyuan Yang <073plan@gmail.com>  Thu, 08 Mar 2018 20:45:11 +0800
+ -- Boyuan Yang <073plan@gmail.com>  Fri, 09 Mar 2018 01:06:24 +0800
 
 dtkwidget (2.0.6.1-1) unstable; urgency=medium
 
