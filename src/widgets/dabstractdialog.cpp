@@ -25,7 +25,7 @@
 #include <QLabel>
 #include <QDebug>
 
-#include "anchors.h"
+#include "danchors.h"
 #include "dialog_constants.h"
 #include "dabstractdialog.h"
 #include "private/dabstractdialogprivate_p.h"
@@ -65,7 +65,7 @@ void DAbstractDialogPrivate::init()
 
     windowTitle = new QLabel(q);
     windowTitle->setAlignment(Qt::AlignCenter);
-    AnchorsBase::setAnchor(windowTitle, Qt::AnchorHorizontalCenter, q, Qt::AnchorHorizontalCenter);
+    DAnchorsBase::setAnchor(windowTitle, Qt::AnchorHorizontalCenter, q, Qt::AnchorHorizontalCenter);
     q->connect(q,&QWidget::windowTitleChanged, windowTitle,[=](const QString &title){
         windowTitle->setText(title);
     });
@@ -149,6 +149,24 @@ DAbstractDialog::DisplayPostion DAbstractDialog::displayPostion() const
     return static_cast<DisplayPostion>(displayPosition());
 }
 
+void DAbstractDialog::move(const QPoint &pos)
+{
+    QDialog::move(pos);
+
+    D_D(DAbstractDialog);
+
+    d->mouseMoved = true;
+}
+
+void DAbstractDialog::setGeometry(const QRect &rect)
+{
+    QDialog::setGeometry(rect);
+
+    D_D(DAbstractDialog);
+
+    d->mouseMoved = true;
+}
+
 /**
  * @brief DAbstractDialog::moveToCenter moves the dialog to the center of the screen or its parent widget.
  */
@@ -176,7 +194,7 @@ void DAbstractDialog::moveToTopRight()
 void DAbstractDialog::moveToTopRightByRect(const QRect &rect)
 {
     int x = rect.x() + rect.width() - width();
-    move(QPoint(x, 0));
+    QDialog::move(QPoint(x, 0));
 }
 
 /**
@@ -247,7 +265,7 @@ void DAbstractDialog::moveToCenterByRect(const QRect &rect)
 {
     QRect qr = geometry();
     qr.moveCenter(rect.center());
-    move(qr.topLeft());
+    QDialog::move(qr.topLeft());
 }
 
 void DAbstractDialog::mousePressEvent(QMouseEvent *event)

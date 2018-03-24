@@ -63,6 +63,14 @@ public:
     DisplayPosition displayPosition() const;
     D_DECL_DEPRECATED DisplayPostion displayPostion() const;
 
+    void move(const QPoint &pos);
+    inline void move(int x, int y)
+    { move(QPoint(x, y));}
+
+    void setGeometry(const QRect &rect);
+    inline void setGeometry(int x, int y, int width, int height)
+    { setGeometry(QRect(x, y, width, height));}
+
 public Q_SLOTS:
     void moveToCenter();
     void moveToTopRight();
